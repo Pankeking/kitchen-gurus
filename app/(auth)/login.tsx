@@ -1,5 +1,5 @@
-import { Button, Pressable, StyleSheet, useColorScheme } from "react-native"
-import { Text, View } from "../../components/Themed"
+import { StyleSheet, useColorScheme } from "react-native"
+import { Button, Text, View } from "../../components/Themed"
 import * as AppleAuthentication from "expo-apple-authentication";
 import { useEffect, useState } from "react";
 import Colors from "../../constants/Colors";
@@ -23,10 +23,10 @@ export default function LoginScreen() {
 
   return (
     <>
-      <View style={styles.container}>
+      <View darkColor="brown" lightColor="orange" style={styles.container}>
         <AppleAuthentication.AppleAuthenticationButton
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-          buttonStyle={colorScheme === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.BLACK : AppleAuthentication.AppleAuthenticationButtonStyle.WHITE}
+          buttonStyle={colorScheme === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.WHITE : AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
           cornerRadius={5}
           style={styles.button}
           onPress={async () => {
@@ -49,8 +49,10 @@ export default function LoginScreen() {
         />
         <View style={styles.separator}></View>
         <Link href="/register">
-          <Text>No account yet? Sign Up</Text>
+          <Button title="Sign in" lightColor="white" darkColor="black" />
         </Link>
+        <View style={styles.separator}></View>
+          <Text darkColor="white" lightColor="black">No account yet? Sign Up</Text>
       </View>
     </>
   )
