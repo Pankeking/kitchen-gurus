@@ -28,7 +28,7 @@ export default function LoginScreen() {
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
           buttonStyle={colorScheme === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.WHITE : AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
           cornerRadius={5}
-          style={styles.button}
+          style={styles.appleButton}
           onPress={async () => {
             try {
               const credential = await AppleAuthentication.signInAsync({
@@ -49,7 +49,7 @@ export default function LoginScreen() {
         />
         <View style={styles.separator}></View>
         <Link href="/register">
-          <Button title="Sign in" lightColor="white" darkColor="black" />
+          <Button style={styles.button} title="Sign in with Apple" lightColor="white" darkColor="black" onPress={() => alert("eureka")} />
         </Link>
         <View style={styles.separator}></View>
           <Text darkColor="white" lightColor="black">No account yet? Sign Up</Text>
@@ -69,9 +69,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
-  button: {
+  appleButton: {
     height: 50,
     width: "60%"
+  },
+  button: {
+    height: 50,
+    marginHorizontal: 5,
+    // width: "60%"
   },
   separator: {
     marginVertical: 30,
