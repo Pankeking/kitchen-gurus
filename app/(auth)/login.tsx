@@ -1,25 +1,37 @@
-import { StyleSheet, useColorScheme } from "react-native"
-import { Button, Text, View } from "../../components/Themed"
-import * as AppleAuthentication from "expo-apple-authentication";
 import { useEffect, useState } from "react";
+import { Linking, StyleSheet, useColorScheme } from "react-native"
+import { Link, router } from "expo-router";
+
+import { Button } from "@rneui/base";
+
+import * as AppleAuthentication from "expo-apple-authentication";
+
+import { Text, View } from "../../components/Themed"
 import Colors from "../../constants/Colors";
-import { Link } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+
 
 
 
 // AppleAuthentication.isAvailableAsync();
 
 export default function LoginScreen() {
-  const [apple, setApple] = useState(false);
   const colorScheme = useColorScheme();
 
   useEffect(() => {
     // iOS Authentication availability
-    async function isAvailable() {
-      const appleSupported =  await AppleAuthentication.isAvailableAsync(); 
-      setApple(appleSupported);
-    }
   }, [])
+  const appleIcon = () => {
+    return (
+      <AntDesign
+        name="login"
+        size={18}
+        color={Colors[colorScheme ?? 'light'].text}
+        style={{ paddingHorizontal: 8}}
+      />
+    )
+  }
+
 
   return (
     <>
@@ -38,6 +50,7 @@ export default function LoginScreen() {
                 ],
               });
               // signed in
+              router.replace('/(tabs)')
             } catch (e : any) {
               if (e.code === 'ERR_REQUEST_CANCELED') {
                 // handle that the user canceled the sign-in flow
@@ -48,16 +61,28 @@ export default function LoginScreen() {
           }}
         />
         <View style={styles.separator}></View>
-        <Link href="/register">
-          <Button style={styles.button} title="Sign in with Apple" lightColor="white" darkColor="black" onPress={() => alert("eureka")} />
-        </Link>
+
+          <Link href="/register" asChild>
+            <Button 
+              color={"#000"} 
+              icon={appleIcon()} 
+              iconPosition='right'
+              radius={5} 
+              size="lg" 
+              title="No account? Register"  
+              titleStyle={styles.buttonTitle}
+              
+              containerStyle={styles.buttonContainer}
+            />
+          </Link>
         <View style={styles.separator}></View>
-          <Text darkColor="white" lightColor="black">No account yet? Sign Up</Text>
       </View>
     </>
   )
 
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -73,14 +98,17 @@ const styles = StyleSheet.create({
     height: 50,
     width: "60%"
   },
-  button: {
-    height: 50,
-    marginHorizontal: 5,
-    // width: "60%"
-  },
   separator: {
     marginVertical: 30,
     height: 1,
     width: '80%',
   },
+  buttonTitle: {
+    fontSize: 22,
+  },
+  buttonContainer: {
+    marginHorizontal: 8,
+    width: "60%",
+    
+  }
 })

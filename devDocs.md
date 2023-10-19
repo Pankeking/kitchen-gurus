@@ -21,3 +21,8 @@
 ## VS Code configs / code style standard
 
 - Reduced default tabSize from 4 to 2 spaces
+
+## App architecture
+
+- State management through redux @reduxjs/toolkit
+- Back-end through firebase

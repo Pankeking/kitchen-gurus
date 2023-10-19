@@ -1,10 +1,52 @@
 import { StyleSheet, useColorScheme } from "react-native";
 import * as AppleAuthentication from "expo-apple-authentication"
 import { Text, View } from "../../components/Themed";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import { Button } from "@rneui/base";
+import { FontAwesome } from "@expo/vector-icons";
+import Colors from "../../constants/Colors";
+
+import { useDispatch, useSelector } from "react-redux";
+import { signUp, signIn, signOut, setError, clearError, setLoading } from "../../redux/slices/authSlice";
+import { useEffect, useState } from "react";
+
+import { FBauth } from "../../services/firebase"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 
 export default function RegisterScreen() {
+
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [matchMessage, setMatchMessage] = useState('')
+
   const colorScheme = useColorScheme();
+
+  useEffect(() => {
+    if (password == confirmPassword) {
+      setMatchMessage('Match');
+    } else {
+      setMatchMessage('Passwords do not match');
+    }
+  },[password, confirmPassword])
+
+  const handleRegister = async () => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
+
+    try {
+      // check if user exists
+      // LOGIC HERE
+      // create new User
+      const { user } = await createUserWithEmailAndPassword(FBauth, email, password);
+    }
+    catch (e) {
+      dispatch(setError(e));
+    }
+  }
+
   return (
     <>
     <View style={styles.container}>
@@ -21,6 +63,7 @@ export default function RegisterScreen() {
                     AppleAuthentication.AppleAuthenticationScope.EMAIL,
                   ],
                 });
+                
                 // signed in
               } catch (e : any) {
                 if (e.code === 'ERR_REQUEST_CANCELED') {
@@ -32,9 +75,16 @@ export default function RegisterScreen() {
             }}
           />
       <View style={styles.separator}></View>
-      <Link href="/login">
-        <Text>Already have an account? Sign In</Text>
-      </Link>
+      <Link href="/login" asChild>
+            <Button radius={5} size="lg" title="Already have an account? " 
+              icon={<FontAwesome
+                name="apple"
+                size={18}
+                color={Colors[colorScheme ?? 'light'].text}
+                style={{ marginHorizontal: 8}}
+                />} 
+            />
+          </Link>
     </View>
     </>
   )
