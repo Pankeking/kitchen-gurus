@@ -26,10 +26,11 @@ import { FBauth } from "../../services/firebase";
 import { useSelector } from "react-redux";
 
 
-// AppleAuthentication.isAvailableAsync();
+AppleAuthentication.isAvailableAsync();
 
 export default function LoginScreen() {
   const themeColors = useTheme().theme.colors;
+  const mode = useThemeMode();
 
   const dispatch = useDispatch();
   const errorObj = useSelector((state: any) => state.auth.error)
@@ -59,26 +60,6 @@ export default function LoginScreen() {
   }
 
 
-  // >> ICONS <<
-  const LogInIcon = () => {
-    return (
-      <CustomIcon
-        name="login"
-        size={18}
-        style={{ paddingHorizontal: 8}}
-      />
-    )
-  }
-  const RegisterIcon = () => {
-    return (
-      <CustomIcon
-        name="form-select"
-        size={18}
-        style={{ paddingHorizontal: 8}}
-      />
-    )
-  }
-  // >> ICONS <<
 
   return (
     <>
@@ -92,9 +73,9 @@ export default function LoginScreen() {
         <ToggleMode />
         {/* <AppleAuthentication.AppleAuthenticationButton
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-          buttonStyle={colorScheme === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.WHITE : AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+          buttonStyle={mode.mode === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.WHITE : AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
           cornerRadius={5}
-          style={styles.appleButton}
+          // style={styles.appleButton}
           onPress={async () => {
             try {
               const credential = await AppleAuthentication.signInAsync({
@@ -115,14 +96,15 @@ export default function LoginScreen() {
           }}
         /> */}
         
-        {/* <View style={styles.separator}></View> */}
+        <View style={styles.separator} />
+
         <BackgroundView style={styles.inputContainer}>
           
           <BackgroundView style={styles.innerInputContainer}>
             <Input
               autoCapitalize="none"
               placeholder="Email"
-              placeholderTextColor={themeColors.grey2}
+              // placeholderTextColor={themeColors.grey2}
               style={styles.input}
               onChangeText={setEmail}
             />
@@ -131,7 +113,7 @@ export default function LoginScreen() {
           <BackgroundView style={styles.innerInputContainer}>
             <Input
               placeholder="Password"
-              placeholderTextColor={themeColors.grey2}
+              // placeholderTextColor={themeColors.grey2}
               secureTextEntry
               style={styles.input}
               onChangeText={setPassword}
@@ -141,32 +123,33 @@ export default function LoginScreen() {
           <BackgroundView style={styles.innerInputContainer}>
             <Button
               buttonStyle={styles.buttonContainer}
-              icon={<LogInIcon />} 
-              iconPosition='right'
-              radius={5} 
+              icon={<CustomIcon
+                name="login"
+                size={18}
+                />} 
               size="lg" 
-              // titleStyle={{color: themeColors.primary}}
               title="Sign In" 
               onPress={handleSubmit}
             />
           </BackgroundView>
-
+          <View style={styles.smallSpacer} />
           <BackgroundView style={styles.innerInputContainer}>
             <Link href="/register" asChild>
               <Button 
-                buttonStyle={[styles.buttonContainer]}
-                icon={<RegisterIcon />} 
-                iconPosition='right'
-                radius={5} 
+                buttonStyle={styles.buttonContainer}
+                icon={<CustomIcon
+                  name="form-select"
+                  size={18}
+                  />} 
                 size="lg" 
                 title="Create new account"  
-                // titleStyle={styles.buttonTitle}
               />
             </Link>
           </BackgroundView>
 
         </BackgroundView>
 
+        <View style={styles.separator}></View>
         <View style={styles.separator}></View>
       </BackgroundView>
     </>
@@ -182,15 +165,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  separator: {
-    height: 0,
-    marginVertical: "10%",
-    width: '80%',
-  },
   buttonTitle: {
     fontSize: 22,
   },
@@ -198,19 +172,32 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   input: {
-    height: 40,
-    marginBottom: 4,
+    // height: 40,
+    marginVertical: 3,
     fontSize: 22,
   },    
   inputContainer: {
     alignItems: "center",
     justifyContent: "center",
+    height: "40%",
     width: "90%",
-    height: "40%"
   },
   innerInputContainer: {
     width: "80%",
     marginVertical: 8,
-
-  }
+  },
+  separator: {
+    height: 0,
+    marginVertical: "10%",
+    width: '80%',
+  },
+  smallSpacer: {
+    height: 0,
+    marginVertical: 7,
+    width: "80%"
+  },
+  title: {
+    fontSize: 14,
+    fontWeight: "bold",
+  },
 })
