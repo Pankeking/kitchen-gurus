@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, useColorScheme } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { StyleSheet } from "react-native";
+import { useDispatch } from "react-redux";
 
-import { Text, View } from "../../components/Themed";
-import Colors from "../../constants/Colors";
+import { View } from "../../components/Themed";
 
-import * as AppleAuthentication from "expo-apple-authentication"
-import { Link, router } from "expo-router";
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { Link } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
-import { Button, Input } from "@rneui/base";
+import { Button, Input, Text, useTheme } from "@rneui/themed";
 
 import { 
   signUp, 
@@ -23,26 +21,25 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword } from "firebase/auth"
 import { FBauth } from "../../services/firebase"
+import ToggleMode from "../../components/ToggleMode";
 
 export default function RegisterScreen() {
 
   const dispatch = useDispatch();
+  const theme = useTheme();
+  
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [matchMessage, setMatchMessage] = useState('')
 
-  // const loading = useSelector(state => state.auth.loading);  
-  // const error = useSelector(state => state.auth.error);
-
-  const colorScheme = useColorScheme();
 
   useEffect(() => {
     if (password != confirmPassword) {
       setMatchMessage('Passwords do not match');
     } else if (password == confirmPassword && password != '') {
-      setMatchMessage('Match');
+      setMatchMessage('Passwords match');
     } else {
       setMatchMessage('')
     }
@@ -61,16 +58,16 @@ export default function RegisterScreen() {
       await signInWithEmailAndPassword(FBauth, email, password);
       dispatch(signUp(user.email))
     }
-    catch (error) {
+    catch (error : unknown) {
       dispatch(setLoading(false));
       console.log(error);
-      dispatch(setError(error));
+      // dispatch(setError(error));
     }
   }
 
   return (
     <>
-    <View style={styles.container}>
+    <View style={styles.container} lightColor="orange">
       {/* <AppleAuthentication.AppleAuthenticationButton
             buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_UP}
             buttonStyle={colorScheme === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.BLACK : AppleAuthentication.AppleAuthenticationButtonStyle.WHITE}
@@ -95,8 +92,9 @@ export default function RegisterScreen() {
               }
             }}
           /> */}
+      <ToggleMode />
       <View style={styles.separator}></View>
-      <View style={styles.inputContainer}>
+      <View style={styles.inputContainer} lightColor="orange">
         <Input
           style={styles.input}
           placeholder="Email"
@@ -115,26 +113,25 @@ export default function RegisterScreen() {
           onChangeText={setConfirmPassword}
           secureTextEntry
         />
-        <Text>{matchMessage}</Text>
+        <Text style={styles.matchMessage}>{matchMessage}</Text>
       </View>
       <View style={styles.separator}></View>
-        <Button radius={5} size="lg" title="Register"
-          onPress={handleRegister}
-          icon={<AntDesign
-          name="key"
-          size={18}
-          color={Colors[colorScheme ?? 'light'].text}
-          style={{ marginHorizontal: 8}}
-            />} 
-        />
+          <Button radius={5} size="lg" title="Register"
+            onPress={handleRegister}
+            icon={<AntDesign
+              name="key"
+              size={18}
+              style={{ marginHorizontal: 8, color: theme.theme.colors.secondary}}
+              />} 
+          />
       <View style={styles.separator}></View>
       <Link href="/login" asChild>
         <Button radius={5} size="lg" title="Already have an account? sign-in" 
           icon={<AntDesign
-          name="login"
-          size={18}
-          color={Colors[colorScheme ?? 'light'].text}
-          style={{ marginHorizontal: 8}}
+            name="login"
+            size={18}
+            // color={Colors[colorScheme ?? 'light'].text}
+            style={{ marginHorizontal: 8}}
             />} 
         />
       </Link>
@@ -147,12 +144,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   separator: {
     height: 1,
+    marginVertical: 30,
     width: "80%",
-    marginVertical: 30
   },
   button: {
     height: 50,
@@ -160,19 +157,15 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingHorizontal: 8,
-    borderRadius: 5,
-    backgroundColor: Colors.dark.background, // Light orange color
-    color: Colors.dark.text, // Black text color
+    marginBottom: 8,
     fontSize: 22,
-    // paddingLeft: 12,
-    // paddingRight: 12,
   },    
   inputContainer: {
     alignItems: "center",
     justifyContent: "center",
     width: "70%",
+  },
+  matchMessage: {
+    color: "white"
   }
 })

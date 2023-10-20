@@ -1,22 +1,58 @@
 import { useEffect, useState } from "react";
-import { Linking, StyleSheet, useColorScheme } from "react-native"
+import { StyleSheet, useColorScheme } from "react-native"
 import { Link, router } from "expo-router";
 
-import { Button } from "@rneui/base";
+import { Button, Input, Text } from "@rneui/themed";
+import { useThemeMode } from '@rneui/themed';
+
+import ToggleMode from "../../components/ToggleMode";
 
 import * as AppleAuthentication from "expo-apple-authentication";
 
-import { Text, View } from "../../components/Themed"
-import Colors from "../../constants/Colors";
+import { View } from "../../components/Themed"
+import { Colors } from "../../constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
 
+import { useDispatch } from "react-redux";
 
+import { 
+  signUp, 
+  signIn, 
+  signOut, 
+  setError, 
+  clearError, 
+  setLoading } from "../../redux/slices/authSlice";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { FBauth } from "../../services/firebase";
+import { useSelector } from "react-redux";
 
 
 // AppleAuthentication.isAvailableAsync();
 
 export default function LoginScreen() {
   const colorScheme = useColorScheme();
+
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async () => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
+
+    try {
+      const { user } = await signInWithEmailAndPassword(FBauth, email, password);
+      dispatch(setLoading(false))
+      console.log("success")
+      dispatch(signIn(user.email)) 
+    } catch (error) {
+      console.log(error)
+      dispatch(setError(error));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  }
 
   useEffect(() => {
     // iOS Authentication availability
@@ -32,11 +68,13 @@ export default function LoginScreen() {
     )
   }
 
-
   return (
     <>
-      <View darkColor="brown" lightColor="orange" style={styles.container}>
-        <AppleAuthentication.AppleAuthenticationButton
+      <View lightColor="orange" style={styles.container}>
+        <Text>{}</Text>
+        <ToggleMode />
+        <View style={styles.separator}></View>
+        {/* <AppleAuthentication.AppleAuthenticationButton
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
           buttonStyle={colorScheme === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.WHITE : AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
           cornerRadius={5}
@@ -59,23 +97,52 @@ export default function LoginScreen() {
               }
             }
           }}
+        /> */}
+        <Button
+          iconPosition='right' 
+          radius={5} 
+          size="lg" 
+          title="Sign In" 
+          onPress={handleSubmit}
+          icon={<AntDesign
+            name="login"
+            size={18}
+            // color={Colors[colorScheme ?? 'light'].text}
+            style={{ marginHorizontal: 8}}
+            />} 
         />
+        <View style={styles.separator}></View>
+        <View style={styles.inputContainer} lightColor="orange">
+          <Input
+            style={styles.input}
+            placeholder="Email"
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            placeholderTextColor={"white"}
+          />
+          <Input
+            style={styles.input}
+            placeholder="Password"
+            onChangeText={setPassword}
+            secureTextEntry
+            placeholderTextColor={"white"}
+          />
+        </View>
         <View style={styles.separator}></View>
 
           <Link href="/register" asChild>
             <Button 
-              color={"#000"} 
               icon={appleIcon()} 
               iconPosition='right'
               radius={5} 
               size="lg" 
               title="No account? Register"  
               titleStyle={styles.buttonTitle}
-              
               containerStyle={styles.buttonContainer}
             />
           </Link>
         <View style={styles.separator}></View>
+        
       </View>
     </>
   )
@@ -99,8 +166,8 @@ const styles = StyleSheet.create({
     width: "60%"
   },
   separator: {
-    marginVertical: 30,
     height: 1,
+    marginVertical: 30,
     width: '80%',
   },
   buttonTitle: {
@@ -109,6 +176,15 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginHorizontal: 8,
     width: "60%",
-    
+  },
+  input: {
+    height: 40,
+    marginBottom: 8,
+    fontSize: 22,
+  },    
+  inputContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "70%",
   }
 })

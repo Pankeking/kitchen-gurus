@@ -24,7 +24,8 @@ const authSlice = createSlice({
       state.loading = action.payload;
     },
     setError: (state, action) => {
-      state.error = action.payload;
+      const error = action.payload.message;
+      state.error = error;
     },
     clearError: (state) => {
       state.error = null;
