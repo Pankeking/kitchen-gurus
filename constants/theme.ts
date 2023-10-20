@@ -1,26 +1,28 @@
-import { createTheme } from '@rneui/themed';
+import { createTheme, useTheme } from '@rneui/themed';
 
 const black = '#212121';
 const orange = 'orange'; 
 const red = '#D81B60';
-const white = '#faafaf'
+const white = '#FFF'
+const ivory = "ivory"
 
 
 // Create default theme
 const defaultTheme = createTheme({
   lightColors: {
-    primary: orange,
+    primary: red,
     secondary: black,
-    background: white,
+    background: ivory,
+    surface: white,
   },
   darkColors: {
-    primary: black,
-    secondary: orange,
-    background: white
+    primary: orange,
+    secondary: black,
+    background: black
   },
   components: {
     Button: {
-      raised: true,
+      raised: false,
     },
   },
   mode: "light",

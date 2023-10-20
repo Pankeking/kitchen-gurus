@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { View } from "../../components/Themed";
 
 import { Link } from "expo-router";
-import { AntDesign } from "@expo/vector-icons";
+import { CustomIcon, BackgroundView} from "../../components/themedCustom";
 
 import { Button, Input, Text, useTheme } from "@rneui/themed";
 
@@ -26,7 +26,7 @@ import ToggleMode from "../../components/ToggleMode";
 export default function RegisterScreen() {
 
   const dispatch = useDispatch();
-  const theme = useTheme();
+  const themeColors = useTheme().theme.colors;
   
 
   const [email, setEmail] = useState('');
@@ -67,7 +67,7 @@ export default function RegisterScreen() {
 
   return (
     <>
-    <View style={styles.container} lightColor="orange">
+    <BackgroundView style={styles.container}>
       {/* <AppleAuthentication.AppleAuthenticationButton
             buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_UP}
             buttonStyle={colorScheme === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.BLACK : AppleAuthentication.AppleAuthenticationButtonStyle.WHITE}
@@ -94,7 +94,7 @@ export default function RegisterScreen() {
           /> */}
       <ToggleMode />
       <View style={styles.separator}></View>
-      <View style={styles.inputContainer} lightColor="orange">
+      <BackgroundView style={styles.inputContainer}>
         <Input
           style={styles.input}
           placeholder="Email"
@@ -114,20 +114,20 @@ export default function RegisterScreen() {
           secureTextEntry
         />
         <Text style={styles.matchMessage}>{matchMessage}</Text>
-      </View>
+      </BackgroundView>
       <View style={styles.separator}></View>
           <Button radius={5} size="lg" title="Register"
             onPress={handleRegister}
-            icon={<AntDesign
+            icon={<CustomIcon
               name="key"
               size={18}
-              style={{ marginHorizontal: 8, color: theme.theme.colors.secondary}}
+              style={{ marginHorizontal: 8, color: themeColors.secondary}}
               />} 
           />
       <View style={styles.separator}></View>
       <Link href="/login" asChild>
         <Button radius={5} size="lg" title="Already have an account? sign-in" 
-          icon={<AntDesign
+          icon={<CustomIcon
             name="login"
             size={18}
             // color={Colors[colorScheme ?? 'light'].text}
@@ -135,7 +135,7 @@ export default function RegisterScreen() {
             />} 
         />
       </Link>
-    </View>
+    </BackgroundView>
     </>
   )
 }

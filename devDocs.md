@@ -26,3 +26,6 @@
 
 - State management through redux @reduxjs/toolkit
 - Back-end through firebase
+- Themed by react native elements: @rneui/themed
+
+## Icons theme: MaterialCommunityIcons

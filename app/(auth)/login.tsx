@@ -2,16 +2,15 @@ import { useEffect, useState } from "react";
 import { StyleSheet, useColorScheme } from "react-native"
 import { Link, router } from "expo-router";
 
-import { Button, Input, Text } from "@rneui/themed";
+import { Button, Input, Text, useTheme } from "@rneui/themed";
 import { useThemeMode } from '@rneui/themed';
 
-import ToggleMode from "../../components/ToggleMode";
 
 import * as AppleAuthentication from "expo-apple-authentication";
 
 import { View } from "../../components/Themed"
 import { Colors } from "../../constants/Colors";
-import { AntDesign } from "@expo/vector-icons";
+import { BackgroundView, CustomIcon, SurfaceView, ToggleMode }  from "../../components/themedCustom";
 
 import { useDispatch } from "react-redux";
 
@@ -30,9 +29,10 @@ import { useSelector } from "react-redux";
 // AppleAuthentication.isAvailableAsync();
 
 export default function LoginScreen() {
-  const colorScheme = useColorScheme();
+  const themeColors = useTheme().theme.colors;
 
   const dispatch = useDispatch();
+  const errorObj = useSelector((state: any) => state.auth.error)
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,34 +46,50 @@ export default function LoginScreen() {
       dispatch(setLoading(false))
       console.log("success")
       dispatch(signIn(user.email)) 
-    } catch (error) {
+    } catch (error: any) {
+      const errorDispatched = {
+        name: error.name,
+        code: error.code
+      }
       console.log(error)
-      dispatch(setError(error));
+      dispatch(setError(errorDispatched));
     } finally {
       dispatch(setLoading(false));
     }
   }
 
-  useEffect(() => {
-    // iOS Authentication availability
-  }, [])
-  const appleIcon = () => {
+
+  // >> ICONS <<
+  const LogInIcon = () => {
     return (
-      <AntDesign
+      <CustomIcon
         name="login"
         size={18}
-        color={Colors[colorScheme ?? 'light'].text}
         style={{ paddingHorizontal: 8}}
       />
     )
   }
+  const RegisterIcon = () => {
+    return (
+      <CustomIcon
+        name="form-select"
+        size={18}
+        style={{ paddingHorizontal: 8}}
+      />
+    )
+  }
+  // >> ICONS <<
 
   return (
     <>
-      <View lightColor="orange" style={styles.container}>
-        <Text>{}</Text>
+      <BackgroundView style={styles.container}>
+        {errorObj &&
+          <>
+            <Text>Name: {errorObj?.name}</Text>
+            <Text>Code: {errorObj?.code}</Text>
+          </> 
+        }
         <ToggleMode />
-        <View style={styles.separator}></View>
         {/* <AppleAuthentication.AppleAuthenticationButton
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
           buttonStyle={colorScheme === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.WHITE : AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
@@ -98,52 +114,61 @@ export default function LoginScreen() {
             }
           }}
         /> */}
-        <Button
-          iconPosition='right' 
-          radius={5} 
-          size="lg" 
-          title="Sign In" 
-          onPress={handleSubmit}
-          icon={<AntDesign
-            name="login"
-            size={18}
-            // color={Colors[colorScheme ?? 'light'].text}
-            style={{ marginHorizontal: 8}}
-            />} 
-        />
-        <View style={styles.separator}></View>
-        <View style={styles.inputContainer} lightColor="orange">
-          <Input
-            style={styles.input}
-            placeholder="Email"
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            placeholderTextColor={"white"}
-          />
-          <Input
-            style={styles.input}
-            placeholder="Password"
-            onChangeText={setPassword}
-            secureTextEntry
-            placeholderTextColor={"white"}
-          />
-        </View>
-        <View style={styles.separator}></View>
+        
+        {/* <View style={styles.separator}></View> */}
+        <BackgroundView style={styles.inputContainer}>
+          
+          <BackgroundView style={styles.innerInputContainer}>
+            <Input
+              autoCapitalize="none"
+              placeholder="Email"
+              placeholderTextColor={themeColors.grey2}
+              style={styles.input}
+              onChangeText={setEmail}
+            />
+          </BackgroundView>
 
-          <Link href="/register" asChild>
-            <Button 
-              icon={appleIcon()} 
+          <BackgroundView style={styles.innerInputContainer}>
+            <Input
+              placeholder="Password"
+              placeholderTextColor={themeColors.grey2}
+              secureTextEntry
+              style={styles.input}
+              onChangeText={setPassword}
+            />
+          </BackgroundView>
+
+          <BackgroundView style={styles.innerInputContainer}>
+            <Button
+              buttonStyle={styles.buttonContainer}
+              icon={<LogInIcon />} 
               iconPosition='right'
               radius={5} 
               size="lg" 
-              title="No account? Register"  
-              titleStyle={styles.buttonTitle}
-              containerStyle={styles.buttonContainer}
+              // titleStyle={{color: themeColors.primary}}
+              title="Sign In" 
+              onPress={handleSubmit}
             />
-          </Link>
+          </BackgroundView>
+
+          <BackgroundView style={styles.innerInputContainer}>
+            <Link href="/register" asChild>
+              <Button 
+                buttonStyle={[styles.buttonContainer]}
+                icon={<RegisterIcon />} 
+                iconPosition='right'
+                radius={5} 
+                size="lg" 
+                title="Create new account"  
+                // titleStyle={styles.buttonTitle}
+              />
+            </Link>
+          </BackgroundView>
+
+        </BackgroundView>
+
         <View style={styles.separator}></View>
-        
-      </View>
+      </BackgroundView>
     </>
   )
 
@@ -161,30 +186,31 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
-  appleButton: {
-    height: 50,
-    width: "60%"
-  },
   separator: {
-    height: 1,
-    marginVertical: 30,
+    height: 0,
+    marginVertical: "10%",
     width: '80%',
   },
   buttonTitle: {
     fontSize: 22,
   },
   buttonContainer: {
-    marginHorizontal: 8,
-    width: "60%",
+    width: "100%",
   },
   input: {
     height: 40,
-    marginBottom: 8,
+    marginBottom: 4,
     fontSize: 22,
   },    
   inputContainer: {
     alignItems: "center",
     justifyContent: "center",
-    width: "70%",
+    width: "90%",
+    height: "40%"
+  },
+  innerInputContainer: {
+    width: "80%",
+    marginVertical: 8,
+
   }
 })
