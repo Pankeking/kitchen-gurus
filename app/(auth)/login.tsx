@@ -26,7 +26,7 @@ import { FBauth } from "../../services/firebase";
 import { useSelector } from "react-redux";
 
 
-AppleAuthentication.isAvailableAsync();
+// AppleAuthentication.isAvailableAsync();
 
 export default function LoginScreen() {
   const themeColors = useTheme().theme.colors;
@@ -34,9 +34,19 @@ export default function LoginScreen() {
 
   const dispatch = useDispatch();
   const errorObj = useSelector((state: any) => state.auth.error)
+  const userState = useSelector((state: any) => state.auth.user);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    async function LogInNav() {
+      if (userState) {
+        router.replace('/(tabs)');
+      }
+    LogInNav();
+    }
+  },[userState])
 
   const handleSubmit = async () => {
     dispatch(setLoading(true));
@@ -46,7 +56,8 @@ export default function LoginScreen() {
       const { user } = await signInWithEmailAndPassword(FBauth, email, password);
       dispatch(setLoading(false))
       console.log("success")
-      dispatch(signIn(user.email)) 
+      dispatch(signIn({id: user.displayName, email: user.email})) 
+      router.replace('/(tabs)')
     } catch (error: any) {
       const errorDispatched = {
         name: error.name,
@@ -70,6 +81,7 @@ export default function LoginScreen() {
             <Text>Code: {errorObj?.code}</Text>
           </> 
         }
+        {userState && <Text>{userState.id}</Text>}
         <ToggleMode />
         {/* <AppleAuthentication.AppleAuthenticationButton
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}

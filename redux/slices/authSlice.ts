@@ -1,21 +1,6 @@
 import { ActionCreator, PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { AuthState, User, Error } from '../types';
 
-interface User {
-  id: string;
-  email: string;
-}
-
-interface Error {
-  code: string;
-  name: string;
-}
-
-interface AuthState {
-  user: User | null;
-  email: string | null;
-  loading: boolean;
-  error: Error | null;
-}
 
 const initialState = {
   user: null,

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { View } from "../../components/Themed";
 
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { CustomIcon, BackgroundView} from "../../components/themedCustom";
 
 import { Button, Input, Text, useTheme } from "@rneui/themed";
@@ -23,6 +23,7 @@ import {
 import { FBauth } from "../../services/firebase"
 import ToggleMode from "../../components/ToggleMode";
 import { ActionCreator, PayloadAction } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 
 
 export default function RegisterScreen() {
@@ -38,6 +39,9 @@ export default function RegisterScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [matchMessage, setMatchMessage] = useState('')
 
+  const userState = useSelector((state: any) => state.auth.user);
+
+
 
   useEffect(() => {
     if (password != confirmPassword) {
@@ -48,6 +52,15 @@ export default function RegisterScreen() {
       setMatchMessage('')
     }
   },[password, confirmPassword])
+
+  useEffect(() => {
+    async function LogInNav() {
+      if (userState) {
+        router.replace('/(tabs)');
+      }
+    LogInNav();
+    }
+  },[userState]);
 
   const handleRegister = async () => {
     dispatch(clearError());
@@ -61,6 +74,7 @@ export default function RegisterScreen() {
       dispatch(setLoading(false));
       await signInWithEmailAndPassword(FBauth, email, password);
       dispatch(signUp({id: user.displayName, email: user.email}))
+      router.replace('/(tabs)');
     }
     catch (error : unknown) {
       dispatch(setLoading(false));

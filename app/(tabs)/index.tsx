@@ -1,43 +1,72 @@
-import { StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { Platform, StyleSheet } from 'react-native';
 
-import { View } from '../../components/Themed';
-import { Text } from '@rneui/base';
-import { Link } from 'expo-router';
-import { Button } from '@rneui/base';
-import { AntDesign } from '@expo/vector-icons';
+import { Text, View } from '../../components/Themed';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import BackgroundView from '../../components/BackgroundView';
+import { useEffect } from 'react';
+import { router } from 'expo-router';
+import { clearError, setError, setLoading, signOut } from '../../redux/slices/authSlice';
+import { signOut as FBsignOut } from 'firebase/auth';
+import { FBauth } from '../../services/firebase';
+import { Error } from '../../redux/types';
+import { Button } from '@rneui/themed';
+import CustomIcon from '../../components/CustomIcon';
 
 export default function TabOneScreen() {
 
-  const iconO = () => {
-    return (
-      <AntDesign
-        name="logout"
-        size={18}
-        color="#fff"
-        style={styles.buttonIcon}
-      />
-    )
+  const dispatch = useDispatch();
+  const userState = useSelector((state: any) => state.auth.user);
+
+  useEffect(() => {
+    async function AuthInOut() {
+      if (userState == null) {
+        router.replace('/(auth)')
+      }
+    AuthInOut();
+    }
+  }, [userState])
+
+  const handleSignOut = async () => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
+    try {
+      await FBsignOut(FBauth)
+      dispatch(signOut());
+      router.replace('/(auth)')
+    } catch (error: any) {
+      const errorDispatched = {
+        name: error.name,
+        code: error.code
+      }
+      console.log(error)
+      dispatch(setError(errorDispatched));
+    } finally {
+      dispatch(setLoading(false));
+    }
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-        <Text style={styles.title}>Conectado</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-        <Link href="/(auth)/login" asChild>
-          <Button 
-            color={"#000"} 
-            containerStyle={styles.buttonContainer}
-            icon={iconO()}
-            iconPosition='right'
-            radius={5} 
-            size="lg" 
-            title="Log Out" 
-            titleStyle={styles.buttonTitle}
-          />
-        </Link>
-      {/* <EditScreenInfo path="app/(tabs)/index.tsx" /> */}
-    </View>
+    <BackgroundView style={styles.container}>
+      <Text style={styles.title}>KONEKTA2 EN EL INDIC</Text>
+      {userState && 
+        <Text style={styles.title}>{userState.id} - {userState.email}</Text>
+      }
+      <View style={styles.separator} />
+      <BackgroundView style={styles.inputContainer}>
+        <Button 
+          buttonStyle={styles.buttonContainer}
+          icon={<CustomIcon
+            name="logout"
+            size={18}
+            />}
+          size="lg"
+          title="Sign Out"
+          onPress={handleSignOut}
+        />
+      </BackgroundView>
+    </BackgroundView>
   );
 }
 
@@ -47,8 +76,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buttonContainer: {
+    width: "100%",
+  },
+  inputContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: "40%",
+    width: "90%",
+  },
   title: {
-    fontSize: 50,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   separator: {
@@ -56,15 +94,4 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
-  buttonIcon: {
-    paddingHorizontal: 8,
-  },
-  buttonTitle: {
-    fontSize: 24,
-  },
-  buttonContainer: {
-    width: "50%",
-    borderWidth: 1,
-    borderColor: "white"
-  }
 });

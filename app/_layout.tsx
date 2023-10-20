@@ -46,17 +46,23 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+function Navigator() {
+  return (
+    <Stack>
+      <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+    </Stack>
+  )
+}
+
 function RootLayoutNav() {
 
   return (
     <ReduxProvider store={reduxStore}>
       <ThemeProvider theme={theme}>
-
-        <Stack>
-            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        </Stack>
+          <Navigator />
+        
       </ThemeProvider>
     </ReduxProvider>
   );

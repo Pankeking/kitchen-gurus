@@ -1,15 +1,28 @@
 import { StyleSheet } from "react-native"
 import { Text, View } from "../../components/Themed"
 import { Link } from "expo-router"
+import BackgroundView from "../../components/BackgroundView"
+import { Button } from "@rneui/themed"
+import CustomIcon from "../../components/CustomIcon"
 
 export default function IndexScreen() {
   return (
     <>
-      <View style={styles.container}>
-        <Link href="/login" style={styles.link}>
-          <Text style={styles.linkText}>Log In</Text>
-        </Link>
-      </View>
+      <BackgroundView style={styles.container}>
+        <BackgroundView style={styles.innerInputContainer}>
+          <Link href="/register" asChild>
+            <Button 
+              buttonStyle={styles.buttonContainer}
+              icon={<CustomIcon
+                name="account-alert"
+                size={18}
+                />} 
+              size="lg" 
+              title="DES KONEKTAO"  
+            />
+          </Link>
+        </BackgroundView>
+      </BackgroundView>
     </>
   )
 }
@@ -21,14 +34,20 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     title: {
-        fontSize: 20,
+        fontSize: 40,
         fontWeight: "bold",
     },
-    link: {
-      fontStyle: "italic" 
+    inputContainer: {
+      alignItems: "center",
+      justifyContent: "center",
+      height: "40%",
+      width: "90%",
     },
-    linkText: {
-      fontSize: 14,
-      color: "#a923fc"
-    }
+    innerInputContainer: {
+      width: "80%",
+      marginVertical: 8,
+    },
+    buttonContainer: {
+      width: "100%",
+    },
 })

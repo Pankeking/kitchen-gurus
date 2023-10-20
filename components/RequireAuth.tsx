@@ -1,25 +1,12 @@
 import { router } from "expo-router";
 import { useSelector } from "react-redux";
+import { User, AuthState } from "../redux/types";
 
-interface User {
-  id: string;
-  email: string;
-}
-
-interface RootState  {
-  auth: {
-    user: User | null;
-    email: string | null;
-    loading: boolean;
-    error: Error | null;
-  }
-}
-
-export default function RequireAuth ({ children } : {children: React.JSX.Element}) {
-  const user = useSelector<RootState, User | null>(
-    state => state.auth.user
+export default function RequireAuth ({ children } : {children: React.ReactNode}) {
+  const user = useSelector<AuthState, User | null>(
+    state => state.user
   );
 
-  return !user ? () => router.replace('/(auth)') : children;
+  return !user ? () => router.replace('/(auth)') : router.replace('/');
 }
 

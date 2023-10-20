@@ -1,19 +1,74 @@
 import { StatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import BackgroundView from '../components/BackgroundView';
+import { useEffect } from 'react';
+import { router } from 'expo-router';
+import { clearError, setError, setLoading, signOut } from '../redux/slices/authSlice';
+import { signOut as FBsignOut } from 'firebase/auth';
+import { FBauth } from '../services/firebase';
+import { Error } from '../redux/types';
+import { Button } from '@rneui/themed';
+import CustomIcon from '../components/CustomIcon';
 
 export default function ModalScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/modal.tsx" />
 
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </View>
+  const dispatch = useDispatch();
+  const userState = useSelector((state: any) => state.auth.user);
+
+  useEffect(() => {
+    async function AuthInOut() {
+      if (userState == null) {
+        router.replace('/(auth)')
+      }
+      console.log("auth in logic")
+    AuthInOut();
+    }
+  }, [userState])
+
+  const handleSignOut = async () => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
+    try {
+      await FBsignOut(FBauth)
+      dispatch(signOut());
+      router.replace('/(auth)')
+    } catch (error: any) {
+      const errorDispatched = {
+        name: error.name,
+        code: error.code
+      }
+      console.log(error)
+      dispatch(setError(errorDispatched));
+    } finally {
+      dispatch(setLoading(false));
+    }
+    
+  }
+
+  return (
+    <BackgroundView style={styles.container}>
+      <Text style={styles.title}>CONEKTAO</Text>
+      {userState && 
+        <Text style={styles.title}>{userState.id} - {userState.email}</Text>
+      }
+      <View style={styles.separator} />
+      <BackgroundView style={styles.inputContainer}>
+        <Button 
+          buttonStyle={styles.buttonContainer}
+          icon={<CustomIcon
+            name="logout"
+            size={18}
+            />}
+          size="lg"
+          title="Sign Out"
+          onPress={handleSignOut}
+        />
+      </BackgroundView>
+    </BackgroundView>
   );
 }
 
@@ -22,6 +77,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonContainer: {
+    width: "100%",
+  },
+  inputContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: "40%",
+    width: "90%",
   },
   title: {
     fontSize: 20,
