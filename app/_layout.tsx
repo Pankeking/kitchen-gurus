@@ -1,14 +1,13 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
-import { View, useColorScheme } from 'react-native';
 import { Provider as ReduxProvider } from 'react-redux';
 
 import reduxStore from "../redux/store";
 import { ThemeProvider } from '@rneui/themed';
 import theme from "../constants/theme"
+import RequireAuth from '../components/RequireAuth';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -48,15 +47,15 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
 
   return (
     <ReduxProvider store={reduxStore}>
       <ThemeProvider theme={theme}>
+
         <Stack>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         </Stack>
       </ThemeProvider>
     </ReduxProvider>

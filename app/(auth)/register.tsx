@@ -9,24 +9,28 @@ import { CustomIcon, BackgroundView} from "../../components/themedCustom";
 
 import { Button, Input, Text, useTheme } from "@rneui/themed";
 
-import { 
+import authSlice, { 
   signUp, 
   signIn, 
-  signOut, 
-  setError, 
-  clearError, 
-  setLoading } from "../../redux/slices/authSlice";
+  signOut,
+  setLoading, 
+  clearError,
+  setError,  } from "../../redux/slices/authSlice";
 
 import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword } from "firebase/auth"
 import { FBauth } from "../../services/firebase"
 import ToggleMode from "../../components/ToggleMode";
+import { ActionCreator, PayloadAction } from "@reduxjs/toolkit";
+
 
 export default function RegisterScreen() {
 
   const dispatch = useDispatch();
   const themeColors = useTheme().theme.colors;
+
+  
   
 
   const [email, setEmail] = useState('');
@@ -56,7 +60,7 @@ export default function RegisterScreen() {
       const { user } = await createUserWithEmailAndPassword(FBauth, email, password);
       dispatch(setLoading(false));
       await signInWithEmailAndPassword(FBauth, email, password);
-      dispatch(signUp(user.email))
+      dispatch(signUp({id: user.displayName, email: user.email}))
     }
     catch (error : unknown) {
       dispatch(setLoading(false));
@@ -122,9 +126,11 @@ export default function RegisterScreen() {
             secureTextEntry
           />
         </BackgroundView>
+        {matchMessage && 
         <BackgroundView style={styles.innerInputContainer}>
           <Text style={[styles.matchMessage, {color: themeColors.text}]}>{matchMessage}</Text>
         </BackgroundView>
+        }
 
         <BackgroundView style={styles.innerInputContainer}>
           <Button 
