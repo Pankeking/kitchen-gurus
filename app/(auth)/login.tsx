@@ -18,8 +18,6 @@ import {
   signUp, 
   signIn, 
   signOut, 
-  setError, 
-  clearError, 
   setLoading } from "../../redux/slices/authSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FBauth } from "../../services/firebase";
@@ -50,7 +48,6 @@ export default function LoginScreen() {
 
   const handleSubmit = async () => {
     dispatch(setLoading(true));
-    dispatch(clearError());
 
     try {
       const { user } = await signInWithEmailAndPassword(FBauth, email, password);
@@ -64,7 +61,6 @@ export default function LoginScreen() {
         code: error.code
       }
       console.log(error)
-      dispatch(setError(errorDispatched));
     } finally {
       dispatch(setLoading(false));
     }
@@ -110,9 +106,9 @@ export default function LoginScreen() {
         
         <View style={styles.separator} />
 
-        <BackgroundView style={styles.inputContainer}>
+        <BackgroundView style={styles.innerContainer}>
           
-          <BackgroundView style={styles.innerInputContainer}>
+          <BackgroundView style={styles.innerDeepContainer}>
             <Input
               autoCapitalize="none"
               placeholder="Email"
@@ -122,7 +118,7 @@ export default function LoginScreen() {
             />
           </BackgroundView>
 
-          <BackgroundView style={styles.innerInputContainer}>
+          <BackgroundView style={styles.innerDeepContainer}>
             <Input
               placeholder="Password"
               // placeholderTextColor={themeColors.grey2}
@@ -132,7 +128,7 @@ export default function LoginScreen() {
             />
           </BackgroundView>
 
-          <BackgroundView style={styles.innerInputContainer}>
+          <BackgroundView style={styles.innerDeepContainer}>
             <Button
               buttonStyle={styles.buttonContainer}
               icon={<CustomIcon
@@ -145,7 +141,7 @@ export default function LoginScreen() {
             />
           </BackgroundView>
           <View style={styles.smallSpacer} />
-          <BackgroundView style={styles.innerInputContainer}>
+          <BackgroundView style={styles.innerDeepContainer}>
             <Link href="/register" asChild>
               <Button 
                 buttonStyle={styles.buttonContainer}
@@ -188,13 +184,13 @@ const styles = StyleSheet.create({
     marginVertical: 3,
     fontSize: 22,
   },    
-  inputContainer: {
+  innerContainer: {
     alignItems: "center",
     justifyContent: "center",
     height: "40%",
     width: "90%",
   },
-  innerInputContainer: {
+  innerDeepContainer: {
     width: "80%",
     marginVertical: 8,
   },

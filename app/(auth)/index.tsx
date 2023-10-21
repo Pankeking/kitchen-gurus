@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native"
-import { Text, View } from "../../components/Themed"
 import { Link } from "expo-router"
 import BackgroundView from "../../components/BackgroundView"
 import { Button } from "@rneui/themed"
@@ -9,18 +8,20 @@ export default function IndexScreen() {
   return (
     <>
       <BackgroundView style={styles.container}>
-        <BackgroundView style={styles.innerInputContainer}>
-          <Link href="/register" asChild>
-            <Button 
-              buttonStyle={styles.buttonContainer}
-              icon={<CustomIcon
-                name="account-alert"
-                size={18}
-                />} 
-              size="lg" 
-              title="DES KONEKTAO"  
-            />
-          </Link>
+        <BackgroundView style={styles.inputContainer}>
+          <BackgroundView style={styles.innerInputContainer}>
+            <Link href="/register" asChild>
+              <Button 
+                buttonStyle={styles.buttonContainer}
+                icon={<CustomIcon
+                  name="account-alert"
+                  size={18}
+                  />} 
+                size="lg" 
+                title="Proceed to Sign In"  
+              />
+            </Link>
+          </BackgroundView>
         </BackgroundView>
       </BackgroundView>
     </>

@@ -7,7 +7,6 @@ import { Provider as ReduxProvider } from 'react-redux';
 import reduxStore from "../redux/store";
 import { ThemeProvider } from '@rneui/themed';
 import theme from "../constants/theme"
-import RequireAuth from '../components/RequireAuth';
 
 export {
   // Catch any errors thrown by the Layout component.

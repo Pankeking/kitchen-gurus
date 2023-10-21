@@ -13,9 +13,8 @@ import authSlice, {
   signUp, 
   signIn, 
   signOut,
-  setLoading, 
-  clearError,
-  setError,  } from "../../redux/slices/authSlice";
+  setLoading,   
+} from "../../redux/slices/authSlice";
 
 import { 
   createUserWithEmailAndPassword, 
@@ -63,7 +62,6 @@ export default function RegisterScreen() {
   },[userState]);
 
   const handleRegister = async () => {
-    dispatch(clearError());
     
     try {
       dispatch(setLoading(true));
@@ -112,9 +110,9 @@ export default function RegisterScreen() {
           /> */}
       <ToggleMode />
       <View style={styles.separator}></View>
-      <BackgroundView style={styles.inputContainer}>
+      <BackgroundView style={styles.innerContainer}>
 
-        <BackgroundView style={styles.innerInputContainer}>
+        <BackgroundView style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
             placeholder="Email"
@@ -123,7 +121,7 @@ export default function RegisterScreen() {
           />
         </BackgroundView>
 
-        <BackgroundView style={styles.innerInputContainer}>
+        <BackgroundView style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
             placeholder="Password"
@@ -132,7 +130,7 @@ export default function RegisterScreen() {
           />
         </BackgroundView>
 
-        <BackgroundView style={styles.innerInputContainer}>
+        <BackgroundView style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
             placeholder="Confirm Password"
@@ -141,12 +139,12 @@ export default function RegisterScreen() {
           />
         </BackgroundView>
         {matchMessage && 
-        <BackgroundView style={styles.innerInputContainer}>
+        <BackgroundView style={styles.innerDeepContainer}>
           <Text style={[styles.matchMessage, {color: themeColors.text}]}>{matchMessage}</Text>
         </BackgroundView>
         }
 
-        <BackgroundView style={styles.innerInputContainer}>
+        <BackgroundView style={styles.innerDeepContainer}>
           <Button 
             buttonStyle={styles.buttonContainer}
             icon={<CustomIcon
@@ -161,7 +159,7 @@ export default function RegisterScreen() {
 
         <View style={styles.smallSpacer} />
 
-        <BackgroundView style={styles.innerInputContainer}>
+        <BackgroundView style={styles.innerDeepContainer}>
           <Link href="/login" asChild>
             <Button 
               buttonStyle={styles.buttonContainer}
@@ -197,13 +195,13 @@ const styles = StyleSheet.create({
     marginVertical: 3,
     fontSize: 22,
   },    
-  inputContainer: {
+  innerContainer: {
     alignItems: "center",
     justifyContent: "center",
     height: "40%",
     width: "90%",
   },
-  innerInputContainer: {
+  innerDeepContainer: {
     width: "80%",
     marginVertical: 8,
   },

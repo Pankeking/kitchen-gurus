@@ -1,12 +1,25 @@
 import { ActionCreator, PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { AuthState, User, Error } from '../types';
 
+interface User {
+  uid: string;
+  email: string;
+}
+interface Error {
+  code: string;
+  name: string;
+}
+interface AuthState  {
+  
+    user: User | null;
+    email: string | null;
+    loading: boolean;
+  
+}
 
 const initialState = {
   user: null,
   email: null,
   loading: false,
-  error: null,
 };
 
 const authSlice = createSlice<AuthState, any>({
@@ -25,20 +38,11 @@ const authSlice = createSlice<AuthState, any>({
     setLoading: (state: AuthState, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    setError: (state: AuthState, action: PayloadAction<Error>) => {
-      const error = action.payload;
-      state.error = error;
-    },
-    clearError: (state: AuthState) => {
-      state.error = null;
-    },
   },
 });
 
 
 export const setLoading = authSlice.actions.setLoading as ActionCreator<PayloadAction<boolean>>;
-export const setError = authSlice.actions.setError as ActionCreator<PayloadAction<Error>>
-export const clearError = authSlice.actions.clearError as ActionCreator<PayloadAction<null>>;
 export const signUp = authSlice.actions.signUp as ActionCreator<PayloadAction<User>>;
 export const signIn = authSlice.actions.signIn as ActionCreator<PayloadAction<User>>;
 export const signOut = authSlice.actions.signOut as ActionCreator<PayloadAction<null>>;

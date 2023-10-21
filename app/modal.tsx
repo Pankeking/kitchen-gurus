@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 import { useSelector } from 'react-redux';
@@ -7,10 +6,9 @@ import { useDispatch } from 'react-redux';
 import BackgroundView from '../components/BackgroundView';
 import { useEffect } from 'react';
 import { router } from 'expo-router';
-import { clearError, setError, setLoading, signOut } from '../redux/slices/authSlice';
+import { setLoading, signOut } from '../redux/slices/authSlice';
 import { signOut as FBsignOut } from 'firebase/auth';
 import { FBauth } from '../services/firebase';
-import { Error } from '../redux/types';
 import { Button } from '@rneui/themed';
 import CustomIcon from '../components/CustomIcon';
 
@@ -31,7 +29,6 @@ export default function ModalScreen() {
 
   const handleSignOut = async () => {
     dispatch(setLoading(true));
-    dispatch(clearError());
     try {
       await FBsignOut(FBauth)
       dispatch(signOut());
@@ -42,7 +39,6 @@ export default function ModalScreen() {
         code: error.code
       }
       console.log(error)
-      dispatch(setError(errorDispatched));
     } finally {
       dispatch(setLoading(false));
     }
@@ -56,7 +52,7 @@ export default function ModalScreen() {
         <Text style={styles.title}>{userState.id} - {userState.email}</Text>
       }
       <View style={styles.separator} />
-      <BackgroundView style={styles.inputContainer}>
+      <BackgroundView style={styles.innerContainer}>
         <Button 
           buttonStyle={styles.buttonContainer}
           icon={<CustomIcon
@@ -81,7 +77,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "100%",
   },
-  inputContainer: {
+  innerContainer: {
     alignItems: "center",
     justifyContent: "center",
     height: "40%",
