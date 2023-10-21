@@ -1,37 +1,28 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, useColorScheme } from "react-native"
+import { StyleSheet } from "react-native"
 import { Link, router } from "expo-router";
 
 import { Button, Input, Text, useTheme } from "@rneui/themed";
 import { useThemeMode } from '@rneui/themed';
-
-
-import * as AppleAuthentication from "expo-apple-authentication";
-
 import { View } from "../../components/Themed"
-import { Colors } from "../../constants/Colors";
-import { BackgroundView, CustomIcon, SurfaceView, ToggleMode }  from "../../components/themedCustom";
+import { BackgroundView, CustomIcon, ToggleMode }  from "../../components/themedCustom";
+
+// import * as AppleAuthentication from "expo-apple-authentication";
 
 import { useDispatch } from "react-redux";
 
 import { 
-  signUp, 
   signIn, 
-  signOut, 
   setLoading } from "../../redux/slices/authSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { FBauth } from "../../services/firebase";
+import { FBauth } from "../../firebase-config";
 import { useSelector } from "react-redux";
-
-
-// AppleAuthentication.isAvailableAsync();
 
 export default function LoginScreen() {
   const themeColors = useTheme().theme.colors;
   const mode = useThemeMode();
 
   const dispatch = useDispatch();
-  const errorObj = useSelector((state: any) => state.auth.error)
   const userState = useSelector((state: any) => state.auth.user);
 
   const [email, setEmail] = useState('');
@@ -56,14 +47,8 @@ export default function LoginScreen() {
       dispatch(signIn({id: user.displayName, email: user.email})) 
       router.replace('/(tabs)')
     } catch (error: any) {
-      const errorDispatched = {
-        name: error.name,
-        code: error.code
-      }
       console.log(error)
-    } finally {
-      dispatch(setLoading(false));
-    }
+    } 
   }
 
 
@@ -71,12 +56,6 @@ export default function LoginScreen() {
   return (
     <>
       <BackgroundView style={styles.container}>
-        {errorObj &&
-          <>
-            <Text>Name: {errorObj?.name}</Text>
-            <Text>Code: {errorObj?.code}</Text>
-          </> 
-        }
         {userState && <Text>{userState.id}</Text>}
         <ToggleMode />
         {/* <AppleAuthentication.AppleAuthenticationButton

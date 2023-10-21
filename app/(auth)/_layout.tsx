@@ -1,14 +1,7 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Stack, Tabs } from 'expo-router';
-import { Pressable, View, useColorScheme } from 'react-native';
-
-import { Colors } from '../../constants/Colors';
+import {Stack } from 'expo-router';
 
 export default function LoginLayout() {
-  const colorScheme = useColorScheme();
-
-
-
+  
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false}} />

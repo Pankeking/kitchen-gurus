@@ -1,8 +1,7 @@
 import { StyleSheet } from "react-native"
 import { Link } from "expo-router"
-import BackgroundView from "../../components/BackgroundView"
 import { Button } from "@rneui/themed"
-import CustomIcon from "../../components/CustomIcon"
+import { CustomIcon, BackgroundView } from "../../components/themedCustom"
 
 export default function IndexScreen() {
   return (

@@ -4,22 +4,17 @@ interface User {
   uid: string;
   email: string;
 }
-interface Error {
-  code: string;
-  name: string;
-}
+
 interface AuthState  {
-  
     user: User | null;
-    email: string | null;
-    loading: boolean;
-  
+    isLoggedIn: boolean;
+    initialized: boolean;
 }
 
 const initialState = {
   user: null,
-  email: null,
-  loading: false,
+  isLoggedIn: false,
+  initialized: false,
 };
 
 const authSlice = createSlice<AuthState, any>({
@@ -34,9 +29,6 @@ const authSlice = createSlice<AuthState, any>({
     },
     signOut: (state: AuthState) => {
       state.user = null;
-    },
-    setLoading: (state: AuthState, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
     },
   },
 });

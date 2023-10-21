@@ -1,16 +1,15 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
-import { Text, View } from '../../components/Themed';
+import { View } from '../../components/Themed';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import BackgroundView from '../../components/BackgroundView';
 import { useEffect } from 'react';
 import { router } from 'expo-router';
-import { setLoading, signOut } from '../../redux/slices/authSlice';
+import { signOut } from '../../redux/slices/authSlice';
 import { signOut as FBsignOut } from 'firebase/auth';
-import { FBauth } from '../../services/firebase';
+import { FBauth } from '../../firebase-config';
 import { Button } from '@rneui/themed';
-import CustomIcon from '../../components/CustomIcon';
+import { CustomIcon, BackgroundView } from '../../components/themedCustom';
 
 export default function TabOneScreen() {
 
@@ -27,19 +26,12 @@ export default function TabOneScreen() {
   }, [userState])
 
   const handleSignOut = async () => {
-    dispatch(setLoading(true));
     try {
       await FBsignOut(FBauth)
       dispatch(signOut());
       router.replace('/(auth)')
     } catch (error: any) {
-      const errorDispatched = {
-        name: error.name,
-        code: error.code
-      }
       console.log(error)
-    } finally {
-      dispatch(setLoading(false));
     }
   }
 

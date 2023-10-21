@@ -28,4 +28,24 @@
 - Back-end through firebase
 - Themed by react native elements: @rneui/themed
 
-## Icons theme: MaterialCommunityIcons
+## Themed Components
+
+- CustomIcon: Icon with theme color as default
+-
+- ToggleMode: button to toggle dark/light theme mode
+
+### Default Icon: MaterialCommunityIcons from @expo/vector-icons
+
+## Current working tree - files
+
+- AuthFlow:
+  - redux/store.ts
+  - redux/slices/authSlice.ts
+  - app/modal.tsx
+  - (auth)/register.tsx
+  - (auth)/login.tsx
+  - (auth)(index.tsx)
+
+- Apple Buttons:
+  - Login.tsx
+  - Register.tsx

@@ -61,7 +61,6 @@ function RootLayoutNav() {
     <ReduxProvider store={reduxStore}>
       <ThemeProvider theme={theme}>
           <Navigator />
-        
       </ThemeProvider>
     </ReduxProvider>
   );

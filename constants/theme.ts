@@ -1,4 +1,4 @@
-import { createTheme, useTheme } from '@rneui/themed';
+import { createTheme } from '@rneui/themed';
 
 const black = '#212121';
 const orange = 'orange'; 

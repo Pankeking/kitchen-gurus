@@ -5,23 +5,18 @@ import { useDispatch } from "react-redux";
 import { View } from "../../components/Themed";
 
 import { Link, router } from "expo-router";
-import { CustomIcon, BackgroundView} from "../../components/themedCustom";
+import { CustomIcon, BackgroundView, ToggleMode} from "../../components/themedCustom";
 
 import { Button, Input, Text, useTheme } from "@rneui/themed";
 
-import authSlice, { 
+import { 
   signUp, 
-  signIn, 
-  signOut,
-  setLoading,   
 } from "../../redux/slices/authSlice";
 
 import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword } from "firebase/auth"
-import { FBauth } from "../../services/firebase"
-import ToggleMode from "../../components/ToggleMode";
-import { ActionCreator, PayloadAction } from "@reduxjs/toolkit";
+import { FBauth } from "../../firebase-config"
 import { useSelector } from "react-redux";
 
 
@@ -64,20 +59,16 @@ export default function RegisterScreen() {
   const handleRegister = async () => {
     
     try {
-      dispatch(setLoading(true));
       // check if user exists
-      // LOGIC HERE
+
       // create new User
       const { user } = await createUserWithEmailAndPassword(FBauth, email, password);
-      dispatch(setLoading(false));
       await signInWithEmailAndPassword(FBauth, email, password);
       dispatch(signUp({id: user.displayName, email: user.email}))
       router.replace('/(tabs)');
     }
-    catch (error : unknown) {
-      dispatch(setLoading(false));
+    catch (error) {
       console.log(error);
-      // dispatch(setError(error));
     }
   }
 
