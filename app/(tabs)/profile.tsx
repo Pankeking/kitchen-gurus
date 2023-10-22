@@ -5,17 +5,18 @@ import { selectUser } from '../../redux/slices/authSlice';
 
 export default function ProfileScreen() {
   const user = useSelector(selectUser);
+  console.log(user)
   return (
     <View background style={styles.container}>
       <ToggleMode />
       <View background style={styles.innerContainer}>
-        <Text> {user.uid} </Text>
-        <Text> {user.email} </Text>
-        <Text> {user.emailVerified} </Text>
-        <Text> {user.displayName} </Text>
-        <Text> {user.photoURL} </Text>
-        <Text> {user.phoneNumber} </Text>
-        <Text> {user.isAnonymous} </Text>
+        <Text lightColor > {user.uid} </Text>
+        <Text lightColor > {user.email} </Text>
+        <Text lightColor > {user.emailVerified} </Text>
+        <Text lightColor > {user.displayName} </Text>
+        <Text lightColor > {user.photoURL} </Text>
+        <Text lightColor > {user.phoneNumber} </Text>
+        <Text lightColor > {user.isAnonymous} </Text>
         <Text lightColor style={styles.title}>Tab Two</Text>
         <View style={styles.separator} />
       </View>
