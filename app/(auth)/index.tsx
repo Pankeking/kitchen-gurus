@@ -1,28 +1,32 @@
 import { StyleSheet } from "react-native"
-import { Link } from "expo-router"
+import { router } from "expo-router"
 import { Button } from "@rneui/themed"
-import { CustomIcon, BackgroundView } from "../../components/themedCustom"
+import { CustomIcon, View } from "../../components/themedCustom"
 
 export default function IndexScreen() {
+
+  const onPress = () => {
+    router.push('/login');
+  }
+
   return (
     <>
-      <BackgroundView style={styles.container}>
-        <BackgroundView style={styles.inputContainer}>
-          <BackgroundView style={styles.innerInputContainer}>
-            <Link href="/register" asChild>
-              <Button 
-                buttonStyle={styles.buttonContainer}
-                icon={<CustomIcon
-                  name="account-alert"
-                  size={18}
-                  />} 
-                size="lg" 
-                title="Proceed to Sign In"  
-              />
-            </Link>
-          </BackgroundView>
-        </BackgroundView>
-      </BackgroundView>
+      <View background style={styles.container}>
+        <View background style={styles.inputContainer}>
+          <View background style={styles.innerInputContainer}>
+            <Button 
+              buttonStyle={styles.buttonContainer}
+              icon={<CustomIcon
+                name="account-alert"
+                size={18}
+                />} 
+              size="lg" 
+              title="Proceed to Sign In"  
+              onPress={onPress}
+            />
+          </View>
+        </View>
+      </View>
     </>
   )
 }

@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
-import { Provider as ReduxProvider } from 'react-redux';
+import { Provider } from 'react-redux';
 
 import reduxStore from "../redux/store";
 import { ThemeProvider } from '@rneui/themed';
@@ -48,9 +48,9 @@ export default function RootLayout() {
 function Navigator() {
   return (
     <Stack>
-      <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
     </Stack>
   )
 }
@@ -58,10 +58,10 @@ function Navigator() {
 function RootLayoutNav() {
 
   return (
-    <ReduxProvider store={reduxStore}>
+    <Provider store={reduxStore}>
       <ThemeProvider theme={theme}>
           <Navigator />
       </ThemeProvider>
-    </ReduxProvider>
+    </Provider>
   );
 }

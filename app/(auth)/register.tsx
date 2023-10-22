@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
+import { router } from "expo-router";
 
-import { View } from "../../components/Themed";
-
-import { Link, router } from "expo-router";
-import { CustomIcon, BackgroundView, ToggleMode} from "../../components/themedCustom";
-
-import { Button, Input, Text, useTheme } from "@rneui/themed";
-
-import { 
-  signUp, 
-} from "../../redux/slices/authSlice";
+import { CustomIcon, View, ToggleMode, Text} from "../../components/themedCustom";
+import { Button, Input, useTheme } from "@rneui/themed";
 
 import { 
   createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword } from "firebase/auth"
+  updateProfile
+} from "firebase/auth"
 import { FBauth } from "../../firebase-config"
-import { useSelector } from "react-redux";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../../redux/slices/authSlice";
 
 
 export default function RegisterScreen() {
@@ -25,17 +20,13 @@ export default function RegisterScreen() {
   const dispatch = useDispatch();
   const themeColors = useTheme().theme.colors;
 
-  
-  
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [matchMessage, setMatchMessage] = useState('')
 
   const userState = useSelector((state: any) => state.auth.user);
-
-
 
   useEffect(() => {
     if (password != confirmPassword) {
@@ -47,34 +38,45 @@ export default function RegisterScreen() {
     }
   },[password, confirmPassword])
 
-  useEffect(() => {
-    async function LogInNav() {
-      if (userState) {
-        router.replace('/(tabs)');
-      }
-    LogInNav();
-    }
-  },[userState]);
-
-  const handleRegister = async () => {
-    
+  const appSignUp = async (email: string, password: string, displayName: string) => {
     try {
-      // check if user exists
-
-      // create new User
-      const { user } = await createUserWithEmailAndPassword(FBauth, email, password);
-      await signInWithEmailAndPassword(FBauth, email, password);
-      dispatch(signUp({id: user.displayName, email: user.email}))
-      router.replace('/(tabs)');
-    }
-    catch (error) {
-      console.log(error);
+      // This will trigger onAuthStateChange to update the store
+      const resp = await createUserWithEmailAndPassword(FBauth, email, password);
+      // Add display name
+      await updateProfile(resp?.user, {displayName});
+      const userObject = {
+        uid: resp?.user.uid,
+        email: resp?.user.email,
+        emailVerified: resp?.user.emailVerified,
+        displayName: displayName,
+        photoURL: resp?.user.photoURL,
+        phoneNumber: resp?.user.phoneNumber,
+        isAnonymous: resp?.user.isAnonymous,
+      }
+      dispatch(setUser(userObject));
+      return { user: FBauth.currentUser };
+    } catch (e) {
+      console.error(e);
+      return { error: e};
     }
   }
 
+  const handleRegister = async () => {
+      // create new User
+      const resp = await appSignUp(email, password, displayName);
+      if (resp?.user) {
+        router.replace('/(tabs)')
+      } else {
+        console.error(resp.error)
+      }
+    }
+  
+
+
+
   return (
     <>
-    <BackgroundView style={styles.container}>
+    <View background style={styles.container}>
       {/* <AppleAuthentication.AppleAuthenticationButton
             buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_UP}
             buttonStyle={colorScheme === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.BLACK : AppleAuthentication.AppleAuthenticationButtonStyle.WHITE}
@@ -101,41 +103,49 @@ export default function RegisterScreen() {
           /> */}
       <ToggleMode />
       <View style={styles.separator}></View>
-      <BackgroundView style={styles.innerContainer}>
+      <View background style={styles.innerContainer}>
 
-        <BackgroundView style={styles.innerDeepContainer}>
+        <View background style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
             placeholder="Email"
             onChangeText={setEmail}
             autoCapitalize="none"
           />
-        </BackgroundView>
+        </View>
+        <View background style={styles.innerDeepContainer}>
+          <Input
+            style={styles.input}
+            placeholder="Username"
+            onChangeText={setDisplayName}
+          />
+        </View>
 
-        <BackgroundView style={styles.innerDeepContainer}>
+        <View background style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
             placeholder="Password"
             onChangeText={setPassword}
             secureTextEntry
           />
-        </BackgroundView>
+        </View>
 
-        <BackgroundView style={styles.innerDeepContainer}>
+        <View background style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
             placeholder="Confirm Password"
             onChangeText={setConfirmPassword}
             secureTextEntry
           />
-        </BackgroundView>
+        </View>
+
         {matchMessage && 
-        <BackgroundView style={styles.innerDeepContainer}>
-          <Text style={[styles.matchMessage, {color: themeColors.text}]}>{matchMessage}</Text>
-        </BackgroundView>
+          <View background style={styles.innerDeepContainer}>
+            <Text style={[styles.matchMessage, {color: themeColors.secondary}]}>{matchMessage}</Text>
+          </View>
         }
 
-        <BackgroundView style={styles.innerDeepContainer}>
+        <View background style={styles.innerDeepContainer}>
           <Button 
             buttonStyle={styles.buttonContainer}
             icon={<CustomIcon
@@ -146,29 +156,28 @@ export default function RegisterScreen() {
             title="Register"
             onPress={handleRegister}
           />
-        </BackgroundView>
+        </View>
 
         <View style={styles.smallSpacer} />
 
-        <BackgroundView style={styles.innerDeepContainer}>
-          <Link href="/login" asChild>
-            <Button 
-              buttonStyle={styles.buttonContainer}
-              icon={<CustomIcon
-                name="login"
-                size={18}
-                />} 
-              size="lg"
-              title="Have an account? Sign-In" 
-            />
-          </Link>
-        </BackgroundView>
+        <View background style={styles.innerDeepContainer}>
+          <Button 
+            buttonStyle={styles.buttonContainer}
+            icon={<CustomIcon
+              name="login"
+              size={18}
+              />} 
+            size="lg"
+            title="Have an account? Sign-In" 
+            onPress={() => router.push('/login')}
+          />
+        </View>
         
         
-      </BackgroundView>
+      </View>
       <View style={styles.separator}></View>
       <View style={styles.separator}></View>
-    </BackgroundView>
+    </View>
     </>
   )
 }

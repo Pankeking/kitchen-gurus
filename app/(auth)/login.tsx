@@ -1,62 +1,60 @@
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native"
-import { Link, router } from "expo-router";
+import { Alert, StyleSheet } from "react-native"
 
-import { Button, Input, Text, useTheme } from "@rneui/themed";
-import { useThemeMode } from '@rneui/themed';
-import { View } from "../../components/Themed"
-import { BackgroundView, CustomIcon, ToggleMode }  from "../../components/themedCustom";
+import { router } from "expo-router";
+
+import { Button, Input } from "@rneui/themed";
+import { Text, View, CustomIcon, ToggleMode }  from "../../components/themedCustom";
 
 // import * as AppleAuthentication from "expo-apple-authentication";
 
-import { useDispatch } from "react-redux";
-
-import { 
-  signIn, 
-  setLoading } from "../../redux/slices/authSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../../redux/slices/authSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FBauth } from "../../firebase-config";
-import { useSelector } from "react-redux";
+
 
 export default function LoginScreen() {
-  const themeColors = useTheme().theme.colors;
-  const mode = useThemeMode();
-
   const dispatch = useDispatch();
-  const userState = useSelector((state: any) => state.auth.user);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    async function LogInNav() {
-      if (userState) {
-        router.replace('/(tabs)');
-      }
-    LogInNav();
-    }
-  },[userState])
-
-  const handleSubmit = async () => {
-    dispatch(setLoading(true));
-
+  // SIGN IN LOGIC
+  const appSignIn = async (email: string, password: string) => {
     try {
-      const { user } = await signInWithEmailAndPassword(FBauth, email, password);
-      dispatch(setLoading(false))
-      console.log("success")
-      dispatch(signIn({id: user.displayName, email: user.email})) 
-      router.replace('/(tabs)')
-    } catch (error: any) {
-      console.log(error)
-    } 
+      const resp = await signInWithEmailAndPassword(FBauth, email, password);
+      const userObject = {
+        uid: resp?.user.uid,
+        email: resp?.user.email,
+        emailVerified: resp?.user.emailVerified,
+        displayName: resp?.user.displayName,
+        photoURL: resp?.user.photoURL,
+        phoneNumber: resp?.user.phoneNumber,
+        isAnonymous: resp?.user.isAnonymous,
+      }
+      dispatch(setUser(userObject));
+      return { user: FBauth.currentUser };
+    } catch (e) {
+      console.error(e);
+      return { error: e };
+    }
   }
-
-
+  // SIGN IN BUTTON HANDLER
+  const handleSignIn = async () => {
+    const resp = await appSignIn(email, password);
+    if (resp?.user) {
+      router.replace('/(tabs)')
+      console.log("success")
+    } else {
+      console.error(resp.error)
+    }
+  }
 
   return (
     <>
-      <BackgroundView style={styles.container}>
-        {userState && <Text>{userState.id}</Text>}
+      <View background style={styles.container}>
+        {/* {userState && <Text>{userState.uid}</Text>} */}
         <ToggleMode />
         {/* <AppleAuthentication.AppleAuthenticationButton
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
@@ -82,32 +80,26 @@ export default function LoginScreen() {
             }
           }}
         /> */}
-        
         <View style={styles.separator} />
 
-        <BackgroundView style={styles.innerContainer}>
-          
-          <BackgroundView style={styles.innerDeepContainer}>
+        <View background style={styles.innerContainer}>
+          <View background style={styles.innerDeepContainer}>
             <Input
               autoCapitalize="none"
               placeholder="Email"
-              // placeholderTextColor={themeColors.grey2}
               style={styles.input}
               onChangeText={setEmail}
             />
-          </BackgroundView>
-
-          <BackgroundView style={styles.innerDeepContainer}>
+          </View>
+          <View background style={styles.innerDeepContainer}>
             <Input
               placeholder="Password"
-              // placeholderTextColor={themeColors.grey2}
               secureTextEntry
               style={styles.input}
               onChangeText={setPassword}
             />
-          </BackgroundView>
-
-          <BackgroundView style={styles.innerDeepContainer}>
+          </View>
+          <View background style={styles.innerDeepContainer}>
             <Button
               buttonStyle={styles.buttonContainer}
               icon={<CustomIcon
@@ -116,29 +108,27 @@ export default function LoginScreen() {
                 />} 
               size="lg" 
               title="Sign In" 
-              onPress={handleSubmit}
+              onPress={handleSignIn}
             />
-          </BackgroundView>
+          </View>
           <View style={styles.smallSpacer} />
-          <BackgroundView style={styles.innerDeepContainer}>
-            <Link href="/register" asChild>
-              <Button 
-                buttonStyle={styles.buttonContainer}
-                icon={<CustomIcon
-                  name="form-select"
-                  size={18}
-                  />} 
-                size="lg" 
-                title="Create new account"  
-              />
-            </Link>
-          </BackgroundView>
-
-        </BackgroundView>
+          <View background style={styles.innerDeepContainer}>
+            <Button 
+              buttonStyle={styles.buttonContainer}
+              icon={<CustomIcon
+                name="form-select"
+                size={18}
+                />} 
+              size="lg" 
+              title="Create new account"  
+              onPress={() => router.push('/register')}
+            />
+          </View>
+        </View>
 
         <View style={styles.separator}></View>
         <View style={styles.separator}></View>
-      </BackgroundView>
+      </View>
     </>
   )
 

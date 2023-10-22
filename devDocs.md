@@ -30,8 +30,9 @@
 
 ## Themed Components
 
+- Text: Text with Light/Dark mode selector
 - CustomIcon: Icon with theme color as default
--
+- BackgroundView: Default View with background theme color
 - ToggleMode: button to toggle dark/light theme mode
 
 ### Default Icon: MaterialCommunityIcons from @expo/vector-icons

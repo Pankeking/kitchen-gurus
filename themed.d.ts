@@ -5,6 +5,7 @@ declare module '@rneui/themed' {
     tertiary: string;
     accent: string;
     surface: string;
-    text: string;
+    lightText: string;
+    darkText: string;
   }
 }

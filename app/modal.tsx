@@ -1,35 +1,35 @@
-import { StyleSheet } from 'react-native';
-
-import { Text, View } from '../components/Themed';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import { signOut } from '../redux/slices/authSlice';
-import { signOut as FBsignOut } from 'firebase/auth';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '../redux/slices/authSlice';
+
 import { FBauth } from '../firebase-config';
+import { signOut as FBsignOut } from 'firebase/auth';
+
 import { Button } from '@rneui/themed';
-import { CustomIcon, BackgroundView } from '../components/themedCustom';
+import { CustomIcon, View, Text } from '../components/themedCustom';
 
 export default function ModalScreen() {
 
   const dispatch = useDispatch();
-  const userState = useSelector((state: any) => state.auth.user);
+  // const userState = useSelector((state: any) => state.auth.user);
 
-  useEffect(() => {
-    async function AuthInOut() {
-      if (userState == null) {
-        router.replace('/(auth)')
-      }
-      console.log("auth in logic")
-    AuthInOut();
-    }
-  }, [userState])
+  // useEffect(() => {
+  //   async function AuthInOut() {
+  //     if (userState == null) {
+  //       router.replace('/(auth)')
+  //     }
+  //     console.log("auth in logic")
+  //   AuthInOut();
+  //   }
+  // }, [userState])
 
   const handleSignOut = async () => {
     try {
       await FBsignOut(FBauth)
-      dispatch(signOut());
+      dispatch(setUser(null));
       router.replace('/(auth)')
     } catch (error) {
       console.log(error)
@@ -37,13 +37,11 @@ export default function ModalScreen() {
   }
 
   return (
-    <BackgroundView style={styles.container}>
+    <View background style={styles.container}>
       <Text style={styles.title}>CONEKTAO</Text>
-      {userState && 
-        <Text style={styles.title}>{userState.id} - {userState.email}</Text>
-      }
+      {/* {userState && <Text style={styles.title}>{userState.id} - {userState.email}</Text>} */}
       <View style={styles.separator} />
-      <BackgroundView style={styles.innerContainer}>
+      <View background style={styles.innerContainer}>
         <Button 
           buttonStyle={styles.buttonContainer}
           icon={<CustomIcon
@@ -54,8 +52,8 @@ export default function ModalScreen() {
           title="Sign Out"
           onPress={handleSignOut}
         />
-      </BackgroundView>
-    </BackgroundView>
+      </View>
+    </View>
   );
 }
 

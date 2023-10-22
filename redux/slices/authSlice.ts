@@ -1,41 +1,51 @@
-import { ActionCreator, PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-interface User {
+interface FirebaseUser {
   uid: string;
-  email: string;
+  email: string | null;
+  emailVerified: boolean;
+  displayName: string | null;
+  photoURL: string | null;
+  phoneNumber: string | null;
+  isAnonymous: boolean;
 }
 
-interface AuthState  {
-    user: User | null;
+interface AuthState {
+    user: FirebaseUser | null;
     isLoggedIn: boolean;
     initialized: boolean;
 }
 
-const initialState = {
-  user: null,
-  isLoggedIn: false,
-  initialized: false,
-};
+  const initialState: AuthState = {
+    user: null,
+    isLoggedIn: false,
+    initialized: false,
+  };
 
-const authSlice = createSlice<AuthState, any>({
+const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    signUp: (state: AuthState, action: PayloadAction<User>) => {
+    setUser: (state, action) => {
       state.user = action.payload;
+      state.isLoggedIn = action.payload ? true : false;
     },
-    signIn: (state: AuthState, action: PayloadAction<User>) => {
-      state.user = action.payload;
-    },
-    signOut: (state: AuthState) => {
-      state.user = null;
-    },
+    setInitialized: (state, action) => {
+      state.initialized = action.payload;
+    }
   },
 });
 
+export const selectUser = (state:any) => state.user;
 
-export const setLoading = authSlice.actions.setLoading as ActionCreator<PayloadAction<boolean>>;
-export const signUp = authSlice.actions.signUp as ActionCreator<PayloadAction<User>>;
-export const signIn = authSlice.actions.signIn as ActionCreator<PayloadAction<User>>;
-export const signOut = authSlice.actions.signOut as ActionCreator<PayloadAction<null>>;
+
+export const { setUser, setInitialized } = authSlice.actions;
+
+
+// const unsub = onAuthStateChanged(FBauth, (user) => {
+//   console.log("On auth state changed", user);
+//   dispatch(setUser(user));
+//   dispatch(setInitialized(true));
+// });
+
 export default authSlice;
