@@ -32,6 +32,11 @@ const authSlice = createSlice({
     },
     setInitialized: (state, action) => {
       state.initialized = action.payload;
+    },
+    updateUser: (state, action) => {
+      state.user = action.payload;
+      console.log("Updated photoURL\n");
+      console.log(state.user?.photoURL);
     }
   },
 });
@@ -39,7 +44,7 @@ const authSlice = createSlice({
 export const selectUser = (state:any) => state.auth.user;
 
 
-export const { setUser, setInitialized } = authSlice.actions;
+export const { setUser, updateUser, setInitialized } = authSlice.actions;
 
 
 // const unsub = onAuthStateChanged(FBauth, (user) => {

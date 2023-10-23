@@ -50,3 +50,7 @@
 - Apple Buttons:
   - Login.tsx
   - Register.tsx
+
+## Added Dependencies
+
+- expo-image-picker

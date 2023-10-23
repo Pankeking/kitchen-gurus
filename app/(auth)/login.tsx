@@ -33,7 +33,6 @@ export default function LoginScreen() {
         phoneNumber: resp?.user.phoneNumber,
         isAnonymous: resp?.user.isAnonymous,
       }
-      console.log(userObject)
       dispatch(setUser(userObject));
       return { user: FBauth.currentUser };
     } catch (e) {
