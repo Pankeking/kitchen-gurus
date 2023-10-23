@@ -30,16 +30,30 @@
 
 ## Themed Components
 
-- Text: Text with Light/Dark mode selector
+- Text: Default Text with lightText theme color
 - CustomIcon: Icon with theme color as default
-- BackgroundView: Default View with background theme color
+- View: Default View with background theme color
 - ToggleMode: button to toggle dark/light theme mode
 
 ### Default Icon: MaterialCommunityIcons from @expo/vector-icons
 
-## Current working tree - files
+## Current working tree - files (STATUS)
 
-- AuthFlow:
+- Profile Screen (WIP OCT 23)
+  - Alignment
+    - Image / Button
+    - Info Text / Icons
+  - Components
+    - Network Components Container / View
+    - Personal Recipes
+    - Personal Feed
+  - Profile Items persistance (Social Media, Followers, Likes, Recipes)
+    - FireStore Visualization
+    - FireStore Storage
+    - FireStore Documents
+    - FireBase Auth link to Store
+
+- AuthFlow (DONE OCT 21):
   - redux/store.ts
   - redux/slices/authSlice.ts
   - app/modal.tsx
@@ -47,7 +61,7 @@
   - (auth)/login.tsx
   - (auth)(index.tsx)
 
-- Apple Buttons:
+- Apple Buttons (DONE OCT 18):
   - Login.tsx
   - Register.tsx
 
