@@ -1,5 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// interface SocialMedia {
+//   facebook: string;
+//   instagram: string;
+//   linkedin: string;
+//   twitter: string;
+// }
+
 interface FirebaseUser {
   uid: string;
   email: string | null;
@@ -8,6 +15,7 @@ interface FirebaseUser {
   photoURL: string | null;
   phoneNumber: string | null;
   isAnonymous: boolean;
+  // socialMedia: SocialMedia | null;
 }
 
 interface AuthState {
@@ -42,6 +50,7 @@ const authSlice = createSlice({
 });
 
 export const selectUser = (state:any) => state.auth.user;
+export const selectSocialMedia = (state:any) => state.auth.user.socialMedia;
 
 
 export const { setUser, updateUser, setInitialized } = authSlice.actions;

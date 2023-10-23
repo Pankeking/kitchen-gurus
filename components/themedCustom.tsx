@@ -25,12 +25,11 @@ export type ViewProps = BackgroudViewProps & DefaultView['props'];
 // DEFAULT TEXT LIGHT/DARK MODE
 export function Text(props: TextProps) {
   const themeColors = useTheme().theme.colors;
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const textColor = lightColor ? themeColors.lightText : darkColor ? themeColors.darkText : themeColors.secondary;
+  const { style, ...otherProps } = props;
 
   return (
     <DefaultText 
-      style={[{ color: textColor }, style]}
+      style={[{ color: themeColors.lightText }, style]}
       {...otherProps}
     />
   )
@@ -40,11 +39,10 @@ export function Text(props: TextProps) {
 // DEFAULT VIEW
 export function View(props: ViewProps) {
   const themeColors = useTheme().theme.colors;
-  const { style, background, surface,...otherProps } = props;
-  const bgColor = background ? themeColors.background : surface ? themeColors.surface : themeColors.secondary;
+  const { style, ...otherProps } = props;
   return (
     <DefaultView
-      style={[{ backgroundColor: bgColor}, style]}
+      style={[{ backgroundColor: themeColors.background}, style]}
       {...otherProps}
     />
   )

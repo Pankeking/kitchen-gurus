@@ -14,7 +14,7 @@ const defaultTheme = createTheme({
   lightColors: {
     primary: rose,
     secondary: black,
-    background: ivory,
+    background: white,
     surface: white,
     lightText: black,
     darkText: white,
@@ -40,7 +40,7 @@ const defaultTheme = createTheme({
     },
     Input: {
       placeholderTextColor: grey
-    }
+    },
   },
   mode: "light",
 })

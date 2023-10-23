@@ -76,7 +76,7 @@ export default function RegisterScreen() {
 
   return (
     <>
-    <View background style={styles.container}>
+    <View style={styles.container}>
       {/* <AppleAuthentication.AppleAuthenticationButton
             buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_UP}
             buttonStyle={colorScheme === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.BLACK : AppleAuthentication.AppleAuthenticationButtonStyle.WHITE}
@@ -103,9 +103,9 @@ export default function RegisterScreen() {
           /> */}
       <ToggleMode />
       <View style={styles.separator}></View>
-      <View background style={styles.innerContainer}>
+      <View style={styles.innerContainer}>
 
-        <View background style={styles.innerDeepContainer}>
+        <View style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
             placeholder="Email"
@@ -113,7 +113,7 @@ export default function RegisterScreen() {
             autoCapitalize="none"
           />
         </View>
-        <View background style={styles.innerDeepContainer}>
+        <View style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
             placeholder="Username"
@@ -121,7 +121,7 @@ export default function RegisterScreen() {
           />
         </View>
 
-        <View background style={styles.innerDeepContainer}>
+        <View style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
             placeholder="Password"
@@ -130,7 +130,7 @@ export default function RegisterScreen() {
           />
         </View>
 
-        <View background style={styles.innerDeepContainer}>
+        <View style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
             placeholder="Confirm Password"
@@ -140,12 +140,12 @@ export default function RegisterScreen() {
         </View>
 
         {matchMessage && 
-          <View background style={styles.innerDeepContainer}>
+          <View style={styles.innerDeepContainer}>
             <Text style={[styles.matchMessage, {color: themeColors.secondary}]}>{matchMessage}</Text>
           </View>
         }
 
-        <View background style={styles.innerDeepContainer}>
+        <View style={styles.innerDeepContainer}>
           <Button 
             buttonStyle={styles.buttonContainer}
             icon={<CustomIcon
@@ -160,7 +160,7 @@ export default function RegisterScreen() {
 
         <View style={styles.smallSpacer} />
 
-        <View background style={styles.innerDeepContainer}>
+        <View style={styles.innerDeepContainer}>
           <Button 
             buttonStyle={styles.buttonContainer}
             icon={<CustomIcon

@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import { Alert, StyleSheet } from "react-native"
+import { useState } from "react";
+import { StyleSheet } from "react-native"
 
 import { router } from "expo-router";
 
 import { Button, Input } from "@rneui/themed";
-import { Text, View, CustomIcon, ToggleMode }  from "../../components/themedCustom";
+import { View, CustomIcon, ToggleMode }  from "../../components/themedCustom";
 
 // import * as AppleAuthentication from "expo-apple-authentication";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FBauth } from "../../firebase-config";
@@ -32,6 +32,7 @@ export default function LoginScreen() {
         photoURL: resp?.user.photoURL,
         phoneNumber: resp?.user.phoneNumber,
         isAnonymous: resp?.user.isAnonymous,
+        socialMedia: null
       }
       dispatch(setUser(userObject));
       return { user: FBauth.currentUser };
@@ -45,7 +46,6 @@ export default function LoginScreen() {
     const resp = await appSignIn(email, password);
     if (resp?.user) {
       router.replace('/(tabs)')
-      console.log("success")
     } else {
       console.error(resp.error)
     }
@@ -53,7 +53,7 @@ export default function LoginScreen() {
 
   return (
     <>
-      <View background style={styles.container}>
+      <View style={styles.container}>
         {/* {userState && <Text>{userState.uid}</Text>} */}
         <ToggleMode />
         {/* <AppleAuthentication.AppleAuthenticationButton
@@ -82,8 +82,8 @@ export default function LoginScreen() {
         /> */}
         <View style={styles.separator} />
 
-        <View background style={styles.innerContainer}>
-          <View background style={styles.innerDeepContainer}>
+        <View style={styles.innerContainer}>
+          <View style={styles.innerDeepContainer}>
             <Input
               autoCapitalize="none"
               placeholder="Email"
@@ -91,7 +91,7 @@ export default function LoginScreen() {
               onChangeText={setEmail}
             />
           </View>
-          <View background style={styles.innerDeepContainer}>
+          <View style={styles.innerDeepContainer}>
             <Input
               placeholder="Password"
               secureTextEntry
@@ -99,7 +99,7 @@ export default function LoginScreen() {
               onChangeText={setPassword}
             />
           </View>
-          <View background style={styles.innerDeepContainer}>
+          <View style={styles.innerDeepContainer}>
             <Button
               buttonStyle={styles.buttonContainer}
               icon={<CustomIcon
@@ -112,7 +112,7 @@ export default function LoginScreen() {
             />
           </View>
           <View style={styles.smallSpacer} />
-          <View background style={styles.innerDeepContainer}>
+          <View style={styles.innerDeepContainer}>
             <Button 
               buttonStyle={styles.buttonContainer}
               icon={<CustomIcon

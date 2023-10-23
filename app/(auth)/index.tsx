@@ -11,9 +11,9 @@ export default function IndexScreen() {
 
   return (
     <>
-      <View background style={styles.container}>
-        <View background style={styles.inputContainer}>
-          <View background style={styles.innerInputContainer}>
+      <View style={styles.container}>
+        <View style={styles.inputContainer}>
+          <View style={styles.innerInputContainer}>
             <Button 
               buttonStyle={styles.buttonContainer}
               icon={<CustomIcon

@@ -3,15 +3,16 @@ import { Link, Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
 
 import { useTheme } from '@rneui/themed';
-
+import { CustomIcon } from '../../components/themedCustom';
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: React.ComponentProps<typeof CustomIcon>['name'];
   color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  const primaryColor = useTheme().theme.colors.primary
+  return <CustomIcon size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -21,12 +22,16 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: themeColors.primary,
+        tabBarLabelStyle: {fontSize: 12, fontWeight: "bold"}
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Home',
+          tabBarLabel: "Home",
+          tabBarIcon: ({ focused }) => <TabBarIcon 
+                                              name={focused ? "home-variant" : "home-variant-outline"} 
+                                              color={themeColors.primary} />,
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -47,7 +52,21 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarLabel: "Profile",
+          
+          tabBarIcon: ({ focused }) => <TabBarIcon 
+                                              name={focused ? "account-circle" : "account-circle-outline"} 
+                                              color={themeColors.primary} />,
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarLabel: "Settings",
+          tabBarIcon: ({ focused }) => <TabBarIcon 
+                                              name={focused ? "cog" : "cog-outline"} 
+                                              color={themeColors.primary} />,
         }}
       />
     </Tabs>

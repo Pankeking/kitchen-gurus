@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useSelector } from 'react-redux';
 import { selectUser, setUser, updateUser } from '../../redux/slices/authSlice';
@@ -8,10 +8,11 @@ import { CustomIcon, Text, ToggleMode, View } from '../../components/themedCusto
 import { Button, useTheme } from '@rneui/themed';
 
 import { launchImageLibraryAsync } from 'expo-image-picker';
-import ImageViewer from '../../components/ImageViewer';
+import ImageViewer from '../../components/Profile/ImageViewer';
 import { updateProfile } from 'firebase/auth';
 import { FBauth } from '../../firebase-config';
 import { useDispatch } from 'react-redux';
+import ProfileCard from '../../components/Profile/Card';
 
 
 export default function ProfileScreen() {
@@ -49,42 +50,50 @@ export default function ProfileScreen() {
   }
 
   return (
-    <View background style={styles.container}>
-      <View background style={styles.innerContainer}>
-        <View background style={styles.innerDeepContainer}>
+    <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <CustomIcon 
+          name="circle" 
+          size={14}
+          style={[styles.titleIcon, {
+            color: user?.emailVerified ? "green" : "red",
+            shadowColor: user?.emailVerified ? "green" : "red",
+          }]}
+        />
+        <Text style={styles.titleText}> {user?.displayName} </Text>
+      </View>
+
+      <View style={styles.cardContainer}>
+        <View style={styles.profilePicContainer}>
           <ImageViewer currentImage={user?.photoURL} newImage={imageUri} />
-            <Button onPress={PickImageAsync} 
-              buttonStyle={[styles.buttonContainer, {backgroundColor: themeColors.background}]}
-              icon={<CustomIcon
-                  name="camera"
-                  size={18}
-                  style={{color: themeColors.primary}}
-                />}
-              size="lg"
-              title=""  
-            />
+          <Button onPress={PickImageAsync} 
+            buttonStyle={[styles.profilePicButton, {backgroundColor: themeColors.background}]}
+            icon={<CustomIcon
+                name="camera"
+                size={18}
+                style={{color: themeColors.primary}}
+              />}
+            size="lg"
+            title="Pick an image"  
+            titleStyle={{color: "black"}}
+          />
         </View>
-        <View background style={styles.innerDeepContainer}>
-        {/* <Button onPress={changeName} 
-              buttonStyle={[styles.buttonContainer]}
-              size="lg"
-              title="Edit Profile"  
-            /> */}
-          <Text lightColor style={styles.title}> {user?.displayName} </Text>
-        </View>
-        
+        <ProfileCard />
       </View>
-      <View background style={styles.innerContainer}>
-        <View background>
-          <Text lightColor style={styles.title}>Profile</Text>
-          <Text lightColor style={styles.text} > Email: {user?.email} </Text>
-          <Text lightColor style={styles.text} > Status: {user?.isAnonymous ? "Chef" : "Guest"} </Text>
-          <Text lightColor style={styles.text} > Username: {user?.displayName} </Text>
-          <Text lightColor style={styles.text} > Phone: {user?.phoneNumber} </Text>
-          <Text lightColor style={styles.text} > {user?.emailVerified ? "Verified" : "Not Verified"} </Text>
+
+      <View style={styles.innerContainer}>
+        <View>
+          <Text style={styles.titleText}>Profile</Text>
+          <Text style={[styles.text, {opacity: 0}]} > UID: {user?.uid} </Text>
+          <Text style={styles.text} > Email: {user?.email} </Text>
+          <Text style={styles.text} > Status: {user?.isAnonymous ? "Chef" : "Guest"} </Text>
+          <Text style={styles.text} > Username: {user?.displayName} </Text>
+          <Text style={styles.text} > Phone: {user?.phoneNumber} </Text>
+          <Text style={styles.text} > {user?.emailVerified ? "Verified" : "Not Verified"} </Text>
         </View>
       </View>
-      <View background style={styles.innerContainer}>
+      <View style={styles.bottomContainer}>
+        <Text>Bottom Container</Text>
       </View>
     </View>
   );
@@ -96,19 +105,34 @@ const styles = StyleSheet.create({
     // borderColor: "black",
     // borderWidth: 1,
   },
-  buttonContainer: {
-    width: "100%",
-  },
+  
   innerContainer: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
-    // height: "30%",
-    // width: "100%",
     // borderColor: "blue",
     // borderWidth: 1,
+  },
+  
+  // PROFILE PICTURE
+  profilePicContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "red",
+    borderWidth: 1,
+  },
+  profilePicButton: {
+  },
+  cardContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    borderColor: "blue",
+    borderWidth: 1,
   },
   innerDeepContainer: {
     flex: 1,
@@ -117,12 +141,30 @@ const styles = StyleSheet.create({
     // borderColor: "red",
     // borderWidth: 1,
   },
-  title: {
-    fontSize: 20,
+  bottomContainer: {
+    width: "100%",
+    height: "20%",
+  },
+
+  // TITLE
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 20,
+    // borderColor: "red",
+    // borderWidth: 1,
+  },
+  titleText: {
+    fontSize: 40,
     fontWeight: 'bold',
     marginVertical: 7,
-    fontFamily: "SpaceMono"
   },
+  titleIcon: {
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    shadowOffset: {width: 0, height: 0},
+  },
+
   text: {
     marginBottom: 5,
   },

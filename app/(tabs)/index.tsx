@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { router } from 'expo-router';
@@ -9,8 +8,7 @@ import { setUser } from '../../redux/slices/authSlice';
 import { signOut } from 'firebase/auth';
 import { FBauth } from '../../firebase-config';
 
-import { Button } from '@rneui/themed';
-import { CustomIcon, ToggleMode, View, Text } from '../../components/themedCustom';
+import { View, Text } from '../../components/themedCustom';
 
 export default function HomeScreen() {
 
@@ -38,21 +36,11 @@ export default function HomeScreen() {
   }
 
   return (
-    <View background style={styles.container}>
-      <ToggleMode />
-      <Text lightColor style={styles.title}>Home Screen</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Home Screen</Text>
       <View style={styles.separator} />
-      <View background style={styles.innerContainer}>
-        <Button 
-          buttonStyle={styles.buttonContainer}
-          icon={<CustomIcon
-            name="logout"
-            size={18}
-            />}
-          size="lg"
-          title="Sign Out"
-          onPress={handleSignOut}
-        />
+      <View style={styles.innerContainer}>
+        
       </View>
     </View>
   );
