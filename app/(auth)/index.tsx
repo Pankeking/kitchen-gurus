@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native"
 import { router } from "expo-router"
-import { Button } from "@rneui/themed"
+import { Button, useTheme } from "@rneui/themed"
 import { CustomIcon, View } from "../../components/themedCustom"
+import { LinearGradient } from "expo-linear-gradient"
 
 export default function IndexScreen() {
-
+  const themeColors = useTheme().theme.colors;
   const onPress = () => {
     router.push('/login');
   }
@@ -13,17 +14,25 @@ export default function IndexScreen() {
     <>
       <View style={styles.container}>
         <View style={styles.inputContainer}>
-          <View style={styles.innerInputContainer}>
+          <View style={styles.buttonContainer}>
+            <LinearGradient
+              colors={[themeColors.primary, themeColors.accent]}
+              style={styles.gradient}
+            >
+              
+
             <Button 
-              buttonStyle={styles.buttonContainer}
+              buttonStyle={styles.button}
               icon={<CustomIcon
                 name="account-alert"
                 size={18}
                 />} 
+              iconPosition="right"  
               size="lg" 
               title="Proceed to Sign In"  
               onPress={onPress}
-            />
+                />
+            </LinearGradient>
           </View>
         </View>
       </View>
@@ -37,21 +46,26 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    title: {
-        fontSize: 40,
-        fontWeight: "bold",
-    },
     inputContainer: {
       alignItems: "center",
       justifyContent: "center",
       height: "40%",
       width: "90%",
     },
-    innerInputContainer: {
-      width: "80%",
-      marginVertical: 8,
-    },
+
     buttonContainer: {
+      width: "80%",
+      height: 50,
+    },
+    gradient: {
+      flex:1,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 12,
+      overflow: "hidden",
+    },
+    button: {
+      backgroundColor: "transparent",
       width: "100%",
     },
 })

@@ -82,6 +82,9 @@ export function ToggleMode(props: any) {
       buttonStyle={{backgroundColor: themeColors.background}}
       icon={<IconNode />}
       raised={false}
+      iconRight
+      titleStyle={{color: themeColors.lightText, fontWeight: "bold"}}
+      title={mode === 'dark' ? "Dark" : "Light"}
     />
   ) 
 }

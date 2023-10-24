@@ -13,6 +13,7 @@ import { FBauth } from "../../firebase-config"
 
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
+import { LinearGradient } from "expo-linear-gradient";
 
 
 export default function RegisterScreen() {
@@ -145,32 +146,44 @@ export default function RegisterScreen() {
           </View>
         }
 
-        <View style={styles.innerDeepContainer}>
+        <View style={styles.buttonContainer}>
+        <LinearGradient
+                colors={[themeColors.primary, themeColors.accent]}
+                style={styles.gradient}
+              >
           <Button 
-            buttonStyle={styles.buttonContainer}
+            buttonStyle={styles.button}
             icon={<CustomIcon
               name="key"
-              size={18}
+              size={22}
+              style={[styles.icon, {color: themeColors.background}]}
               />} 
             size="lg" 
             title="Register"
             onPress={handleRegister}
           />
+          </LinearGradient>
         </View>
 
         <View style={styles.smallSpacer} />
 
-        <View style={styles.innerDeepContainer}>
+        <View style={styles.buttonContainer}>
+        <LinearGradient
+                colors={[themeColors.primary, themeColors.accent]}
+                style={styles.gradient}
+        >
           <Button 
-            buttonStyle={styles.buttonContainer}
+            buttonStyle={styles.button}
             icon={<CustomIcon
               name="login"
-              size={18}
+              size={22}
+              style={[styles.icon, {color: themeColors.background}]}
               />} 
             size="lg"
             title="Have an account? Sign-In" 
             onPress={() => router.push('/login')}
           />
+          </LinearGradient>
         </View>
         
         
@@ -187,9 +200,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  buttonContainer: {
-    width: "100%",
   },
   input: {
     marginVertical: 3,
@@ -210,6 +220,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
   },
+
+  // SPACERS
+  // SPACERS
   smallSpacer: {
     height: 0,
     marginVertical: 7,
@@ -219,5 +232,28 @@ const styles = StyleSheet.create({
     height: 0,
     marginVertical: "10%",
     width: "80%",
+  },
+
+  // BUTTONS
+  // BUTTONS
+  buttonContainer: {
+    width: "80%",
+    height: 50,
+  },
+  button: {
+    backgroundColor: "transparent",
+    alignItems: "center",
+    marginHorizontal: "10%",
+    width: "100%",
+  },
+  gradient: {
+    flex:1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 12,
+    overflow: "hidden",
+  },
+  icon: {
+    justifyContent: "flex-end",
   },
 })

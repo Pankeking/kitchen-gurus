@@ -40,27 +40,69 @@ export default function SettingsScreen() {
 
   return (
     <View style={styles.container}>
-      <ToggleMode />
-      <Text style={styles.title}>Settings Screen</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Settings</Text>
+      </View>
+      
+      <View style={styles.separator} />
+      
+      <View style={[styles.optionContainer, {backgroundColor: themeColors.surface}]}>
+      
+        <View style={[styles.options, { backgroundColor: themeColors.surface, borderBottomColor: themeColors.background }]}>
+          <View style={styles.optionInfo}>
+            <CustomIcon style={styles.optionIcon} name="circle" />
+            
+            <Text style={styles.optionText}>Settings</Text>
+          </View>
+            <CustomIcon name="circle" />
+        </View>
+
+        {/* //////
+        
+        //////
+        //////
+        // CREATE A REUSABLE COMPONENT FOR OPTION: ICON 1 / ICON 2? / TITLE / ONPRESS
+        // CREATE A REUSABLE COMPONENT FOR OPTION: ICON 1 / ICON 2? / TITLE / ONPRESS
+        //////
+        // CREATE A REUSABLE COMPONENT FOR OPTION: ICON 1 / ICON 2? / TITLE / ONPRESS
+        // CREATE A REUSABLE COMPONENT FOR OPTION: ICON 1 / ICON 2? / TITLE / ONPRESS 
+        //////
+        //////
+
+        ////// */}
+
+      
+        <View style={[styles.options, { backgroundColor: themeColors.surface, borderBottomColor: themeColors.background }]}>
+          <ToggleMode />
+        </View>
+      
+        <View style={[styles.options, { backgroundColor: themeColors.surface, borderBottomColor: themeColors.background }]}>
+          <CustomIcon name="circle" />
+          <Text style={styles.optionText}>Settings</Text>
+        </View>
+        
+      </View>
+
+
       <View style={styles.separator} />
       <View style={styles.buttonContainer}>
         <LinearGradient
-            colors={[themeColors.primary, themeColors.accent]}
-            style={styles.gradient}
+          colors={[themeColors.primary, themeColors.accent]}
+          style={styles.gradient}
         >
-          <TouchableOpacity 
-            onPress={handleSignOut}
-            style={styles.button}
-          >
-            <CustomIcon
-              style={[styles.icon, {color: themeColors.background}]}
+          <Button 
+            buttonStyle={styles.button}
+            icon={<CustomIcon
               name="logout"
-              size={24}
-            />
-            <Text style={[styles.buttonTitle, {color: themeColors.darkText}]} >Sign Out</Text>
-          </TouchableOpacity>
+              size={22}
+              style={{color: themeColors.background}}
+              />} 
+            iconPosition="right"
+            size="lg" 
+            title="Sign Out"  
+            onPress={handleSignOut}
+          />
         </LinearGradient>
-          
       </View>
     </View>
   );
@@ -70,43 +112,90 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
+  },
+  titleContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: "10%",
+    width: "100%",      
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+
+  optionContainer: {
+    alignItems: "center",
+    height: "60%",
+    width: "90%",    
+    borderRadius: 25,
+
+    // borderColor:"blue",borderWidth:1,
+  },
+  options: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomColor: "#F3F6FB",
+    borderBottomWidth: 4,
+    borderBottomLeftRadius: 9999,
+    borderBottomRightRadius: 9999,
+    height: "10%",
+    marginVertical: 2,
+    // alignContent: "space-between",
+    borderRadius: 25,
+    // borderColor:"green",borderWidth:1,
+  },
+  optionInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "transparent",
+    // borderColor:"green",borderWidth:1,
+  },
+  optionText: {
+    fontSize: 18,
+  },
+  optionIcon: {
+    marginHorizontal: 12,
+  },
+  optionButton: {
+
   },
   
+
+  
+  // BUTTON
   buttonContainer: {
-    flexDirection: "row",
-    height: 70,
-    width: "90%",
-    
+    width: "80%",
+    height: 50,
   },
+  // OUTER BUTTON
   gradient: {
     flex:1,
     alignItems: "center",
+    justifyContent: "center",
     borderRadius: 12,
     overflow: "hidden",
   },
-  icon: {
-    // alignItems: "center",
-    justifyContent: "flex-end",
-  },
   button: {
     backgroundColor: 'transparent',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
+    width: "100%",
+  },
+  // INNER BUTTON
+  icon: {
+    justifyContent: "flex-end",
   },
   buttonTitle: {
     alignItems: "center",
     fontSize: 16,
     fontWeight: 'bold',
-    justifyContent: "center",
   },
   
   
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
+  
   separator: {
     marginVertical: 30,
     height: 1,

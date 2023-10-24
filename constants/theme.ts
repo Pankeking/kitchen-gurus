@@ -1,6 +1,6 @@
 import { createTheme } from '@rneui/themed';
 
-const black = '#000';
+const black = '#121212';
 const midnight = '#00040D'
 const orange = '#FF9900'; 
 const gradOrange = '#FF2222'
@@ -50,6 +50,7 @@ const defaultTheme = createTheme({
     Input: {
       placeholderTextColor: grey
     },
+    
   },
   mode: "light",
 })

@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 
 import { router } from "expo-router";
 
-import { Button, Input } from "@rneui/themed";
+import { Button, Input, useTheme } from "@rneui/themed";
 import { View, CustomIcon, ToggleMode }  from "../../components/themedCustom";
 
 // import * as AppleAuthentication from "expo-apple-authentication";
@@ -12,11 +12,12 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FBauth } from "../../firebase-config";
+import { LinearGradient } from "expo-linear-gradient";
 
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
-
+  const themeColors = useTheme().theme.colors;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -82,8 +83,8 @@ export default function LoginScreen() {
         /> */}
         <View style={styles.separator} />
 
-        <View style={styles.innerContainer}>
-          <View style={styles.innerDeepContainer}>
+        <View style={styles.formContainer}>
+          <View style={styles.form}>
             <Input
               autoCapitalize="none"
               placeholder="Email"
@@ -91,7 +92,7 @@ export default function LoginScreen() {
               onChangeText={setEmail}
             />
           </View>
-          <View style={styles.innerDeepContainer}>
+          <View style={styles.form}>
             <Input
               placeholder="Password"
               secureTextEntry
@@ -99,31 +100,49 @@ export default function LoginScreen() {
               onChangeText={setPassword}
             />
           </View>
-          <View style={styles.innerDeepContainer}>
-            <Button
-              buttonStyle={styles.buttonContainer}
-              icon={<CustomIcon
-                name="login"
-                size={18}
-                />} 
-              size="lg" 
-              title="Sign In" 
-              onPress={handleSignIn}
-            />
+          <View style={styles.buttonContainer}>
+            <LinearGradient
+              colors={[themeColors.primary, themeColors.accent]}
+              style={styles.gradient}
+              >
+              <Button
+                buttonStyle={styles.button}
+                icon={<CustomIcon
+                  name="login"
+                  size={22}
+                  style={{color: themeColors.background}}
+                  />} 
+                iconPosition="right"
+                size="lg" 
+                title="Sign In" 
+                onPress={handleSignIn}
+              />
+            </LinearGradient>
           </View>
+
           <View style={styles.smallSpacer} />
-          <View style={styles.innerDeepContainer}>
-            <Button 
-              buttonStyle={styles.buttonContainer}
-              icon={<CustomIcon
-                name="form-select"
-                size={18}
-                />} 
-              size="lg" 
-              title="Create new account"  
-              onPress={() => router.push('/register')}
-            />
+
+          <View style={styles.buttonContainer}>
+            <LinearGradient
+                colors={[themeColors.primary, themeColors.accent]}
+                style={styles.gradient}
+              >
+              <Button 
+                buttonStyle={styles.button}
+                icon={<CustomIcon
+                  name="form-select"
+                  size={22}
+                  style={{color: themeColors.background}}
+                  />} 
+                iconPosition="right"
+                size="lg" 
+                title="Create new account"  
+                onPress={() => router.push('/register')}
+              />
+            </LinearGradient>
+            
           </View>
+
         </View>
 
         <View style={styles.separator}></View>
@@ -142,27 +161,45 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonTitle: {
-    fontSize: 22,
-  },
+
+   // BUTTONS 
+  // BUTTONS 
   buttonContainer: {
+    width: "80%",
+    height: 50,
+  },
+  gradient: {
+    flex:1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 12,
+    overflow: "hidden",
+  },
+  button: {
+    backgroundColor: "transparent",
     width: "100%",
+  },
+
+  // FORMS  
+  // FORMS  
+  formContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: "40%",
+    width: "90%",
+  },
+  form: {
+    width: "80%",
+    marginVertical: 8,
   },
   input: {
     // height: 40,
     marginVertical: 3,
     fontSize: 22,
   },    
-  innerContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: "40%",
-    width: "90%",
-  },
-  innerDeepContainer: {
-    width: "80%",
-    marginVertical: 8,
-  },
+  
+  //SPACERS
+  //SPACERS
   separator: {
     height: 0,
     marginVertical: "10%",
@@ -172,9 +209,5 @@ const styles = StyleSheet.create({
     height: 0,
     marginVertical: 7,
     width: "80%"
-  },
-  title: {
-    fontSize: 14,
-    fontWeight: "bold",
   },
 })
