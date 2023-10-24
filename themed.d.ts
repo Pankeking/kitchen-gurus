@@ -7,5 +7,6 @@ declare module '@rneui/themed' {
     surface: string;
     lightText: string;
     darkText: string;
+    gradOrange: string;
   }
 }

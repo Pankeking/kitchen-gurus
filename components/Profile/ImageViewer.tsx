@@ -25,8 +25,6 @@ export default function ImageViewer({ currentImage ,newImage } : any) {
 
 const styles = StyleSheet.create({
   container: {
-    // borderColor: "black",
-    // borderWidth: 2,
     width: "90%",
     height: "80%",
     backgroundColor: 'rgba(0,0,0,0)',

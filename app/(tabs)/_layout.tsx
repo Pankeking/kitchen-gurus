@@ -11,8 +11,8 @@ function TabBarIcon(props: {
   name: React.ComponentProps<typeof CustomIcon>['name'];
   color: string;
 }) {
-  const primaryColor = useTheme().theme.colors.primary
-  return <CustomIcon size={28} style={{ marginBottom: -3 }} {...props} />;
+  const themeColors = useTheme().theme.colors
+  return <CustomIcon size={28} style={{ marginBottom: -3, color: themeColors.lightText }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -21,12 +21,16 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        headerStyle: {backgroundColor: themeColors.background},
+        headerTintColor: themeColors.lightText,
         tabBarActiveTintColor: themeColors.primary,
+        tabBarStyle: {backgroundColor: themeColors.surface},
         tabBarLabelStyle: {fontSize: 12, fontWeight: "bold"}
       }}>
       <Tabs.Screen
         name="index"
         options={{
+          tabBarBadge: "99+",
           title: 'Home',
           tabBarLabel: "Home",
           tabBarIcon: ({ focused }) => <TabBarIcon 

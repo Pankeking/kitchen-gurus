@@ -1,36 +1,45 @@
 import { createTheme } from '@rneui/themed';
 
-const black = '#212121';
+const black = '#000';
 const midnight = '#00040D'
 const orange = '#FF9900'; 
+const gradOrange = '#FF2222'
 const rose = '#D81B60';
+const snowWhite = '#F3F6FB'
 const white = '#FFF'
-const ivory = "ivory"
 const grey = '#86939e'
 
+const altOrange = '#DB5223'; 
+const ivory = "ivory"
 
 // Create default theme
 const defaultTheme = createTheme({
   lightColors: {
-    primary: rose,
-    secondary: black,
-    background: white,
-    surface: white,
-    lightText: black,
-    darkText: white,
-  },
-  darkColors: {
     primary: orange,
     secondary: black,
-    background: black,
-    surface: midnight,
-    lightText: white,
-    darkText: black,
+    accent: gradOrange,
+
+    background: snowWhite,
+    surface: white,
+
+    lightText: midnight,
+    darkText: snowWhite,
+  },
+  darkColors: {
+    primary: rose,
+    secondary: black,
+    accent: gradOrange,
+
+    background: midnight,
+    surface: black,
+
+    lightText: snowWhite,
+    darkText: midnight,
   },
   components: {
     Button: {
       raised: false,
-      radius: 15,
+      radius: 20,
       buttonStyle: {
         justifyContent: "flex-start"
       },

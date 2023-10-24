@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { router } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/slices/authSlice';
@@ -9,11 +10,11 @@ import { setUser } from '../../redux/slices/authSlice';
 import { signOut } from 'firebase/auth';
 import { FBauth } from '../../firebase-config';
 
-import { Button } from '@rneui/themed';
+import { Button, useTheme } from '@rneui/themed';
 import { CustomIcon, ToggleMode, View, Text } from '../../components/themedCustom';
 
 export default function SettingsScreen() {
-
+  const themeColors = useTheme().theme.colors;
   const dispatch = useDispatch();
 
   const appSignOut = async () => {
@@ -42,17 +43,24 @@ export default function SettingsScreen() {
       <ToggleMode />
       <Text style={styles.title}>Settings Screen</Text>
       <View style={styles.separator} />
-      <View style={styles.innerContainer}>
-        <Button 
-          buttonStyle={styles.buttonContainer}
-          icon={<CustomIcon
-            name="logout"
-            size={18}
-            />}
-          size="lg"
-          title="Sign Out"
-          onPress={handleSignOut}
-        />
+      <View style={styles.buttonContainer}>
+        <LinearGradient
+            colors={[themeColors.primary, themeColors.accent]}
+            style={styles.gradient}
+        >
+          <TouchableOpacity 
+            onPress={handleSignOut}
+            style={styles.button}
+          >
+            <CustomIcon
+              style={[styles.icon, {color: themeColors.background}]}
+              name="logout"
+              size={24}
+            />
+            <Text style={[styles.buttonTitle, {color: themeColors.darkText}]} >Sign Out</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+          
       </View>
     </View>
   );
@@ -64,15 +72,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  
   buttonContainer: {
-    width: "100%",
-  },
-  innerContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: "40%",
+    flexDirection: "row",
+    height: 70,
     width: "90%",
+    
   },
+  gradient: {
+    flex:1,
+    alignItems: "center",
+    borderRadius: 12,
+    overflow: "hidden",
+  },
+  icon: {
+    // alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  button: {
+    backgroundColor: 'transparent',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonTitle: {
+    alignItems: "center",
+    fontSize: 16,
+    fontWeight: 'bold',
+    justifyContent: "center",
+  },
+  
+  
   title: {
     fontSize: 20,
     fontWeight: 'bold',

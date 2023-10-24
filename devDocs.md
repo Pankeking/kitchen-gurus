@@ -37,9 +37,13 @@
 
 ### Default Icon: MaterialCommunityIcons from @expo/vector-icons
 
-## Current working tree - files (STATUS)
+## Current working tree - files (DATE)
 
 - Profile Screen (WIP OCT 23)
+  
+  - DEVELOPER NOTES - ###
+    - First template Sucked ### Had to re-start after whole day's work
+    - The image selector / uri resets and actives useEffect provoking unexpected behavior on state.auth.user.photoURL
   - Alignment
     - Image / Button
     - Info Text / Icons
@@ -52,6 +56,8 @@
     - FireStore Storage
     - FireStore Documents
     - FireBase Auth link to Store
+
+## Work Done (DATE)
 
 - AuthFlow (DONE OCT 21):
   - redux/store.ts
@@ -68,3 +74,4 @@
 ## Added Dependencies
 
 - expo-image-picker
+- expo-linear-gradient
