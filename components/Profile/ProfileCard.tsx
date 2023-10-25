@@ -7,6 +7,10 @@ export default function ProfileCard() {
   const color = {color:textColor}
   const hasMedia = true;
   const noMedia = false;
+  const iconInfoSize = 20;
+  const iconMediaSize = 24;
+  const hasSocialIcon = [styles.socialIcon, color, {opacity: hasMedia ? 1 : 0.5}];
+  const noSocialIcon = [styles.socialIcon, color, {opacity: noMedia ? 1 : 0.5}];
   return (
     <View style={styles.container}>
 
@@ -17,25 +21,25 @@ export default function ProfileCard() {
 
 
       <View style={styles.infoContainer}>
-        <CustomIcon size={20} style={[styles.infoIcon, color]} name="map-marker" />
+        <CustomIcon size={iconInfoSize} style={[styles.infoIcon, color]} name="map-marker" />
         <Text style={styles.infoText} >Düsseldorf, Germany</Text>
       </View>
       <View style={styles.infoContainer}>
-        <CustomIcon size={20} style={[styles.infoIcon, color]} name="email" />
+        <CustomIcon size={iconInfoSize} style={[styles.infoIcon, color]} name="email" />
         <Text style={styles.infoText} >JavierDevLongerEmail@gmail.com</Text>
       </View>
       <View style={styles.socialContainer}>
         <TouchableOpacity onPress={() => alert('Go to Javier\'s Facebook')}>
-          <CustomIcon size={24} style={[styles.socialIcon, color, {opacity: hasMedia ? 1 : 0.5}]} name="facebook" />
+          <CustomIcon size={iconMediaSize} style={hasSocialIcon} name="facebook" />
         </TouchableOpacity>
-        <TouchableOpacity>
-          <CustomIcon size={24} style={[styles.socialIcon, color, {opacity: noMedia ? 1 : 0.5}]} name="instagram" />
+        <TouchableOpacity onPress={() => alert('Instagram not available')}>
+          <CustomIcon size={iconMediaSize} style={noSocialIcon} name="instagram" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => alert('Go to Javier\'s Linkedin')}>
-          <CustomIcon size={24} style={[styles.socialIcon, color, {opacity: hasMedia ? 1 : 0.5}]} name="linkedin" />
+          <CustomIcon size={iconMediaSize} style={hasSocialIcon} name="linkedin" />
         </TouchableOpacity>
-        <TouchableOpacity>
-          <CustomIcon size={24} style={[styles.socialIcon, color, {opacity: noMedia ? 1 : 0.5}]} name="twitter" />
+        <TouchableOpacity onPress={() => alert('Twitter not available')}>
+          <CustomIcon size={iconMediaSize} style={noSocialIcon} name="twitter" />
         </TouchableOpacity>
       </View>
     </View>

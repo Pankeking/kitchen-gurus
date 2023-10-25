@@ -57,6 +57,22 @@
     - FireStore Documents
     - FireBase Auth link to Store
 
+- Settings Screen (WIP OCT 24)
+  - Alignment
+    - Inner options containers
+    - Option info / text / button
+  - Background
+    - Title
+    - Options
+    - Buttons
+  - Re-usable component/s
+    - Option with: Icon / Icon #2 / Text / Button
+    - #2 Options group
+  - Buttons
+    - Toggle Dark/Light - On/Off - Profile Selector(Chef, Guest)  
+  - Logic
+    - Settings functionality
+
 ## Work Done (DATE)
 
 - AuthFlow (DONE OCT 21):
