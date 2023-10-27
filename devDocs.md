@@ -51,9 +51,9 @@
   - DEVELOPER NOTES - ###
     - First template Sucked ### Had to re-start after whole day's work
     - The image selector / uri resets and actives useEffect provoking unexpected behavior on state.auth.user.photoURL
-  - Alignment
-    - Image / Button
-    - Info Text / Icons
+  - Alignment (DONE 28 OCT)
+    - Image / Button (DONE 28 OKT)
+    - Info Text / Icons (DONE 28 OKT)
   - Components
     - Network Components Container / View
     - Personal Recipes
