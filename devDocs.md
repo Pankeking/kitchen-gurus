@@ -37,6 +37,13 @@
 
 ### Default Icon: MaterialCommunityIcons from @expo/vector-icons
 
+## TODO
+
+- Password security regEx
+- Email Confirmation
+- Email Link
+- Email template
+
 ## Current working tree - files (DATE)
 
 - Profile Screen (WIP OCT 23)

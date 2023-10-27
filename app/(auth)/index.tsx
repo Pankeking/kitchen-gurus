@@ -26,6 +26,7 @@ export default function IndexScreen() {
               icon={<CustomIcon
                 name="account-alert"
                 size={18}
+                style={{color: themeColors.background}}
                 />} 
               iconPosition="right"  
               size="lg" 

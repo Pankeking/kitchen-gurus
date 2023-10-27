@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser, updateUser } from '../../redux/slices/authSlice';
@@ -14,6 +14,7 @@ import ProfileCard from '../../components/Profile/ProfileCard';
 
 import { updateProfile } from 'firebase/auth';
 import { FBauth } from '../../firebase-config';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default function ProfileScreen() {
@@ -52,9 +53,15 @@ export default function ProfileScreen() {
     }
   }
 
+  const backgroundImage = require('../../assets/images/fondoLindo.jpg')
+
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
+      <View style={styles.bgImgContainer}>
+        <Image source={backgroundImage} style={styles.bgImage}/>
+      </View>
+
+      {/* <View style={styles.titleContainer}>
         <CustomIcon 
           name="circle" 
           size={14}
@@ -63,64 +70,85 @@ export default function ProfileScreen() {
             shadowColor: user?.emailVerified ? "green" : "red",
           }]}
         />
-        <Text style={styles.titleText}> {user?.displayName} Fernandez</Text>
-      </View>
+        <Text style={styles.titleText}> {user?.displayName}</Text>
+      </View> */}
 
       <View style={styles.cardContainer}>
         <View style={styles.profilePicContainer}>
           <ImageViewer currentImage={user?.photoURL} newImage={imageUri} />
-          <TouchableOpacity 
-            onPress={PickImageAsync} 
-            style={[styles.profilePicButton]}
-          >
-            <CustomIcon
-              name="camera"
-              size={24}
-              style={{color: themeColors.lightText}}
-            />
-          </TouchableOpacity>
+          <View style={styles.profilePicButtonContainer}>
+            <TouchableOpacity 
+              onPress={PickImageAsync} 
+              style={[styles.profilePicButton, {borderColor: themeColors.background, backgroundColor: themeColors.background}]}
+            >
+              <CustomIcon
+                name="camera"
+                size={22}
+                style={{color: themeColors.lightText}}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
         <ProfileCard />
       </View>
 
-      <View style={styles.innerContainer}>
-        <View>
-          <View style={styles.itemsContainer}>
-            <Text style={styles.itemsText}>Likes</Text>
-            <Text style={styles.itemsText}>Followers</Text>
-            <Text style={styles.itemsText}>Recipes</Text>
-          </View>
-          <Text style={[styles.text, {opacity: 0}]} > UID: {user?.uid} </Text>
-          <Text style={styles.text} > Email: {user?.email} </Text>
-          <Text style={styles.text} > Status: {user?.isAnonymous ? "Chef" : "Guest"} </Text>
-          <Text style={styles.text} > Username: {user?.displayName} </Text>
-          <Text style={styles.text} > Phone: {user?.phoneNumber} </Text>
-          <Text style={styles.text} > {user?.emailVerified ? "Verified" : "Not Verified"} </Text>
-        </View>
+      <View style={styles.networkContainer}>
+        <Text style={styles.networkText}>Likes</Text>
+        <Text style={styles.networkText}>Followers</Text>
+        <Text style={styles.networkText}>Recipes</Text>
       </View>
-      <View style={styles.bottomContainer}>
-        <Text>Bottom Container</Text>
+
+      <View style={styles.buttonContainer}>
+        <LinearGradient
+          colors={[themeColors.primary, themeColors.accent]}
+          style={styles.gradient}
+        >
+          <Button 
+            buttonStyle={styles.button}
+            icon={<CustomIcon
+              name="heart-outline"
+              size={22}
+              style={{color: themeColors.background}}
+              />}
+            iconRight
+            size='lg'
+            title="Follow" 
+          />
+
+        </LinearGradient>
+      </View>
+
+      {/* <View style={styles.innerContainer}>
+          <Text style={[styles.innerText, {opacity: 0}]} > UID: {user?.uid} </Text>
+          <Text style={styles.innerText} > Email: {user?.email} </Text>
+          <Text style={styles.innerText} > Status: {user?.isAnonymous ? "Chef" : "Guest"} </Text>
+          <Text style={styles.innerText} > Username: {user?.displayName} </Text>
+          <Text style={styles.innerText} > Phone: {user?.phoneNumber} </Text>
+          <Text style={styles.innerText} > {user?.emailVerified ? "Verified" : "Not Verified"} </Text>
+      </View> */}
+
+      <View style={styles.itemsContainer}>
+        <Text>imagenes</Text>
+        <Text>video</Text>
+        <Text>{"<FOTOS/VIDEOS>"}</Text>
+        <Text></Text>
       </View>
     </View>
   );
 }
 
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // borderColor: "black",
-    // borderWidth: 1,
+    // justifyContent: "center",
+    // alignItems: "center",
+    // borderColor: "black",borderWidth: 1,
   },
   
-  innerContainer: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    // borderColor: "blue",
-    // borderWidth: 1,
-  },
+  
 
   // TITLE
   titleContainer: {
@@ -129,8 +157,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginHorizontal: 10,
     marginVertical: "5%",
-    // borderColor: "red",
-    // borderWidth: 1,
+    // borderColor: "red",borderWidth: 1,
   },
   titleText: {
     fontSize: 28,
@@ -144,73 +171,116 @@ const styles = StyleSheet.create({
   },
   // TITLE
 
+  // BACKGROUND IMAGE STYLE
+  bgImgContainer: {
+    // flex: 1,
+    height: "25%",
+    // borderColor: "orange", borderWidth: 1,
+  },
+  bgImage: {
+    width: "100%",
+    height: "100%",
+    opacity: 1,
+  },
+
   // CARD
   cardContainer: {
     flex: 1,
-    flexDirection: "row",
-    // alignItems: "center",
-    justifyContent: "space-between",
-    marginHorizontal: "5%",
-    // borderColor: "blue",
-    // borderWidth: 1,
+    top: "-10%",
+    backgroundColor: "transparent",
+    // borderColor: "blue",borderWidth: 1,
+    // marginBottom: 100,
   },
   // PROFILE PICTURE (CARD)
   profilePicContainer: {
+    backgroundColor: "transparent",
     alignItems: "center",
+    // borderColor: "red",borderWidth: 1,
+  },
+  profilePicButtonContainer: {
+    // flex: 1,
     justifyContent: "center",
-    width: "40%",
-    // borderColor: "red",
-    // borderWidth: 1,
+    alignItems: "center",
+    // width: 100,
+    // borderColor: "blue",borderWidth: 3,
   },
   profilePicButton: {
     position: "absolute",
-    backgroundColor: 'rgba(0,0,0,0)',
-    opacity: 1,
-    borderRadius: 5,
-    // borderColor: "black",
-    // borderWidth: 1,
-    bottom: 0,
-    // left: 0,
-  },
-  
-  innerDeepContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    // borderColor: "red",
-    // borderWidth: 1,
-  },
-  bottomContainer: {
-    // width: "100%",
-    // height: "20%",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    // borderColor: "black",
-    // borderWidth: 1,
+    // opacity: 1,
+    borderRadius: 999,
+    borderWidth: 5,
+    // borderColor: "black",borderWidth: 1,
+    bottom: 10,
+    left: "5%",
   },
   
 
-  // ITEMS
-  itemsContainer: {
+  // NETWORK
+  networkContainer: {
     flexDirection: "row", 
     justifyContent: "center",
     alignItems: "center",
-    // borderColor: "black",
-    // borderWidth: 1,
+    borderColor: "black",borderWidth: 1,
     width: "100%",
-    paddingHorizontal: 20,
+    height: "10%",
   },
-  itemsText: {
+  networkText: {
     fontSize: 22,
     fontFamily: "SpaceMono",
     marginHorizontal: 5,
   },
 
+  
+  
+  // BUTTON
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    // flex: 1,
+    height: 50,
+    width: "80%",
+    paddingHorizontal: 20,
+    borderColor: "black", borderWidth: 5,
+    // height: 50,
+  },
+  button: {
+    backgroundColor: "transparent",
+    alignItems: "center",
+    marginHorizontal: "10%",
+    width: "100%",
+  },
+  gradient: {
+    flex:1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 12,
+    overflow: "hidden",
+  },
 
-  text: {
+    // ITEMS
+  itemsContainer: {
+    // width: "100%",
+    // height: "20%",
+    flex: 1,
+    height: "15%",
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "black",borderWidth: 1,
+  },
+  
+  innerContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    borderColor: "blue",borderWidth: 1,
+  },
+  innerText: {
     marginBottom: 5,
   },
+
+
   separator: {
     marginVertical: 30,
     height: 1,

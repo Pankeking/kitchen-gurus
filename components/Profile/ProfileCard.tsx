@@ -1,107 +1,93 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { CustomIcon, Text, View } from "../themedCustom";
 import { useTheme } from "@rneui/themed";
+import { FBauth } from "../../firebase-config";
 
 export default function ProfileCard() {
   const textColor = useTheme().theme.colors.lightText;
   const color = {color:textColor}
-  const hasMedia = true;
-  const noMedia = false;
-  const iconInfoSize = 20;
-  const iconMediaSize = 24;
-  const hasSocialIcon = [styles.socialIcon, color, {opacity: hasMedia ? 1 : 0.5}];
-  const noSocialIcon = [styles.socialIcon, color, {opacity: noMedia ? 1 : 0.5}];
+  const iconInfoSize = 16;
   return (
     <View style={styles.container}>
 
-
       <View style={styles.titleContainer}>
-        <Text style={styles.title} >Software Developer from Volkswagen</Text>
+        <Text style={styles.title} >{FBauth.currentUser?.displayName}</Text>
       </View>
 
-
-      <View style={styles.infoContainer}>
+      {/* <View style={styles.infoContainer}>
         <CustomIcon size={iconInfoSize} style={[styles.infoIcon, color]} name="map-marker" />
-        <Text style={styles.infoText} >Düsseldorf, Germany</Text>
-      </View>
-      <View style={styles.infoContainer}>
+        <Text style={styles.infoText}>Düsseldorf, Deutschland</Text>
+      </View> */}
+
+      {/* <View style={styles.infoContainer}>
         <CustomIcon size={iconInfoSize} style={[styles.infoIcon, color]} name="email" />
-        <Text style={styles.infoText} >JavierDevLongerEmail@gmail.com</Text>
+        <Text style={styles.infoText}>JavierDev@gmail.com</Text>
+      </View> */}
+      <View style={styles.bioContainer}>
+        <Text style={styles.bioText}>Me gusta el vino 
+          porque el vino es bueno, el que vino al mundo y no tomo vino a que chucha vino?
+          porque el vino es bueno, el que vino al mundo y no tomo vino a que chucha vino?
+          porque el vino es bueno, el que vino al mundo y no tomo vino a que chucha vino?
+        </Text>
       </View>
-      <View style={styles.socialContainer}>
-        <TouchableOpacity onPress={() => alert('Go to Javier\'s Facebook')}>
-          <CustomIcon size={iconMediaSize} style={hasSocialIcon} name="facebook" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => alert('Instagram not available')}>
-          <CustomIcon size={iconMediaSize} style={noSocialIcon} name="instagram" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => alert('Go to Javier\'s Linkedin')}>
-          <CustomIcon size={iconMediaSize} style={hasSocialIcon} name="linkedin" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => alert('Twitter not available')}>
-          <CustomIcon size={iconMediaSize} style={noSocialIcon} name="twitter" />
-        </TouchableOpacity>
-      </View>
+
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    top: 22,
-    height: "80%",
-    width: "90%",
-    marginHorizontal: "5%",
-    marginTop: 10,
-    justifyContent: "flex-start",
-    // borderColor: "black",
-    // borderWidth: 1,
+    // flex: 1,
+    height: "100%",
+    width: "100%",
+    backgroundColor: "transparent",
+    // paddingHorizontal: "10%",
+    // justifyContent: "center",
+    // borderColor: "orange",borderWidth: 1,
   },
   titleContainer: {
-    marginBottom: 16,
-    // borderColor: "blue",
-    // borderWidth: 1,
+    // marginBottom: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    // borderColor: "blue",borderWidth: 1,
+    backgroundColor: "transparent",
+    marginTop: -10,
+    marginBottom: 5,
   },
   title: {
-    fontSize: 16,
-    // fontWeight: "bold",
+    fontSize: 26,
+    fontWeight: "bold",
+    fontFamily: "Arial",
   },
   infoContainer: {
     flexDirection: "row",
-    // alignItems: "center",
-    justifyContent: "flex-start",
-    opacity: 0.3,
-    marginBottom: 10,
-    // marginEnd: "30%",
-    // width: "100%%",
-    // borderColor: "black",
-    // borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    opacity: 0.4,
+    marginTop: 3,
+    // borderColor: "orange",borderWidth: 1,
   },
   infoIcon: {
     // justifyContent: "flex-start",
     alignItems: "center",
-    paddingRight: 4,
+    // paddingRight: 4,
     // width: 20,
   },
   infoText: {
-    fontSize: 14,
-    marginLeft: 2,
-    marginRight: 16,
-    paddingRight: 16,
+    fontSize: 16,
+    // marginLeft: 2,
+    // marginRight: 16,
+    // paddingRight: 16,
     opacity: 0.7,
   },
-  socialContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  bioContainer: {
+    // width: "60%",
+    paddingHorizontal: "15%",
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
-    paddingTop: 10,
-    // borderColor: "orange",
-    // borderWidth: 1,
+    // borderColor: "orange", borderWidth:1,
   },
-  socialIcon: {
-    paddingRight: 8,
-    marginRight: 4,
-  }
+  bioText: {
+    lineHeight: 20,
+  },
 })

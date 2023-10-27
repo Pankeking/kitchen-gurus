@@ -147,21 +147,22 @@ export default function RegisterScreen() {
         }
 
         <View style={styles.buttonContainer}>
-        <LinearGradient
-                colors={[themeColors.primary, themeColors.accent]}
-                style={styles.gradient}
-              >
-          <Button 
-            buttonStyle={styles.button}
-            icon={<CustomIcon
-              name="key"
-              size={22}
-              style={[styles.icon, {color: themeColors.background}]}
-              />} 
-            size="lg" 
-            title="Register"
-            onPress={handleRegister}
-          />
+          <LinearGradient
+            colors={[themeColors.primary, themeColors.accent]}
+            style={styles.gradient}
+          >
+            <Button 
+              buttonStyle={styles.button}
+              icon={<CustomIcon
+                name="key"
+                size={22}
+                style={{color: themeColors.background}}
+                />} 
+              iconRight  
+              size="lg" 
+              title="Register"
+              onPress={handleRegister}
+            />
           </LinearGradient>
         </View>
 
@@ -177,8 +178,9 @@ export default function RegisterScreen() {
             icon={<CustomIcon
               name="login"
               size={22}
-              style={[styles.icon, {color: themeColors.background}]}
+              style={{color: themeColors.background}}
               />} 
+            iconRight
             size="lg"
             title="Have an account? Sign-In" 
             onPress={() => router.push('/login')}
@@ -252,8 +254,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 12,
     overflow: "hidden",
-  },
-  icon: {
-    justifyContent: "flex-end",
   },
 })
