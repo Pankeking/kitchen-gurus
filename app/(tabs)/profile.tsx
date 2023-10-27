@@ -94,9 +94,20 @@ export default function ProfileScreen() {
       </View>
 
       <View style={styles.networkContainer}>
-        <Text style={styles.networkText}>Likes {count} </Text>
-        <Text style={styles.networkText}>Followers</Text>
-        <Text style={styles.networkText}>Recipes</Text>
+        <View style={styles.netInfoContainer}>
+          <Text style={styles.networkText}>Likes</Text>
+          <Text style={styles.networkText}>{count}</Text>
+        </View>
+
+        <View style={styles.netInfoContainer}>
+          <Text style={styles.networkText}>Followers</Text>
+          <Text style={styles.networkText}>{count}</Text>
+        </View>
+
+        <View style={styles.netInfoContainer}>
+          <Text style={styles.networkText}>Recipes</Text>
+          <Text style={styles.networkText}>{count}</Text>
+        </View>
       </View>
 
 
@@ -222,16 +233,23 @@ const styles = StyleSheet.create({
   // NETWORK
   networkContainer: {
     flexDirection: "row", 
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
     // borderColor: "black",borderWidth: 1,
+    paddingVertical: "5%",
     width: "100%",
     height: "10%",
+  },
+  netInfoContainer: {
+    // borderColor: "black",borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   networkText: {
     fontSize: 22,
     fontFamily: "SpaceMono",
     marginHorizontal: 5,
+    // borderColor: "black",borderWidth: 1,
   },
 
   

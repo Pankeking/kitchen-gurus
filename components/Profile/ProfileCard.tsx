@@ -75,14 +75,17 @@ const styles = StyleSheet.create({
     fontFamily: "Arial",
   },
   bioScrollContainer: {
+    // borderColor: "green", borderWidth: 2,
   },
   bioContainer: {
     height: "160%",
     paddingHorizontal: "15%",
     alignItems: "center",
+    // borderColor: "green", borderWidth: 2,
   },
   bioText: {
     lineHeight: 20,
+    // borderColor: "green", borderWidth: 2,
   },
   readMoreText: {
     color: "blue",
