@@ -22,6 +22,7 @@ export default function ProfileScreen() {
   const themeColors = useTheme().theme.colors;
   const dispatch = useDispatch();
   const [imageUri, setImageUri] = useState('');
+  const [count, setCount] = useState(0);
   
   const PickImageAsync = async () => {
     let result = await launchImageLibraryAsync({
@@ -93,10 +94,11 @@ export default function ProfileScreen() {
       </View>
 
       <View style={styles.networkContainer}>
-        <Text style={styles.networkText}>Likes</Text>
+        <Text style={styles.networkText}>Likes {count} </Text>
         <Text style={styles.networkText}>Followers</Text>
         <Text style={styles.networkText}>Recipes</Text>
       </View>
+
 
       <View style={styles.buttonContainer}>
         <LinearGradient
@@ -105,6 +107,7 @@ export default function ProfileScreen() {
         >
           <Button 
             buttonStyle={styles.button}
+            onPress={() => setCount(count+1)}
             icon={<CustomIcon
               name="heart-outline"
               size={22}
@@ -117,7 +120,6 @@ export default function ProfileScreen() {
 
         </LinearGradient>
       </View>
-
       {/* <View style={styles.innerContainer}>
           <Text style={[styles.innerText, {opacity: 0}]} > UID: {user?.uid} </Text>
           <Text style={styles.innerText} > Email: {user?.email} </Text>
@@ -175,12 +177,14 @@ const styles = StyleSheet.create({
   bgImgContainer: {
     // flex: 1,
     height: "25%",
+    justifyContent: "center",
+    alignItems: "center",
     // borderColor: "orange", borderWidth: 1,
   },
   bgImage: {
-    width: "100%",
+    width: "99%",
+    borderRadius: 3,
     height: "100%",
-    opacity: 1,
   },
 
   // CARD
@@ -220,7 +224,7 @@ const styles = StyleSheet.create({
     flexDirection: "row", 
     justifyContent: "center",
     alignItems: "center",
-    borderColor: "black",borderWidth: 1,
+    // borderColor: "black",borderWidth: 1,
     width: "100%",
     height: "10%",
   },
@@ -234,19 +238,18 @@ const styles = StyleSheet.create({
   
   // BUTTON
   buttonContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignContent: "center",
     // flex: 1,
     height: 50,
-    width: "80%",
-    paddingHorizontal: 20,
-    borderColor: "black", borderWidth: 5,
-    // height: 50,
+    // width: "80%",
+    paddingHorizontal: "10%",
+    // borderColor: "black", borderWidth: 5,
   },
   button: {
     backgroundColor: "transparent",
-    alignItems: "center",
-    marginHorizontal: "10%",
+    // alignItems: "center",
+    // marginHorizontal: "10%",
     width: "100%",
   },
   gradient: {
@@ -265,7 +268,7 @@ const styles = StyleSheet.create({
     height: "15%",
     alignItems: "center",
     justifyContent: "center",
-    borderColor: "black",borderWidth: 1,
+    // borderColor: "black",borderWidth: 1,
   },
   
   innerContainer: {

@@ -100,6 +100,7 @@ export default function LoginScreen() {
               onChangeText={setPassword}
             />
           </View>
+          
           <View style={styles.buttonContainer}>
             <LinearGradient
               colors={[themeColors.primary, themeColors.accent]}

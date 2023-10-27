@@ -244,8 +244,6 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "transparent",
-    alignItems: "center",
-    marginHorizontal: "10%",
     width: "100%",
   },
   gradient: {
