@@ -14,11 +14,11 @@ import { FBauth } from "../../firebase-config"
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
 import { LinearGradient } from "expo-linear-gradient";
+import { appSignUp } from "../../utils/firebaseUtils";
 
 
 export default function RegisterScreen() {
 
-  const dispatch = useDispatch();
   const themeColors = useTheme().theme.colors;
 
   const [email, setEmail] = useState('');
@@ -27,7 +27,6 @@ export default function RegisterScreen() {
   const [displayName, setDisplayName] = useState('');
   const [matchMessage, setMatchMessage] = useState('')
 
-  const userState = useSelector((state: any) => state.auth.user);
 
   useEffect(() => {
     if (password != confirmPassword) {
@@ -39,28 +38,7 @@ export default function RegisterScreen() {
     }
   },[password, confirmPassword])
 
-  const appSignUp = async (email: string, password: string, displayName: string) => {
-    try {
-      // This will trigger onAuthStateChange to update the store
-      const resp = await createUserWithEmailAndPassword(FBauth, email, password);
-      // Add display name
-      await updateProfile(resp?.user, {displayName});
-      const userObject = {
-        uid: resp?.user.uid,
-        email: resp?.user.email,
-        emailVerified: resp?.user.emailVerified,
-        displayName: displayName,
-        photoURL: resp?.user.photoURL,
-        phoneNumber: resp?.user.phoneNumber,
-        isAnonymous: resp?.user.isAnonymous,
-      }
-      dispatch(setUser(userObject));
-      return { user: FBauth.currentUser };
-    } catch (e) {
-      console.error(e);
-      return { error: e};
-    }
-  }
+  
 
   const handleRegister = async () => {
       // create new User

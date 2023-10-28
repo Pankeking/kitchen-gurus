@@ -37,6 +37,28 @@
 
 ### Default Icon: MaterialCommunityIcons from @expo/vector-icons
 
+## Database Firestore Collections
+
+- Users
+  - Each document represents a user and has fields like userId, username, email, profilePicture, BGprofilePicture, bio, etc.
+  - Denormalized Followers/Followed
+  
+- Recipes
+  - Each document represents a recipe and has fields like recipeId, title, description, ingredients, instructions, imageUrl, chefId, etc.
+  - The chefId field references the ID of the user who created the recipe.
+
+- Followers
+  - Each document represents a follower relationship between two users and has fields like followerId and followingId.
+  - This collection allows you to track which users are following each other.
+
+- Likes
+  - Each document represents a like given by a user to a recipe.
+  - It has fields like userId and recipeId to track the association between users and recipes.
+
+- Comments
+  - Each document represents a comment made by a user on a recipe.
+  - It has fields like commentId, userId, recipeId, content, timestamp, etc.
+
 ## TODO
 
 - Password security regEx

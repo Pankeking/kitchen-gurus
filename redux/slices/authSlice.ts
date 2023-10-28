@@ -1,21 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// interface SocialMedia {
-//   facebook: string;
-//   instagram: string;
-//   linkedin: string;
-//   twitter: string;
-// }
 
 interface FirebaseUser {
   uid: string;
-  email: string | null;
-  emailVerified: boolean;
   displayName: string | null;
-  photoURL: string | null;
-  phoneNumber: string | null;
+  emailVerified: boolean;
   isAnonymous: boolean;
-  // socialMedia: SocialMedia | null;
 }
 
 interface AuthState {
@@ -41,11 +31,6 @@ const authSlice = createSlice({
     setInitialized: (state, action) => {
       state.initialized = action.payload;
     },
-    updateUser: (state, action) => {
-      state.user = action.payload;
-      console.log("Updated photoURL\n");
-      console.log(state.user?.photoURL);
-    }
   },
 });
 
@@ -53,7 +38,7 @@ export const selectUser = (state:any) => state.auth.user;
 export const selectSocialMedia = (state:any) => state.auth.user.socialMedia;
 
 
-export const { setUser, updateUser, setInitialized } = authSlice.actions;
+export const { setUser, setInitialized } = authSlice.actions;
 
 
 // const unsub = onAuthStateChanged(FBauth, (user) => {

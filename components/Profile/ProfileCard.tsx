@@ -54,7 +54,6 @@ export default function ProfileCard() {
   )
 }
 
-  // if (bioTextSample.length <= MAX_BIO_LENGTH) {
 
 const styles = StyleSheet.create({
   container: {

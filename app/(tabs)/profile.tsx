@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUser, updateUser } from '../../redux/slices/authSlice';
+import { selectUser } from '../../redux/slices/authSlice';
 
 import { CustomIcon, Text, View } from '../../components/themedCustom';
 import { Button, useTheme } from '@rneui/themed';
@@ -40,7 +40,6 @@ export default function ProfileScreen() {
     const fbUser = FBauth.currentUser;
       if (fbUser && imageUri != '') {
         updateProfile(fbUser, { photoURL: imageUri} )
-        dispatch(updateUser({...user, photoURL: imageUri}))
       }
       console.log("Activated useEffect");
   }, [imageUri])
@@ -50,7 +49,6 @@ export default function ProfileScreen() {
     if (fbUser) {
       const displayName = "Javier"
       updateProfile(fbUser, {displayName})
-      dispatch(updateUser({...user, displayName: displayName}))
     }
   }
 

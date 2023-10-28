@@ -34,7 +34,7 @@ export default function LoginScreen() {
         phoneNumber: resp?.user.phoneNumber,
         isAnonymous: resp?.user.isAnonymous,
         socialMedia: null
-      }
+      }                       
       dispatch(setUser(userObject));
       return { user: FBauth.currentUser };
     } catch (e) {

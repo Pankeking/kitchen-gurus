@@ -25,19 +25,9 @@ export default function ImageViewer({ currentImage ,newImage } : any) {
 
 const styles = StyleSheet.create({
   container: {
-    // width: "90%",
-    // height: "80%",
     margin: 20,
     backgroundColor: 'transparent',
     opacity:1,
-    // shadowColor: "black",
-    // shadowOpacity: 0.6,
-    // shadowRadius: 6,
-    // shadowOffset: {
-    //   height: 4,
-    //   width: 0
-    // },
-    // borderColor: "black", borderWidth: 1,
   },
   image: {
     width: 120,
