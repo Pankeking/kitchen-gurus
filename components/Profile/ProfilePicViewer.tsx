@@ -5,9 +5,10 @@ import { Text, View } from '../themedCustom';
 
 
 
-export default function ImageViewer({ currentImage ,newImage } : any) {
+export default function ProfilePicViewer({ currentImage ,newImage } : any) {
 
   const themeColors = useTheme().theme.colors;
+  console.log("new Image: " + newImage)
   const imageSource = newImage != '' ? { uri: newImage } : { uri: currentImage }; 
   if (imageSource) {
     return (

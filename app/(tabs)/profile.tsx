@@ -9,41 +9,82 @@ import { Button, useTheme } from '@rneui/themed';
 
 import { launchImageLibraryAsync } from 'expo-image-picker';
 
-import ImageViewer from '../../components/Profile/ImageViewer';
+import ProfilePicViewer from '../../components/Profile/ProfilePicViewer';
 import ProfileCard from '../../components/Profile/ProfileCard';
 
 import { updateProfile } from 'firebase/auth';
-import { FBauth } from '../../firebase-config';
+import { FBauth, FBstore } from '../../firebase-config';
 import { LinearGradient } from 'expo-linear-gradient';
+import { updateProfileBackground, updateProfilePicture } from '../../utils/firebaseUtils';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 
 export default function ProfileScreen() {
   const user = useSelector(selectUser);
   const themeColors = useTheme().theme.colors;
   const dispatch = useDispatch();
-  const [imageUri, setImageUri] = useState('');
+  const [profilePic, setProfilePic] = useState('');
+  const [backgroundPic, setBackgroundPic] = useState('');
   const [count, setCount] = useState(0);
   
-  const PickImageAsync = async () => {
+  const PickProfileImageAsync = async () => {
     let result = await launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1
     })
     if (!result.canceled) {
-      setImageUri(result.assets[0].uri)
-      console.log("CHANGED URI");
+      const userId = FBauth.currentUser?.uid;
+      if (userId) {
+        const imageUri = result.assets[0].uri;
+        await updateProfilePicture(userId, imageUri);
+      } else {
+        console.error('User ID is undefined.');
+      }
     } else {
       alert("You did not select any image");
     }
   }
+
+  const PickBackgroundImageAsync = async () => {
+    let result = await launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1
+    })
+    if (!result.canceled) {
+      const userId = FBauth.currentUser?.uid;
+      if (userId) {
+        const imageUri = result.assets[0].uri;
+        await updateProfileBackground(userId, imageUri);
+      } else {
+        console.error('User ID is undefined.');
+      }
+    } else {
+      alert("You did not select any image");
+    }
+  }
+
+
   useEffect(() => {
     const fbUser = FBauth.currentUser;
-      if (fbUser && imageUri != '') {
-        updateProfile(fbUser, { photoURL: imageUri} )
+    if (fbUser) {
+        const userDocRef = doc(FBstore, "users", fbUser?.uid);
+        const unsub = onSnapshot(userDocRef, (docSnapshot) => {
+          if (docSnapshot.exists()) {
+            const userData = docSnapshot.data();
+            const profilePic = userData.profilePicture;
+            const backgroundPic = userData.profileBackground;
+            setProfilePic(profilePic);
+            setBackgroundPic(backgroundPic);
+            updateProfile(fbUser, { photoURL: profilePic} )
+          }
+        })
+        console.log("Activated useEffect");
+        return () => { unsub() };
       }
-      console.log("Activated useEffect");
-  }, [imageUri])
+  }, [FBauth.currentUser?.uid])
+
   {/* <ToggleMode /> */}
+
   const changeName = () => {
     const fbUser = FBauth.currentUser;
     if (fbUser) {
@@ -57,7 +98,7 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.bgImgContainer}>
-        <Image source={backgroundImage} style={styles.bgImage}/>
+        <Image source={{uri:backgroundPic}} style={styles.bgImage}/>
       </View>
 
       {/* <View style={styles.titleContainer}>
@@ -74,10 +115,10 @@ export default function ProfileScreen() {
 
       <View style={styles.cardContainer}>
         <View style={styles.profilePicContainer}>
-          <ImageViewer currentImage={user?.photoURL} newImage={imageUri} />
+          <ProfilePicViewer currentImage={user?.photoURL} newImage={profilePic} />
           <View style={styles.profilePicButtonContainer}>
             <TouchableOpacity 
-              onPress={PickImageAsync} 
+              onPress={PickProfileImageAsync} 
               style={[styles.profilePicButton, {borderColor: themeColors.background, backgroundColor: themeColors.background}]}
             >
               <CustomIcon
@@ -116,7 +157,8 @@ export default function ProfileScreen() {
         >
           <Button 
             buttonStyle={styles.button}
-            onPress={() => setCount(count+1)}
+            // onPress={() => setCount(count+1)}
+            onPress={PickBackgroundImageAsync}
             icon={<CustomIcon
               name="heart-outline"
               size={22}
@@ -124,7 +166,7 @@ export default function ProfileScreen() {
               />}
             iconRight
             size='lg'
-            title="Follow" 
+            title="Pick background" 
           />
 
         </LinearGradient>
@@ -188,7 +230,7 @@ const styles = StyleSheet.create({
     height: "25%",
     justifyContent: "center",
     alignItems: "center",
-    // borderColor: "orange", borderWidth: 1,
+    backgroundColor: "transparent",
   },
   bgImage: {
     width: "99%",

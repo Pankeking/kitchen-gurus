@@ -14,7 +14,7 @@ import { FBauth } from "../../firebase-config"
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
 import { LinearGradient } from "expo-linear-gradient";
-import { appSignUp } from "../../utils/firebaseUtils";
+import { appSignUp, registerUserDB } from "../../utils/firebaseUtils";
 
 
 export default function RegisterScreen() {
@@ -44,6 +44,7 @@ export default function RegisterScreen() {
       // create new User
       const resp = await appSignUp(email, password, displayName);
       if (resp?.user) {
+        const docID = await registerUserDB(resp.user.uid, displayName, email);
         router.replace('/(tabs)')
       } else {
         console.error(resp.error)
