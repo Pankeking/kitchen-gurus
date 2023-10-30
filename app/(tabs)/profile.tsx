@@ -191,7 +191,7 @@ export default function ProfileScreen() {
         >
           <Button 
             buttonStyle={styles.button}
-            onPress={() => router.push('/(content)/(add)')}
+            onPress={() => router.push('/(content)/(add)/')}
             // onPress={PickBackgroundImageAsync}
             icon={<CustomIcon
               name="bowl-mix-outline"

@@ -2,17 +2,27 @@ import { Link, Stack } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
 import { Text, View } from '../components/themedCustom';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../redux/slices/authSlice';
 
 export default function NotFoundScreen() {
+  const user = useSelector(selectUser);
   return (
     <>
       <Stack.Screen options={{ title: 'Oops!' }} />
       <View style={styles.container}>
-        <Text style={styles.title}>This screen doesn't exist.</Text>
-
-        <Link href="/" style={styles.link}>
+        <Text style={styles.title}>This place doesn't exist.</Text>
+      {user &&
+        <Link href="/(tabs)" style={styles.link}>
           <Text style={styles.linkText}>Go to home screen!</Text>
         </Link>
+      }
+      {!user &&
+        <Link href="/(auth)" style={styles.link}>
+          <Text style={styles.linkText}>Go to login screen!</Text>
+        </Link>
+      
+      }
       </View>
     </>
   );
