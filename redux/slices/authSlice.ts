@@ -33,8 +33,8 @@ const authSlice = createSlice({
   },
 });
 
-export const selectUser = (state:any) => state.auth.user;
-export const selectUserId = (state:any) => state.auth.user?.uid;
+export const selectUser = (state:AuthState) => state.user;
+export const selectUserId = (state:AuthState) => state.user?.uid;
 
 
 export const { setUser, setInitialized } = authSlice.actions;
