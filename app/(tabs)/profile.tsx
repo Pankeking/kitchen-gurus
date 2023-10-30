@@ -17,6 +17,7 @@ import { FBauth, FBstore } from '../../firebase-config';
 import { LinearGradient } from 'expo-linear-gradient';
 import { updateProfileBackground, updateProfilePicture } from '../../utils/firebaseUtils';
 import { doc, onSnapshot } from 'firebase/firestore';
+import { router } from 'expo-router';
 
 
 export default function ProfileScreen() {
@@ -95,6 +96,8 @@ export default function ProfileScreen() {
 
   const backgroundImage = require('../../assets/images/fondoLindo.jpg')
 
+  const gradientOpacity = [0.9, 0.91, 0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99];
+
   return (
     <View style={styles.container}>
       <View style={styles.bgMainImgContainer}>
@@ -145,8 +148,23 @@ export default function ProfileScreen() {
             </TouchableOpacity>
           </View>
         </View>
+        
         <ProfileCard />
       </View>
+
+
+                        {/* THIS JUST WORKS, THANK YOU! */}
+      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.9}]} />
+      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.91}]} />
+      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.92}]} />
+      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.93}]} />
+      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.94}]} />
+      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.95}]} />
+      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.96}]} />
+      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.97}]} />
+      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.98}]} />
+      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.99}]} />
+                        {/* THIS JUST WORKS, THANK YOU! */}
 
       <View style={styles.networkContainer}>
         <View style={styles.netInfoContainer}>
@@ -173,16 +191,16 @@ export default function ProfileScreen() {
         >
           <Button 
             buttonStyle={styles.button}
-            onPress={() => setCount(count+1)}
+            onPress={() => router.push('/(content)/(add)')}
             // onPress={PickBackgroundImageAsync}
             icon={<CustomIcon
-              name="heart-outline"
+              name="bowl-mix-outline"
               size={22}
-              style={{color: themeColors.background}}
+              style={[styles.buttonIcon, {color: themeColors.background}]}
               />}
             iconRight
             size='lg'
-            title="Follow" 
+            title="New Dish" 
           />
 
         </LinearGradient>
@@ -316,19 +334,16 @@ const styles = StyleSheet.create({
   
   // BUTTON
   buttonContainer: {
-    // justifyContent: "center",
-    // alignContent: "center",
     // flex: 1,
     height: 50,
-    // width: "80%",
     paddingHorizontal: "10%",
-    // borderColor: "black", borderWidth: 5,
   },
   button: {
     backgroundColor: "transparent",
-    // alignItems: "center",
-    // marginHorizontal: "10%",
     width: "100%",
+  },
+  buttonIcon: {
+    marginTop: -5,
   },
   gradient: {
     flex:1,
@@ -340,8 +355,6 @@ const styles = StyleSheet.create({
 
     // ITEMS
   itemsContainer: {
-    // width: "100%",
-    // height: "20%",
     flex: 1,
     height: "15%",
     alignItems: "center",
@@ -350,9 +363,7 @@ const styles = StyleSheet.create({
   },
   
   separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-    backgroundColor: "black",
+    width: '100%',
+    height: 2,
   },
 });

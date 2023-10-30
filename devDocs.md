@@ -60,6 +60,7 @@
   - It has fields like commentId, userId, recipeId, content, timestamp, etc.
 
 ## TODO
+
 - Delete user functionality
 - Password security regEx
 - Email Confirmation
@@ -73,18 +74,19 @@
   - DEVELOPER NOTES - ###
     - First template Sucked ### Had to re-start after whole day's work
     - The image selector / uri resets and actives useEffect provoking unexpected behavior on state.auth.user.photoURL
-  - Alignment (DONE 28 OCT)
-    - Image / Button (DONE 28 OKT)
-    - Info Text / Icons (DONE 28 OKT)
-  - Components
+
+  - Components (Social Media, Followers, Likes, Recipes)
     - Network Components Container / View
-    - Personal Recipes
     - Personal Feed
-  - Profile Items persistance (Social Media, Followers, Likes, Recipes)
-    - FireStore Visualization
-    - FireStore Storage
-    - FireStore Documents
-    - FireBase Auth link to Store
+      - NetWork content
+      - OutOf NetWork content
+      - Ads
+  
+  - Content Screen (WIP OCT 30)  
+    - Personal Recipes
+      - Add
+      - Edit
+      - Share
 
 - Settings Screen (WIP OCT 24)
   - Alignment
@@ -103,6 +105,19 @@
     - Settings functionality
 
 ## Work Done (DATE)
+
+- Profile Items persistance (DONE 29 OCT)
+  - FireStore Visualization
+  - FireBase Cloud Storage
+  - FireStore Documents
+  - FireBase Auth link to Store
+
+- Profile Screen Alignment (DONE 28 OCT)
+  - ProfilePic / Button
+  - BackgroundPic / Button
+  - Bio Text / Icons
+  - NetWork Info Display
+  - Upload New Button
 
 - AuthFlow (DONE OCT 21):
   - redux/store.ts

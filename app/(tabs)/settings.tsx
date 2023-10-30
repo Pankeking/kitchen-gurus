@@ -29,10 +29,9 @@ export default function SettingsScreen() {
 
   const handleSignOut = async () => {
       const resp = await appSignOut();
-      dispatch(setUser(null));
-      router.replace('/(auth)')
-    if (!resp?.error) {
-      router.replace('/(auth)')
+      if (!resp?.error) {
+        dispatch(setUser(null));
+        router.replace('/(auth)')
     } else {
       console.error(resp.error)
     }
