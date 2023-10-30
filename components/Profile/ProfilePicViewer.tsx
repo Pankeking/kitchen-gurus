@@ -5,12 +5,12 @@ import { Text, View } from '../themedCustom';
 
 
 
-export default function ProfilePicViewer({ currentImage ,newImage } : any) {
+export default function ProfilePicViewer({ newImage } : any) {
 
   const themeColors = useTheme().theme.colors;
   console.log("new Image: " + newImage)
-  const imageSource = newImage != '' ? { uri: newImage } : { uri: currentImage }; 
-  if (imageSource) {
+  if (newImage != '') {
+    const imageSource = { uri: newImage }
     return (
       <View style={styles.container}>
         <Image source={imageSource} style={[styles.image, {borderColor: themeColors.background}]} />
@@ -18,7 +18,11 @@ export default function ProfilePicViewer({ currentImage ,newImage } : any) {
       
     )
   } else {
-    return <Text> Loading... </Text>
+    return (
+      <View style={styles.container}>
+        <Text style={styles.image}> Loading... </Text>
+      </View>
+    )
   }
 
 }

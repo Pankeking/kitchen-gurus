@@ -4,6 +4,7 @@ interface Extra {
   vegan?: boolean;
   vegetarian?: boolean;
   glutenFree?: boolean;
+  lactoseFree?: boolean;
 }
 interface Details {
   duration?: string;
@@ -53,16 +54,26 @@ const contentSlice = createSlice({
       state.recipe.details.cuisine = cuisine;
     },
     setExtra: (state, action) => {
-      const { vegan, vegetarian, glutenFree } = action.payload;
+      const { vegan, vegetarian, glutenFree, lactoseFree } = action.payload;
       state.recipe.extra.vegan = vegan;
       state.recipe.extra.vegetarian = vegetarian;
       state.recipe.extra.glutenFree = glutenFree;
+      state.recipe.extra.lactoseFree = lactoseFree;
     },
+    nullifyRecipe: (state) => {
+      state.recipe = {
+        name: '',
+        instructions: [],
+        photo: '',
+        details: {},
+        extra: {},
+      }
+    }
   },
 });
 
 export const selectRecipe = (state: ContentState) => state.recipe;
 
-export const { setPhotoName, setInstructions, setDetails, setExtra } = contentSlice.actions;
+export const { setPhotoName, setInstructions, setDetails, setExtra, nullifyRecipe } = contentSlice.actions;
 
 export default contentSlice;

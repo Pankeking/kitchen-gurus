@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { selectUser } from '../../redux/slices/authSlice';
-
 import { CustomIcon, Text, View } from '../../components/themedCustom';
 import { Button, useTheme } from '@rneui/themed';
 
@@ -21,12 +18,9 @@ import { router } from 'expo-router';
 
 
 export default function ProfileScreen() {
-  const user = useSelector(selectUser);
   const themeColors = useTheme().theme.colors;
-  const dispatch = useDispatch();
   const [profilePic, setProfilePic] = useState('');
   const [backgroundPic, setBackgroundPic] = useState('');
-  const [count, setCount] = useState(0);
   
   const PickProfileImageAsync = async () => {
     let result = await launchImageLibraryAsync({
@@ -133,7 +127,7 @@ export default function ProfileScreen() {
       <View style={styles.cardContainer}>
         <View style={styles.profilePicContainer}>
           {profilePic != '' &&
-            <ProfilePicViewer currentImage={user?.photoURL} newImage={profilePic} />
+            <ProfilePicViewer newImage={profilePic} />
           }
           <View style={styles.profilePicButtonContainer}>
             <TouchableOpacity 
@@ -153,33 +147,37 @@ export default function ProfileScreen() {
       </View>
 
 
-                        {/* THIS JUST WORKS, THANK YOU! */}
-      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.9}]} />
-      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.91}]} />
-      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.92}]} />
-      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.93}]} />
-      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.94}]} />
-      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.95}]} />
-      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.96}]} />
-      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.97}]} />
-      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.98}]} />
-      <View style={[styles.separator, {backgroundColor: themeColors.background, opacity: 0.99}]} />
-                        {/* THIS JUST WORKS, THANK YOU! */}
+    <View style={[styles.separator, {backgroundColor: "transparent"}]}>
+      <LinearGradient
+        colors={[
+          `${themeColors.background}55`, // Start with 0 opacity
+          `${themeColors.background}FF`, // End with 1 opacity
+        ]}
+        style={ {
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+
+      </LinearGradient>
+    </View>
 
       <View style={styles.networkContainer}>
         <View style={styles.netInfoContainer}>
           <Text style={styles.networkText}>Likes</Text>
-          <Text style={styles.networkText}>{count}</Text>
+          <Text style={styles.networkText}>5</Text>
         </View>
 
         <View style={styles.netInfoContainer}>
           <Text style={styles.networkText}>Followers</Text>
-          <Text style={styles.networkText}>{count}</Text>
+          <Text style={styles.networkText}>10</Text>
         </View>
 
         <View style={styles.netInfoContainer}>
           <Text style={styles.networkText}>Recipes</Text>
-          <Text style={styles.networkText}>{count}</Text>
+          <Text style={styles.networkText}>2</Text>
         </View>
       </View>
 
@@ -364,6 +362,6 @@ const styles = StyleSheet.create({
   
   separator: {
     width: '100%',
-    height: 2,
+    height: 20,
   },
 });
