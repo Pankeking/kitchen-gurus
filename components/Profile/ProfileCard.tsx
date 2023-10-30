@@ -1,26 +1,41 @@
 import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { CustomIcon, Text, View } from "../themedCustom";
-import { useTheme } from "@rneui/themed";
-import { FBauth } from "../../firebase-config";
-import { useEffect, useRef, useState } from "react";
+import { Text, View } from "../themedCustom";
+import { FBauth, FBstore } from "../../firebase-config";
+import { useState } from "react";
+import { doc, updateDoc } from "firebase/firestore";
+import { useSelector } from "react-redux";
+import { selectUserId } from "../../redux/slices/authSlice";
 
 
 const MAX_BIO_LENGTH = 105;
 const bioTextSample = "Aspiring tech enthusiast with a passion for all things digital. " +
   "Constantly seeking knowledge and pushing boundaries in the world of technology. " +
-  "From coding to design, I love exploring the endless possibilities. " 
-  +"Coffee addict, problem solver, and believer in the transformative power of technology. " +
+  "From coding to design, I love exploring the endless possibilities. " +
+  "Coffee addict, problem solver, and believer in the transformative power of technology. " +
   "Let's create something amazing together! 🚀✨"
 
 export default function ProfileCard() {
   
-
+  const [bioText, setBioText] = useState()
   const [expanded, setExpanded] = useState(false);
+  const userId = useSelector(selectUserId);
+
   const handleReadMore = () => {
-    console.log(expanded);
     setExpanded(!expanded);
   }
   const truncatedBioText = `${bioTextSample.substring(0, MAX_BIO_LENGTH)}...`;
+
+  const handleBioUpdate = async () => {
+    if (userId) {
+
+      const userDocRef = doc(FBstore, "users", userId)
+      await updateDoc(userDocRef, {
+        bio: bioText
+      })
+    } else {
+      console.error("alarm")
+    }
+  }
   
   return (
     <View style={styles.container}>

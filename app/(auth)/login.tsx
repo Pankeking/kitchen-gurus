@@ -11,8 +11,9 @@ import { View, CustomIcon, ToggleMode }  from "../../components/themedCustom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { FBauth } from "../../firebase-config";
+import { FBauth, FBstore } from "../../firebase-config";
 import { LinearGradient } from "expo-linear-gradient";
+import { doc, updateDoc } from "firebase/firestore";
 
 
 export default function LoginScreen() {
@@ -25,18 +26,7 @@ export default function LoginScreen() {
   const appSignIn = async (email: string, password: string) => {
     try {
       const resp = await signInWithEmailAndPassword(FBauth, email, password);
-      const userObject = {
-        uid: resp?.user.uid,
-        email: resp?.user.email,
-        emailVerified: resp?.user.emailVerified,
-        displayName: resp?.user.displayName,
-        photoURL: resp?.user.photoURL,
-        phoneNumber: resp?.user.phoneNumber,
-        isAnonymous: resp?.user.isAnonymous,
-        socialMedia: null
-      }                       
-      dispatch(setUser(userObject));
-      return { user: FBauth.currentUser };
+      return { user: resp.user };
     } catch (e) {
       console.error(e);
       return { error: e };
@@ -46,6 +36,16 @@ export default function LoginScreen() {
   const handleSignIn = async () => {
     const resp = await appSignIn(email, password);
     if (resp?.user) {
+      const userId = resp.user.uid;
+      const userDocRef = doc(FBstore, "users", userId);
+      await updateDoc(userDocRef, {
+        lastLogin: new Date()
+      })
+      const userData = {
+        uid: userId,
+        displayName: resp?.user.displayName,
+      }                       
+      dispatch(setUser(userData));
       router.replace('/(tabs)')
     } else {
       console.error(resp.error)

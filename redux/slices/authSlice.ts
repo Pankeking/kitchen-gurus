@@ -3,9 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface FirebaseUser {
   uid: string;
-  displayName: string | null;
-  emailVerified: boolean;
-  isAnonymous: boolean;
+  displayName: string;
 }
 
 interface AuthState {
@@ -26,6 +24,7 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
+      console.log("user set as: ", state.user)
       state.isLoggedIn = action.payload ? true : false;
     },
     setInitialized: (state, action) => {
@@ -35,7 +34,7 @@ const authSlice = createSlice({
 });
 
 export const selectUser = (state:any) => state.auth.user;
-export const selectSocialMedia = (state:any) => state.auth.user.socialMedia;
+export const selectUserId = (state:any) => state.auth.user?.uid;
 
 
 export const { setUser, setInitialized } = authSlice.actions;

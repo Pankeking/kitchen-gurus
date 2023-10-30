@@ -97,8 +97,22 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.bgImgContainer}>
-        <Image source={{uri:backgroundPic}} style={styles.bgImage}/>
+      <View style={styles.bgMainImgContainer}>
+        {backgroundPic != '' &&
+          <Image source={{uri:backgroundPic}} style={styles.bgImage}/>
+        }
+        <View style={styles.profileBackgroundButtonContainer}>
+          <TouchableOpacity 
+            onPress={PickBackgroundImageAsync} 
+            style={[styles.profileBackgroundButton, {borderColor: themeColors.background, backgroundColor: themeColors.background}]}
+          >
+            <CustomIcon
+              name="camera"
+              size={22}
+              style={{color: themeColors.lightText}}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* <View style={styles.titleContainer}>
@@ -115,7 +129,9 @@ export default function ProfileScreen() {
 
       <View style={styles.cardContainer}>
         <View style={styles.profilePicContainer}>
-          <ProfilePicViewer currentImage={user?.photoURL} newImage={profilePic} />
+          {profilePic != '' &&
+            <ProfilePicViewer currentImage={user?.photoURL} newImage={profilePic} />
+          }
           <View style={styles.profilePicButtonContainer}>
             <TouchableOpacity 
               onPress={PickProfileImageAsync} 
@@ -157,8 +173,8 @@ export default function ProfileScreen() {
         >
           <Button 
             buttonStyle={styles.button}
-            // onPress={() => setCount(count+1)}
-            onPress={PickBackgroundImageAsync}
+            onPress={() => setCount(count+1)}
+            // onPress={PickBackgroundImageAsync}
             icon={<CustomIcon
               name="heart-outline"
               size={22}
@@ -166,19 +182,11 @@ export default function ProfileScreen() {
               />}
             iconRight
             size='lg'
-            title="Pick background" 
+            title="Follow" 
           />
 
         </LinearGradient>
       </View>
-      {/* <View style={styles.innerContainer}>
-          <Text style={[styles.innerText, {opacity: 0}]} > UID: {user?.uid} </Text>
-          <Text style={styles.innerText} > Email: {user?.email} </Text>
-          <Text style={styles.innerText} > Status: {user?.isAnonymous ? "Chef" : "Guest"} </Text>
-          <Text style={styles.innerText} > Username: {user?.displayName} </Text>
-          <Text style={styles.innerText} > Phone: {user?.phoneNumber} </Text>
-          <Text style={styles.innerText} > {user?.emailVerified ? "Verified" : "Not Verified"} </Text>
-      </View> */}
 
       <View style={styles.itemsContainer}>
         <Text>imagenes</Text>
@@ -196,8 +204,6 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: "center",
-    // alignItems: "center",
     // borderColor: "black",borderWidth: 1,
   },
   
@@ -225,17 +231,34 @@ const styles = StyleSheet.create({
   // TITLE
 
   // BACKGROUND IMAGE STYLE
-  bgImgContainer: {
+  bgMainImgContainer: {
     // flex: 1,
     height: "25%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "transparent",
+    // justifyContent: "center",
+    // alignItems: "center",
+    // backgroundColor: "transparent",
+    // borderColor: "blue",borderWidth: 1,
   },
   bgImage: {
+    backgroundColor: "transparent",
     width: "99%",
     borderRadius: 3,
     height: "100%",
+    // borderColor: "blue",borderWidth: 1,
+  },
+  profileBackgroundButtonContainer: {
+    // justifyContent: "center",
+    // alignItems: "center",
+    // height: "15%",
+    // width: 100,
+    // borderColor: "blue",borderWidth: 1,
+  },
+  profileBackgroundButton: {
+    position: "absolute",
+    borderRadius: 999,
+    borderWidth: 5,
+    top: -150,
+    right: "10%",
   },
 
   // CARD
@@ -244,7 +267,6 @@ const styles = StyleSheet.create({
     top: "-10%",
     backgroundColor: "transparent",
     // borderColor: "blue",borderWidth: 1,
-    // marginBottom: 100,
   },
   // PROFILE PICTURE (CARD)
   profilePicContainer: {
@@ -253,15 +275,13 @@ const styles = StyleSheet.create({
     // borderColor: "red",borderWidth: 1,
   },
   profilePicButtonContainer: {
-    // flex: 1,
+    zIndex: 999,
     justifyContent: "center",
     alignItems: "center",
-    // width: 100,
     // borderColor: "blue",borderWidth: 3,
   },
   profilePicButton: {
     position: "absolute",
-    // opacity: 1,
     borderRadius: 999,
     borderWidth: 5,
     // borderColor: "black",borderWidth: 1,
@@ -329,19 +349,6 @@ const styles = StyleSheet.create({
     // borderColor: "black",borderWidth: 1,
   },
   
-  innerContainer: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    borderColor: "blue",borderWidth: 1,
-  },
-  innerText: {
-    marginBottom: 5,
-  },
-
-
   separator: {
     marginVertical: 30,
     height: 1,

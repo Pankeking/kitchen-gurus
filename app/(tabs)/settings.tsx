@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -30,6 +29,7 @@ export default function SettingsScreen() {
 
   const handleSignOut = async () => {
       const resp = await appSignOut();
+      dispatch(setUser(null));
       router.replace('/(auth)')
     if (!resp?.error) {
       router.replace('/(auth)')

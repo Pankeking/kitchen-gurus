@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
 import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
-import { StorageReference, getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
+import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 
 // Register
@@ -23,18 +23,38 @@ export const appSignUp = async (email: string, password: string, displayName: st
 // Register
 // Register
 export const registerUserDB = async (uid: string, username: string, email: string) => {
+  // Get default picture for anonymous from cloud storage
+  const storageRef = ref(FBstorage, 'user-profiles/anonymous-user.png');
+  const defaultPic = await getDownloadURL(storageRef)
+  console.log("def ", defaultPic)
+  // Declare userData type and values  
+  const userData: {
+    userID: string;
+    username: string;
+    email: string;
+    bio: string;
+    lastLogin: Date;
+    profilePicture?: string; // Make it optional
+    profileBackground?: string; // Make it optional
+  } = {
+    userID: uid,
+    username: username,
+    email: email,
+    bio: "Write bio...",
+    lastLogin: new Date()
+  };
+  if (defaultPic != null) {
+    userData.profilePicture = defaultPic;
+    userData.profileBackground = defaultPic;
+    console.log("updated")
+  }
   // Get users collection ref
   const usersCollectionRef = collection(FBstore, "users")
   try {
     // Create a new user document with docID as uid -- "users" reference
     const userDocRef = doc(usersCollectionRef, uid);
     // Set data in referenced doc
-    await setDoc(userDocRef, {
-      userID: uid,
-      username: username,
-      email: email,
-      bio: "Write bio...",
-    })
+    await setDoc(userDocRef, userData)
   } catch (e:any) {
     const code = e?.code;
     const name = e?.name;

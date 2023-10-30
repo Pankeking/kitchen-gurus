@@ -5,21 +5,16 @@ import { router } from "expo-router";
 import { CustomIcon, View, ToggleMode, Text} from "../../components/themedCustom";
 import { Button, Input, useTheme } from "@rneui/themed";
 
-import { 
-  createUserWithEmailAndPassword, 
-  updateProfile
-} from "firebase/auth"
-import { FBauth } from "../../firebase-config"
-
-import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "../../redux/slices/authSlice";
 import { LinearGradient } from "expo-linear-gradient";
 import { appSignUp, registerUserDB } from "../../utils/firebaseUtils";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/slices/authSlice";
 
 
 export default function RegisterScreen() {
 
   const themeColors = useTheme().theme.colors;
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -45,6 +40,11 @@ export default function RegisterScreen() {
       const resp = await appSignUp(email, password, displayName);
       if (resp?.user) {
         const docID = await registerUserDB(resp.user.uid, displayName, email);
+        const userData = {
+          uid: resp?.user.uid,
+          displayName: resp?.user.displayName,
+        }      
+        dispatch(setUser(userData));
         router.replace('/(tabs)')
       } else {
         console.error(resp.error)

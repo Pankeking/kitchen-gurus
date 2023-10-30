@@ -60,7 +60,7 @@
   - It has fields like commentId, userId, recipeId, content, timestamp, etc.
 
 ## TODO
-
+- Delete user functionality
 - Password security regEx
 - Email Confirmation
 - Email Link
