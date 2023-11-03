@@ -13,7 +13,7 @@ import { setUser } from "../../redux/slices/authSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FBauth, FBstore } from "../../firebase-config";
 import { LinearGradient } from "expo-linear-gradient";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 
 export default function LoginScreen() {
@@ -38,13 +38,27 @@ export default function LoginScreen() {
     if (resp?.user) {
       const userId = resp.user.uid;
       const userDocRef = doc(FBstore, "users", userId);
+      const docSnap = await getDoc(userDocRef);
       await updateDoc(userDocRef, {
         lastLogin: new Date()
-      })
-      const userData = {
-        uid: userId,
-        displayName: resp?.user.displayName,
-      }                       
+      });
+      let userData = {};
+      if (docSnap.exists()) {
+        const userDataSnap = docSnap.data();
+        const profilePic = userDataSnap.profilePicture;
+        const backgroundPic = userDataSnap.profileBackground;
+        userData = {
+          uid: userId,
+          displayName: resp.user.displayName,
+          profilePhoto: profilePic,
+          backgroundPhoto: backgroundPic
+        }
+      } else {
+        userData = {
+          uid: userId,
+          displayName: resp.user.displayName,
+        }   
+      }
       dispatch(setUser(userData));
       router.replace('/(tabs)')
     } else {

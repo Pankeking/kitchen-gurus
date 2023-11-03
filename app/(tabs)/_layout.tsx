@@ -25,7 +25,8 @@ export default function TabLayout() {
         headerTintColor: themeColors.lightText,
         tabBarActiveTintColor: themeColors.primary,
         tabBarStyle: {backgroundColor: themeColors.surface},
-        tabBarLabelStyle: {fontSize: 12, fontWeight: "bold"}
+        tabBarLabelStyle: {fontSize: 12, fontWeight: "bold"},
+
       }}>
       <Tabs.Screen
         name="index"
@@ -63,6 +64,14 @@ export default function TabLayout() {
                                               color={themeColors.primary} />,
         }}
       />
+      <Tabs.Screen 
+        name="buttonToAdd"
+        options={{
+          title: 'Add',
+          tabBarLabel: 'Add',
+          tabBarIcon: () => <TabBarIcon name="plus-circle-outline" color={themeColors.primary} />
+        }}
+      />
       <Tabs.Screen
         name="settings"
         options={{
@@ -73,6 +82,7 @@ export default function TabLayout() {
                                               color={themeColors.primary} />,
         }}
       />
+      
     </Tabs>
   );
 }

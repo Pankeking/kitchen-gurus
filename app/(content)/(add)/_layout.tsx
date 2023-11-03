@@ -6,11 +6,11 @@ export default function AddLayout() {
       <Stack>
         <Stack.Screen name="index" options={{
           headerBackVisible: true,
-          headerTitle: "",
+          headerTitle: "Photo",
         }}/>
         <Stack.Screen name="addPhotoName" options={{
           headerBackVisible: true,
-          headerTitle: "Photo & Name",
+          headerTitle: "Name",
         }}/>
         <Stack.Screen name="addInstructions" options={{
           headerBackVisible: true,

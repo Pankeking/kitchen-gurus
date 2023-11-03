@@ -21,6 +21,10 @@ interface Recipe {
 
 interface ContentState {
   recipe: Recipe;
+  isPhotoName: boolean;
+  isInstructions: boolean;
+  isDetails: boolean;
+  isExtra: boolean;
   isLoading: boolean;  
 }
 
@@ -32,6 +36,10 @@ const initialState: ContentState = {
     details: {},
     extra: {},
   },
+  isPhotoName: false,
+  isInstructions: false,
+  isDetails: false,
+  isExtra: false,
   isLoading: false,
 }
 
@@ -43,15 +51,18 @@ const contentSlice = createSlice({
       const { photo, name} = action.payload;
       state.recipe.photo = photo;
       state.recipe.name = name;
+      state.isPhotoName = true;
     },
     setInstructions: (state, action) => {
       state.recipe.instructions = action.payload;
+      state.isInstructions = true;
     },
     setDetails: (state, action) => {
       const { duration, ingredients, cuisine } = action.payload;
       state.recipe.details.duration = duration;
       state.recipe.details.ingredients = ingredients;
       state.recipe.details.cuisine = cuisine;
+      state.isDetails = true;
     },
     setExtra: (state, action) => {
       const { vegan, vegetarian, glutenFree, lactoseFree } = action.payload;
@@ -59,6 +70,7 @@ const contentSlice = createSlice({
       state.recipe.extra.vegetarian = vegetarian;
       state.recipe.extra.glutenFree = glutenFree;
       state.recipe.extra.lactoseFree = lactoseFree;
+      state.isDetails = true;
     },
     nullifyRecipe: (state) => {
       state.recipe = {
@@ -68,6 +80,10 @@ const contentSlice = createSlice({
         details: {},
         extra: {},
       }
+      state.isPhotoName    = false;
+      state.isInstructions = false;
+      state.isDetails      = false;
+      state.isExtra        = false;
     }
   },
 });

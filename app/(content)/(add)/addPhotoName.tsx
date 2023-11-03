@@ -1,23 +1,50 @@
 import { Link, router } from "expo-router";
-import { Text, View } from "../../../components/themedCustom";
+import { CustomIcon, Text, View } from "../../../components/themedCustom";
 import { StyleSheet, TouchableOpacity } from "react-native";
+import { useDispatch } from "react-redux";
+import { nullifyRecipe, setPhotoName } from "../../../redux/slices/contentSlice";
 
 export default function addPhotoNameScreen() {
+  const dispatch = useDispatch();
   return (
     <View style={styles.container}>
       <Text>
         add a photo and a name for your recipe
       </Text>
       <View style={styles.separator} />
-      <Link href={'/addInstructions'}>
-        <Text style={{color: "green"}}>Add Instructions</Text>
-      </Link>
-      <View style={styles.separator} />
-      <TouchableOpacity 
-        onPress={() => router.back()}
+      <TouchableOpacity
+        onPress={() => {
+            console.log("dispatched photo name")
+            dispatch(setPhotoName({photo: "photography", name: "new name"}))
+          }
+        }
       >
-        <Text style={{color: "blue"}}>Go back</Text>
+        <Text style={{color: "green"}}>Set the name and photo</Text>
       </TouchableOpacity>
+
+      <View style={styles.separator} />
+
+      <TouchableOpacity
+        onPress={() => {
+            console.log("Nullify")
+            dispatch(nullifyRecipe())
+          }
+        }
+      >
+        <Text style={{color: "green"}}>Nullify</Text>
+      </TouchableOpacity>
+
+      <View style={styles.separator} />
+      
+        <TouchableOpacity 
+          onPress={() => router.replace('/(content)/(add)')}
+          >
+          <View style={styles.goBackContainer}>
+            <Text style={styles.goBackText}>Go back</Text>
+            <CustomIcon name="arrow-u-left-top" size={24}/>
+          </View>
+        </TouchableOpacity>
+
     </View>
   )
 }
@@ -33,5 +60,13 @@ const styles = StyleSheet.create({
   separator: {
     width: "100%",
     marginVertical: 30,
-  }
+  },
+  goBackContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  goBackText: {
+    fontSize: 20,
+    color: "blue",
+  },
 })

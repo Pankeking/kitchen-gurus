@@ -7,21 +7,30 @@ import { Button, useTheme } from '@rneui/themed';
 import { launchImageLibraryAsync } from 'expo-image-picker';
 
 import ProfilePicViewer from '../../components/Profile/ProfilePicViewer';
+import ProfileBackGroundViewer from '../../components/Profile/ProfileBackGroundViewer';
 import ProfileCard from '../../components/Profile/ProfileCard';
 
 import { updateProfile } from 'firebase/auth';
 import { FBauth, FBstore } from '../../firebase-config';
 import { LinearGradient } from 'expo-linear-gradient';
 import { updateProfileBackground, updateProfilePicture } from '../../utils/firebaseUtils';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { router } from 'expo-router';
+import { useSelector } from 'react-redux';
+import { AuthState, selectBackgroundPhoto, selectProfilePhoto, selectUser } from '../../redux/slices/authSlice';
 
 
 export default function ProfileScreen() {
+
   const themeColors = useTheme().theme.colors;
-  const [profilePic, setProfilePic] = useState('');
-  const [backgroundPic, setBackgroundPic] = useState('');
   
+  const readyProfilePic = useSelector((state:any) => state.auth.user.profilePhoto);
+  const readyBackgroundPic = useSelector((state:any) => state.auth.user.backgroundPhoto);
+  
+  const [profilePic, setProfilePic] = useState(() => readyProfilePic);
+  const [backgroundPic, setBackgroundPic] = useState(() => readyBackgroundPic);
+  
+
   const PickProfileImageAsync = async () => {
     let result = await launchImageLibraryAsync({
       allowsEditing: true,
@@ -32,6 +41,7 @@ export default function ProfileScreen() {
       if (userId) {
         const imageUri = result.assets[0].uri;
         await updateProfilePicture(userId, imageUri);
+        setProfilePic(imageUri);
       } else {
         console.error('User ID is undefined.');
       }
@@ -50,6 +60,7 @@ export default function ProfileScreen() {
       if (userId) {
         const imageUri = result.assets[0].uri;
         await updateProfileBackground(userId, imageUri);
+        setBackgroundPic(imageUri);
       } else {
         console.error('User ID is undefined.');
       }
@@ -59,27 +70,6 @@ export default function ProfileScreen() {
   }
 
 
-  useEffect(() => {
-    const fbUser = FBauth.currentUser;
-    if (fbUser) {
-        const userDocRef = doc(FBstore, "users", fbUser?.uid);
-        const unsub = onSnapshot(userDocRef, (docSnapshot) => {
-          if (docSnapshot.exists()) {
-            const userData = docSnapshot.data();
-            const profilePic = userData.profilePicture;
-            const backgroundPic = userData.profileBackground;
-            setProfilePic(profilePic);
-            setBackgroundPic(backgroundPic);
-            updateProfile(fbUser, { photoURL: profilePic} )
-          }
-        })
-        console.log("Activated useEffect");
-        return () => { unsub() };
-      }
-  }, [FBauth.currentUser?.uid])
-
-  {/* <ToggleMode /> */}
-
   const changeName = () => {
     const fbUser = FBauth.currentUser;
     if (fbUser) {
@@ -88,16 +78,12 @@ export default function ProfileScreen() {
     }
   }
 
-  const backgroundImage = require('../../assets/images/fondoLindo.jpg')
-
-  const gradientOpacity = [0.9, 0.91, 0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99];
-
   return (
     <View style={styles.container}>
       <View style={styles.bgMainImgContainer}>
-        {backgroundPic != '' &&
+        {backgroundPic &&
           <Image source={{uri:backgroundPic}} style={styles.bgImage}/>
-        }
+        } 
         <View style={styles.profileBackgroundButtonContainer}>
           <TouchableOpacity 
             onPress={PickBackgroundImageAsync} 
@@ -112,17 +98,6 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* <View style={styles.titleContainer}>
-        <CustomIcon 
-          name="circle" 
-          size={14}
-          style={[styles.titleIcon, {
-            color: user?.emailVerified ? "green" : "red",
-            shadowColor: user?.emailVerified ? "green" : "red",
-          }]}
-        />
-        <Text style={styles.titleText}> {user?.displayName}</Text>
-      </View> */}
 
       <View style={styles.cardContainer}>
         <View style={styles.profilePicContainer}>
@@ -150,7 +125,7 @@ export default function ProfileScreen() {
     <View style={[styles.separator, {backgroundColor: "transparent"}]}>
       <LinearGradient
         colors={[
-          `${themeColors.background}55`, // Start with 0 opacity
+          `${themeColors.background}00`, // Start with 0 opacity
           `${themeColors.background}FF`, // End with 1 opacity
         ]}
         style={ {

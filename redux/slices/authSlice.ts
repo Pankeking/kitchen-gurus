@@ -1,12 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { ImageURISource } from 'react-native';
 
 
 interface FirebaseUser {
   uid: string;
   displayName: string;
+  profilePhoto?: any;
+  backgroundPhoto?: any;
 }
 
-interface AuthState {
+export interface AuthState {
     user: FirebaseUser | null;
     isLoggedIn: boolean;
     initialized: boolean;
@@ -24,7 +27,6 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
-      console.log("user set as: ", state.user)
       state.isLoggedIn = action.payload ? true : false;
     },
     setInitialized: (state, action) => {
@@ -33,6 +35,8 @@ const authSlice = createSlice({
   },
 });
 
+export const selectProfilePhoto = (state:AuthState) => state.user?.profilePhoto;
+export const selectBackgroundPhoto = (state:AuthState) => state.user?.backgroundPhoto;
 export const selectUser = (state:AuthState) => state.user;
 export const selectUserId = (state:AuthState) => state.user?.uid;
 

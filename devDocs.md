@@ -66,6 +66,7 @@
 - Email Confirmation
 - Email Link
 - Email template
+- On boarding tunnel
 
 ## Current working tree - files (DATE)
 

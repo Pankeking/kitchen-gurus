@@ -8,7 +8,6 @@ import { Text, View } from '../themedCustom';
 export default function ProfilePicViewer({ newImage } : any) {
 
   const themeColors = useTheme().theme.colors;
-  console.log("new Image: " + newImage)
   if (newImage != '') {
     const imageSource = { uri: newImage }
     return (

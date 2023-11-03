@@ -6,7 +6,7 @@ export default function ContentLayout() {
       <Stack>
         <Stack.Screen name="(add)" options={{
           headerBackVisible: true,
-          headerTitle: "New Recipe",
+          headerShown: false,
         }}/>
         <Stack.Screen name="edit"/>
         <Stack.Screen name="share"/>
