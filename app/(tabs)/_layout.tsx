@@ -53,6 +53,27 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen 
+        name="search"
+        options={{
+          title: 'Search',
+          tabBarLabel: 'Search',
+          tabBarIcon: ({ focused }) => <TabBarIcon 
+                                              name={focused ? "magnify-expand" : "magnify-scan"}
+                                              color={themeColors.primary} />,
+        }}
+      />
+
+      <Tabs.Screen 
+        name="buttonToAdd"
+        options={{
+          title: 'Add',
+          tabBarLabel: 'Add',
+          tabBarIcon: () => <TabBarIcon 
+                                  name="plus-circle-outline" 
+                                  color={themeColors.primary} />,
+        }}
+      />
       <Tabs.Screen
         name="profile"
         options={{
@@ -62,14 +83,6 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => <TabBarIcon 
                                               name={focused ? "account-circle" : "account-circle-outline"} 
                                               color={themeColors.primary} />,
-        }}
-      />
-      <Tabs.Screen 
-        name="buttonToAdd"
-        options={{
-          title: 'Add',
-          tabBarLabel: 'Add',
-          tabBarIcon: () => <TabBarIcon name="plus-circle-outline" color={themeColors.primary} />
         }}
       />
       <Tabs.Screen

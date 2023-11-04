@@ -14,7 +14,7 @@ export default function AddContentScreen() {
 
   const [TempTest, setTempTest] = useState(false);
   
-  const ICON_SIZE = 24;
+  const ICON_SIZE = 28;
 
   return (
     <View style={styles.container}>
@@ -35,7 +35,7 @@ export default function AddContentScreen() {
 
         <View style={styles.linkBigContainer}>
           <Link style={styles.null} href={'/addPhotoName'}>
-            <CustomIcon size={ICON_SIZE} name="camera" />
+            <CustomIcon size={ICON_SIZE} name="camera" style={{marginHorizontal: 5, borderWidth: 1, borderColor: "blue"}} />
             <Text style={styles.linkText}> Add pictures of your recipe! </Text>
           </Link>
             {isPhotoName ? <CustomIcon size={ICON_SIZE} name="checkbox-marked-circle" style={{color: "green"}} />
@@ -45,7 +45,7 @@ export default function AddContentScreen() {
 
         <View style={styles.linkBigContainer}>
           <Link href={'/addInstructions'}>
-            <CustomIcon size={ICON_SIZE} name="file-document" />
+            <CustomIcon size={ICON_SIZE} name="file-document-multiple" />
             <Text> Add Recipe Instructions </Text>
           </Link>
             {TempTest ? <CustomIcon size={ICON_SIZE} name="checkbox-marked-circle" style={{color: "green"}} />
@@ -55,7 +55,7 @@ export default function AddContentScreen() {
 
         <View style={styles.linkBigContainer}>
           <Link href={'/addOther'}>
-            <CustomIcon size={ICON_SIZE} name="camera" />
+            <CustomIcon size={ICON_SIZE} name="information" />
             <Text> Add other relevant info  </Text>
           </Link>
             {TempTest ? <CustomIcon size={ICON_SIZE} name="checkbox-marked-circle" style={{color: "green"}} />
@@ -65,7 +65,7 @@ export default function AddContentScreen() {
           
         <View style={styles.linkBigContainer}>
           <Link href={'/addDetails'}>
-            <CustomIcon size={ICON_SIZE} name="camera" />
+            <CustomIcon size={ICON_SIZE} name="clock-edit" />
             <Text> Add Ingredients and details </Text>
           </Link>
           {TempTest ? <CustomIcon size={ICON_SIZE} name="checkbox-marked-circle" style={{color: "green"}} />
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     borderColor: "green", borderWidth: 2,
     color: "red",
     textAlignVertical: "top",
+    marginLeft: 23,
   },
   input: {
     height: "20%",
