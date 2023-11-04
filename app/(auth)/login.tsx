@@ -14,6 +14,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FBauth, FBstore } from "../../firebase-config";
 import { LinearGradient } from "expo-linear-gradient";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import WideButton from "../../components/WideButton";
 
 
 export default function LoginScreen() {
@@ -115,53 +116,24 @@ export default function LoginScreen() {
               onChangeText={setPassword}
             />
           </View>
-          
-          <View style={styles.buttonContainer}>
-            <LinearGradient
-              colors={[themeColors.primary, themeColors.accent]}
-              style={styles.gradient}
-              >
-              <Button
-                buttonStyle={styles.button}
-                icon={<CustomIcon
-                  name="login"
-                  size={22}
-                  style={{color: themeColors.background}}
-                  />} 
-                iconPosition="right"
-                size="lg" 
-                title="Sign In" 
-                onPress={handleSignIn}
-              />
-            </LinearGradient>
-          </View>
+        
+          <WideButton 
+            title="Sign In"
+            iconName="login"
+            onPress={handleSignIn}
+          />
 
-          <View style={styles.smallSpacer} />
+          <View style={styles.separator}></View>
 
-          <View style={styles.buttonContainer}>
-            <LinearGradient
-                colors={[themeColors.primary, themeColors.accent]}
-                style={styles.gradient}
-              >
-              <Button 
-                buttonStyle={styles.button}
-                icon={<CustomIcon
-                  name="form-select"
-                  size={22}
-                  style={{color: themeColors.background}}
-                  />} 
-                iconPosition="right"
-                size="lg" 
-                title="Create new account"  
-                onPress={() => router.push('/register')}
-              />
-            </LinearGradient>
-            
-          </View>
+          <WideButton 
+            title="Create new Account"
+            iconName="form-select"
+            onPress={() => router.push('/register')}
+          />
 
         </View>
 
-        <View style={styles.separator}></View>
+        <View style={styles.smallSpacer} />
         <View style={styles.separator}></View>
       </View>
     </>
@@ -176,24 +148,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-
-   // BUTTONS 
-  // BUTTONS 
-  buttonContainer: {
-    width: "80%",
-    height: 50,
-  },
-  gradient: {
-    flex:1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 12,
-    overflow: "hidden",
-  },
-  button: {
-    backgroundColor: "transparent",
-    width: "100%",
   },
 
   // FORMS  

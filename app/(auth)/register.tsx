@@ -9,6 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { appSignUp, registerUserDB } from "../../utils/firebaseUtils";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
+import WideButton from "../../components/WideButton";
 
 
 export default function RegisterScreen() {
@@ -124,52 +125,23 @@ export default function RegisterScreen() {
             <Text style={[styles.matchMessage, {color: themeColors.secondary}]}>{matchMessage}</Text>
           </View>
         }
+        <WideButton 
+          title="Register"
+          iconName="key"
+          onPress={handleRegister}
+        />
 
-        <View style={styles.buttonContainer}>
-          <LinearGradient
-            colors={[themeColors.primary, themeColors.accent]}
-            style={styles.gradient}
-          >
-            <Button 
-              buttonStyle={styles.button}
-              icon={<CustomIcon
-                name="key"
-                size={22}
-                style={{color: themeColors.background}}
-                />} 
-              iconRight  
-              size="lg" 
-              title="Register"
-              onPress={handleRegister}
-            />
-          </LinearGradient>
-        </View>
+        <View style={styles.separator}></View>
 
-        <View style={styles.smallSpacer} />
-
-        <View style={styles.buttonContainer}>
-        <LinearGradient
-                colors={[themeColors.primary, themeColors.accent]}
-                style={styles.gradient}
-        >
-          <Button 
-            buttonStyle={styles.button}
-            icon={<CustomIcon
-              name="login"
-              size={22}
-              style={{color: themeColors.background}}
-              />} 
-            iconRight
-            size="lg"
-            title="Have an account? Sign-In" 
-            onPress={() => router.push('/login')}
-          />
-          </LinearGradient>
-        </View>
-        
+        <WideButton 
+          title="Have an Account? Sign In"
+          iconName="login"
+          onPress={() => router.push('/login')}
+        />
         
       </View>
-      <View style={styles.separator}></View>
+
+      <View style={styles.smallSpacer} />
       <View style={styles.separator}></View>
     </View>
     </>
@@ -214,22 +186,5 @@ const styles = StyleSheet.create({
     marginVertical: "10%",
     width: "80%",
   },
-
-  // BUTTONS
-  // BUTTONS
-  buttonContainer: {
-    width: "80%",
-    height: 50,
-  },
-  button: {
-    backgroundColor: "transparent",
-    width: "100%",
-  },
-  gradient: {
-    flex:1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 12,
-    overflow: "hidden",
-  },
+  
 })

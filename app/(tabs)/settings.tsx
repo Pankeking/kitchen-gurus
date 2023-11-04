@@ -11,6 +11,7 @@ import { FBauth } from '../../firebase-config';
 
 import { Button, useTheme } from '@rneui/themed';
 import { CustomIcon, ToggleMode, View, Text } from '../../components/themedCustom';
+import WideButton from '../../components/WideButton';
 
 export default function SettingsScreen() {
   const themeColors = useTheme().theme.colors;
@@ -69,7 +70,6 @@ export default function SettingsScreen() {
         //////
 
         ////// */}
-
       
         <View style={[styles.options, { backgroundColor: themeColors.surface, borderBottomColor: themeColors.background }]}>
           <ToggleMode />
@@ -82,27 +82,14 @@ export default function SettingsScreen() {
         
       </View>
 
-
       <View style={styles.separator} />
-      <View style={styles.buttonContainer}>
-        <LinearGradient
-          colors={[themeColors.primary, themeColors.accent]}
-          style={styles.gradient}
-        >
-          <Button 
-            buttonStyle={styles.button}
-            icon={<CustomIcon
-              name="logout"
-              size={22}
-              style={{color: themeColors.background}}
-              />} 
-            iconPosition="right"
-            size="lg" 
-            title="Sign Out"  
-            onPress={handleSignOut}
-          />
-        </LinearGradient>
-      </View>
+
+      <WideButton
+        title="Sign Out"
+        iconName="logout"
+        onPress={handleSignOut}
+      />
+
     </View>
   );
 }

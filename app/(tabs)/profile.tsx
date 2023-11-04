@@ -18,6 +18,7 @@ import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { router } from 'expo-router';
 import { useSelector } from 'react-redux';
 import { AuthState, selectBackgroundPhoto, selectProfilePhoto, selectUser } from '../../redux/slices/authSlice';
+import WideButton from '../../components/WideButton';
 
 
 export default function ProfileScreen() {
@@ -157,27 +158,13 @@ export default function ProfileScreen() {
       </View>
 
 
-      <View style={styles.buttonContainer}>
-        <LinearGradient
-          colors={[themeColors.primary, themeColors.accent]}
-          style={styles.gradient}
-        >
-          <Button 
-            buttonStyle={styles.button}
+        <View style={styles.buttonContainer}>
+          <WideButton 
+            title="New Dish"
+            iconName="bowl-mix"
             onPress={() => router.push('/(content)/(add)/')}
-            // onPress={PickBackgroundImageAsync}
-            icon={<CustomIcon
-              name="bowl-mix-outline"
-              size={22}
-              style={[styles.buttonIcon, {color: themeColors.background}]}
-              />}
-            iconRight
-            size='lg'
-            title="New Dish" 
           />
-
-        </LinearGradient>
-      </View>
+        </View>
 
       <View style={styles.itemsContainer}>
         <Text>imagenes</Text>
@@ -307,26 +294,12 @@ const styles = StyleSheet.create({
   
   // BUTTON
   buttonContainer: {
-    // flex: 1,
     height: 50,
-    paddingHorizontal: "10%",
-  },
-  button: {
-    backgroundColor: "transparent",
+    marginLeft: "10%",
     width: "100%",
   },
-  buttonIcon: {
-    marginTop: -5,
-  },
-  gradient: {
-    flex:1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 12,
-    overflow: "hidden",
-  },
 
-    // ITEMS
+  // ITEMS
   itemsContainer: {
     flex: 1,
     height: "15%",

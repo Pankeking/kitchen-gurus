@@ -1,22 +1,43 @@
 import { useTheme } from '@rneui/themed';
-import { Stack } from 'expo-router';
+import { Link, Stack } from 'expo-router';
+import { Pressable } from 'react-native';
+import { CustomIcon, Text } from '../../../components/themedCustom';
 
 export default function AddLayout() {
   const themeColors = useTheme().theme.colors;
   return (
       <Stack
         screenOptions={{
-          headerStyle: {backgroundColor: themeColors.background},
+          headerStyle: {backgroundColor: themeColors.surface},
+          headerTitleStyle: {fontSize: 14},
           headerTintColor: themeColors.lightText,
+          navigationBarColor:"red",
+          headerRight: () => (
+            <Link href={'/cancelModal'} asChild >
+              <Pressable
+                onPress={() => console.log("changed / cancelled")}
+                >
+                {({ pressed }) => (
+                  <Text>CANCEL</Text>
+                  )}
+              </Pressable>
+            </Link>
+          ),
         }}
       >
         <Stack.Screen name="index" options={{
           headerBackVisible: true,
-          headerTitle: "Photo",
+          headerTitle: "New Recipe",
+          
         }}/>
+        <Stack.Screen name="cancelModal" options={{
+          headerShown: false,
+          presentation: "modal",
+          headerRight: () => null
+        }} />
         <Stack.Screen name="addPhotoName" options={{
           headerBackVisible: true,
-          headerTitle: "Name",
+          headerTitle: "Pictures",
         }}/>
         <Stack.Screen name="addInstructions" options={{
           headerBackVisible: true,
