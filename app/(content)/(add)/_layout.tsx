@@ -1,9 +1,15 @@
+import { useTheme } from '@rneui/themed';
 import { Stack } from 'expo-router';
 
 export default function AddLayout() {
-  
+  const themeColors = useTheme().theme.colors;
   return (
-      <Stack>
+      <Stack
+        screenOptions={{
+          headerStyle: {backgroundColor: themeColors.background},
+          headerTintColor: themeColors.lightText,
+        }}
+      >
         <Stack.Screen name="index" options={{
           headerBackVisible: true,
           headerTitle: "Photo",

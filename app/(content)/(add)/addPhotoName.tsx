@@ -15,7 +15,8 @@ export default function addPhotoNameScreen() {
       <TouchableOpacity
         onPress={() => {
             console.log("dispatched photo name")
-            dispatch(setPhotoName({photo: "photography", name: "new name"}))
+            dispatch(setPhotoName({photo: "photography", name: "new name"}));
+            router.back();
           }
         }
       >

@@ -101,6 +101,7 @@ export default function LoginScreen() {
           <View style={styles.form}>
             <Input
               autoCapitalize="none"
+              keyboardType="email-address"
               placeholder="Email"
               style={styles.input}
               onChangeText={setEmail}
