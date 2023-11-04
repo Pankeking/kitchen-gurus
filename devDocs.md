@@ -84,10 +84,17 @@
       - Ads
   
   - Content Screen (WIP OCT 30)  
-    - Personal Recipes
-      - Add
-      - Edit
-      - Share
+    - Bottom Tab & Profile ---> Route (DONE 3 NOV)
+    - Add Screen (WIP 1 NOV)
+      - Alignment & Display (DONE 4 NOV)
+      - Re-usable CheckList Component (DONE 4 NOV)
+      - Add Name (DONE 4 NOV)
+      - Add Photo (WIP 5 NOV)
+      - Add Instructions (WIP)
+      - Add Details (WIP)
+      - Add Extras (WIP)
+    - Edit
+    - Share
 
 - Settings Screen (WIP OCT 24)
   - Alignment

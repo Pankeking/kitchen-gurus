@@ -1,18 +1,19 @@
-import { Image, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { CustomIcon, Text, View } from "../../../components/themedCustom";
-import { Button, Input, useTheme } from "@rneui/themed";
-import { Link, router } from "expo-router";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View } from "../../../components/themedCustom";
+import { Input, useTheme } from "@rneui/themed";
+import { router } from "expo-router";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { nullifyRecipe } from "../../../redux/slices/contentSlice";
-import { LinearGradient } from "expo-linear-gradient";
+import { nullifyRecipe, setName } from "../../../redux/slices/contentSlice";
 import { FBauth } from "../../../firebase-config";
 import CheckList from "../../../components/AddContent/CheckList";
+import WideButton from "../../../components/WideButton";
 
 export default function AddContentScreen() {
 
-  const isPhotoName    = useSelector((state:any) => state.content.isPhotoName);
+  const isPhoto        = useSelector((state:any) => state.content.isPhoto);
+  const isName         = useSelector((state:any) => state.content.isName);
   const isInstructions = useSelector((state:any) => state.content.isInstructions);
   const isDetails      = useSelector((state:any) => state.content.isDetails);
   const isExtra        = useSelector((state:any) => state.content.isExtra);
@@ -23,35 +24,67 @@ export default function AddContentScreen() {
   const [TempTest, setTempTest] = useState(false);
   
   const userPhoto = FBauth.currentUser?.photoURL;
+  const [InputDisabled, setInputDisabled] = useState(true);
+  const [ButtonTitle, setButtonTitle] = useState("Name Your Culinary Creation");
+  const [RecipeName, setRecipeName] = useState("");
+  
+  const inputRef:any = useRef(null);
+  const handleNameChange = () => {
+    if (inputRef.current) {
+      setInputDisabled(false)
+    }
+  }
+  const handleConfirmName = () => {
+    setInputDisabled(true)
+    dispatch(setName(RecipeName))
+  };
+
+  useEffect(() => {
+    if (!InputDisabled) {
+      inputRef.current.focus()
+      setButtonTitle("Savor Your Creation's Name");
+    } else {
+      inputRef.current.blur()
+      setButtonTitle("Refine Your Cuisine");
+    }
+  }, [InputDisabled])
 
 
   return (
     <View style={styles.container}>
+      <View style={{marginVertical: 10}} />
       <View style={styles.inputContainer} >
         <View style={styles.photoContainer}>
-        {userPhoto &&
+        {userPhoto ?
           <Image 
             source={{uri: userPhoto}} 
             style={[styles.photo, {borderColor: themeColors.surface}]}
             resizeMode="stretch"
-
           />
+          : <Text> Loading... </Text>
         }
         </View>
-        {/* <ScrollView> */}
+
           <Input 
-            // style={styles.input}
+            ref={inputRef}
             autoCapitalize="sentences"
             placeholder="Fruity juicy cherry..."
-            // multiline
             keyboardType="ascii-capable"
+            enterKeyHint="enter"
             returnKeyType="done"
+            onChangeText={setRecipeName}
+            onSubmitEditing={handleConfirmName}
             containerStyle={styles.input}
-            
-            
+            disabled={InputDisabled}
           />
-        {/* </ScrollView> */}
+        
+
+
       </View>
+
+
+
+
 
       <View style={styles.linksContainer}>
         <View style={{width: 150, height: 30}}>
@@ -63,10 +96,18 @@ export default function AddContentScreen() {
 
         <View style={[styles.line, {backgroundColor: themeColors.lightText}]} />
 
+        <CheckList
+          iconName="abacus"
+          title={ButtonTitle}
+          done={isName}
+          onPress={handleNameChange}
+        />
+
         <CheckList 
           iconName={"camera"}
           title="Add a Dash of Flavor with Pictures!"
-          done={isPhotoName}
+          done={isPhoto}
+          
           onPress={() => router.push('/addPhotoName')} 
         />
 
@@ -103,7 +144,6 @@ export default function AddContentScreen() {
       <View style={[styles.line, {backgroundColor: themeColors.lightText}]} />
 
       <View style={styles.separator} />
-      
 
         <TouchableOpacity
           onPress={() => {
@@ -116,25 +156,12 @@ export default function AddContentScreen() {
         
         <View style={styles.separator} />
         
-        <View style={styles.buttonContainer}>
-            <LinearGradient
-                colors={[themeColors.primary, themeColors.accent]}
-                style={styles.gradient}
-              >
-              <Button 
-                buttonStyle={styles.button}
-                icon={<CustomIcon
-                  name="form-select"
-                  size={22}
-                  style={{color: themeColors.background}}
-                  />} 
-                iconPosition="right"
-                size="lg" 
-                title="Finish uploading"  
-                onPress={() => alert("uploaded")}
-              />
-            </LinearGradient>
-          </View>
+        <WideButton 
+          title="Finish Uploading"
+          iconName="form-select"
+          onPress={() => alert("Uploaded")}
+        />
+        
     </View>
   )
 }
@@ -144,9 +171,14 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     width: "100%",
-    // borderColor:"blue",borderWidth:1,
-    // justifyContent: "center",
     alignItems: "center",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    height: 140,
+    width: "100%",
+    marginBottom: 30,
+    // borderColor:"green",borderWidth:1,
   },
   photoContainer: {
     width: 90,
@@ -159,13 +191,7 @@ const styles = StyleSheet.create({
     height: 120,
     borderWidth: 3,
   },
-  inputContainer: {
-    flexDirection: "row",
-    height: 140,
-    width: "100%",
-    marginBottom: 30,
-    // borderColor:"green",borderWidth:1,
-  },
+  
   input: {
     // height: "30%",
     width: "60%",
@@ -205,20 +231,4 @@ const styles = StyleSheet.create({
     opacity: 0.1,
   },
   null: {},
-
-  buttonContainer: {
-    width: "80%",
-    height: 50,
-  },
-  gradient: {
-    flex:1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 12,
-    overflow: "hidden",
-  },
-  button: {
-    backgroundColor: "transparent",
-    width: "100%",
-  },
 })

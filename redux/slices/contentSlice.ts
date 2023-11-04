@@ -21,7 +21,8 @@ interface Recipe {
 
 interface ContentState {
   recipe: Recipe;
-  isPhotoName: boolean;
+  isPhoto: boolean;
+  isName: boolean;
   isInstructions: boolean;
   isDetails: boolean;
   isExtra: boolean;
@@ -31,12 +32,13 @@ interface ContentState {
 const initialState: ContentState = {
   recipe: {
     name: '',
-    instructions: [],
     photo: '',
+    instructions: [],
     details: {},
     extra: {},
   },
-  isPhotoName: false,
+  isName: false,
+  isPhoto: false,
   isInstructions: false,
   isDetails: false,
   isExtra: false,
@@ -47,11 +49,19 @@ const contentSlice = createSlice({
   name: 'content',
   initialState,
   reducers: {
-    setPhotoName: (state, action) => {
-      const { photo, name} = action.payload;
+    setName: (state, action) => {
+      state.recipe.name = action.payload;
+      if (action.payload != '') {
+        state.isName = true;
+      } else {
+        state.isName = false;
+      }
+      console.log("Recipe Name is: ", state.recipe.name)
+    },
+    setPhoto: (state, action) => {
+      const photo = action.payload;
       state.recipe.photo = photo;
-      state.recipe.name = name;
-      state.isPhotoName = true;
+      state.isPhoto = true;
     },
     setInstructions: (state, action) => {
       state.recipe.instructions = action.payload;
@@ -80,7 +90,8 @@ const contentSlice = createSlice({
         details: {},
         extra: {},
       }
-      state.isPhotoName    = false;
+      state.isName        = false;
+      state.isPhoto        = false;
       state.isInstructions = false;
       state.isDetails      = false;
       state.isExtra        = false;
@@ -90,6 +101,6 @@ const contentSlice = createSlice({
 
 export const selectRecipe = (state: ContentState) => state.recipe;
 
-export const { setPhotoName, setInstructions, setDetails, setExtra, nullifyRecipe } = contentSlice.actions;
+export const { setName, setPhoto, setInstructions, setDetails, setExtra, nullifyRecipe } = contentSlice.actions;
 
 export default contentSlice;

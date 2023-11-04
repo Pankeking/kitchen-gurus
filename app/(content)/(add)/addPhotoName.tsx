@@ -2,7 +2,7 @@ import { Link, router } from "expo-router";
 import { CustomIcon, Text, View } from "../../../components/themedCustom";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useDispatch } from "react-redux";
-import { nullifyRecipe, setPhotoName } from "../../../redux/slices/contentSlice";
+import { nullifyRecipe, setPhoto } from "../../../redux/slices/contentSlice";
 
 export default function addPhotoNameScreen() {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ export default function addPhotoNameScreen() {
       <TouchableOpacity
         onPress={() => {
             console.log("dispatched photo name")
-            dispatch(setPhotoName({photo: "photography", name: "new name"}));
+            dispatch(setPhoto({photo: "photography"}));
             router.back();
           }
         }
@@ -38,7 +38,7 @@ export default function addPhotoNameScreen() {
       <View style={styles.separator} />
       
         <TouchableOpacity 
-          onPress={() => router.replace('/(content)/(add)')}
+          onPress={() => router.back()}
           >
           <View style={styles.goBackContainer}>
             <Text style={styles.goBackText}>Go back</Text>
