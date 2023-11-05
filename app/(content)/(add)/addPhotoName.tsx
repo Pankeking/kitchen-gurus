@@ -3,37 +3,61 @@ import { CustomIcon, Text, View } from "../../../components/themedCustom";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useDispatch } from "react-redux";
 import { nullifyRecipe, setPhoto } from "../../../redux/slices/contentSlice";
+import * as ImagePicker from 'expo-image-picker';
+import { useSelector } from "react-redux";
+import { Image } from "react-native";
+import { useTheme } from "@rneui/themed";
+import WideButton from "../../../components/WideButton";
+import { useEffect, useState } from "react";
 
 export default function addPhotoNameScreen() {
+
   const dispatch = useDispatch();
+  const themeColors = useTheme().theme.colors;
+
+  const photoUri = useSelector((state:any) => state.content.recipe.photo)
+  const defaultPhoto = require('../../../assets/images/fondoLindo.jpg')
+  const [ImageSource, setImageSource] = useState(defaultPhoto);
+
+  const handleImagePick = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    })
+    if (!result.canceled) {
+      dispatch(setPhoto(result.assets[0].uri));
+    } else {
+      
+    }
+  }
+  useEffect(() => {
+    if (photoUri) {
+      setImageSource(photoUri)
+    }
+  }, [photoUri])
+
+
   return (
     <View style={styles.container}>
+      <View style={[styles.imageContainer, {borderColor: themeColors.surface}]}>
+          <Image 
+            source={ImageSource} 
+            resizeMode="stretch"
+            style={styles.image}
+          />
+        </View>
       <Text>
-        add a photo and a name for your recipe
+        {photoUri}
       </Text>
       <View style={styles.separator} />
-      <TouchableOpacity
-        onPress={() => {
-            console.log("dispatched photo name")
-            dispatch(setPhoto({photo: "photography"}));
-            router.back();
-          }
-        }
-      >
-        <Text style={{color: "green"}}>Set the name and photo</Text>
-      </TouchableOpacity>
+      
+      <WideButton 
+        iconName="camera"
+        title="New Photo"
+        onPress={handleImagePick}
+      />
 
-      <View style={styles.separator} />
-
-      <TouchableOpacity
-        onPress={() => {
-            console.log("Nullify")
-            dispatch(nullifyRecipe())
-          }
-        }
-      >
-        <Text style={{color: "green"}}>Nullify</Text>
-      </TouchableOpacity>
+      
 
       <View style={styles.separator} />
       
@@ -45,7 +69,8 @@ export default function addPhotoNameScreen() {
             <CustomIcon name="arrow-u-left-top" size={24}/>
           </View>
         </TouchableOpacity>
-
+        
+        
     </View>
   )
 }
@@ -55,8 +80,20 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
+  },
+  imageContainer: {
+    // justifyContent: "center",
+    // alignItems: "center",
+    width: "100%",
+    height: 240,
+    paddingHorizontal: "1%",
+    // borderColor: "green", borderWidth: 1,
+  },
+  image: {
+    width: "100%",
+    height: 240,
   },
   separator: {
     width: "100%",
@@ -70,4 +107,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "blue",
   },
+  
 })
