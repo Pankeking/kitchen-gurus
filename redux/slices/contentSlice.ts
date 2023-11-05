@@ -14,7 +14,7 @@ interface Details {
 interface Recipe {
   name: string;
   instructions: string[];
-  photo: string;
+  photo: string[];
   details: Details;
   extra: Extra;
 }
@@ -27,16 +27,18 @@ interface ContentState {
   isDetails: boolean;
   isExtra: boolean;
   isLoading: boolean;  
+  photoCounter: number;
 }
 
 const initialState: ContentState = {
   recipe: {
     name: '',
-    photo: '',
+    photo: [],
     instructions: [],
     details: {},
     extra: {},
   },
+  photoCounter: 0,
   isName: false,
   isPhoto: false,
   isInstructions: false,
@@ -56,12 +58,14 @@ const contentSlice = createSlice({
       } else {
         state.isName = false;
       }
-      console.log("Recipe Name is: ", state.recipe.name)
     },
-    setPhoto: (state, action) => {
-      const photo = action.payload;
-      state.recipe.photo = photo;
+    addPhoto: (state, action) => {
+      const newPhoto = action.payload;
+      state.recipe.photo.push(newPhoto);
+      console.log("array",state.recipe.photo);
+      console.log("length",state.recipe.photo.length);
       state.isPhoto = true;
+      state.photoCounter = state.photoCounter + 1;
     },
     setInstructions: (state, action) => {
       state.recipe.instructions = action.payload;
@@ -86,11 +90,12 @@ const contentSlice = createSlice({
       state.recipe = {
         name: '',
         instructions: [],
-        photo: '',
+        photo: [],
         details: {},
         extra: {},
       }
-      state.isName        = false;
+      state.photoCounter   = 0;
+      state.isName         = false;
       state.isPhoto        = false;
       state.isInstructions = false;
       state.isDetails      = false;
@@ -101,6 +106,6 @@ const contentSlice = createSlice({
 
 export const selectRecipe = (state: ContentState) => state.recipe;
 
-export const { setName, setPhoto, setInstructions, setDetails, setExtra, nullifyRecipe } = contentSlice.actions;
+export const { setName, addPhoto, setInstructions, setDetails, setExtra, nullifyRecipe } = contentSlice.actions;
 
 export default contentSlice;

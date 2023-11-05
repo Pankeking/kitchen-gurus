@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { router } from "expo-router";
 
-import { CustomIcon, View, ToggleMode, Text} from "../../components/themedCustom";
-import { Button, Input, useTheme } from "@rneui/themed";
+import { View, ToggleMode, Text} from "../../components/themedCustom";
+import { Input, useTheme } from "@rneui/themed";
 
-import { LinearGradient } from "expo-linear-gradient";
 import { appSignUp, registerUserDB } from "../../utils/firebaseUtils";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";

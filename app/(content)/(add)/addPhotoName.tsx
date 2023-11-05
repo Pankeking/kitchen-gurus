@@ -1,8 +1,8 @@
-import { Link, router } from "expo-router";
-import { CustomIcon, Text, View } from "../../../components/themedCustom";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
+import { Text, View } from "../../../components/themedCustom";
+import { Dimensions, FlatList, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
-import { nullifyRecipe, setPhoto } from "../../../redux/slices/contentSlice";
+import { addPhoto } from "../../../redux/slices/contentSlice";
 import * as ImagePicker from 'expo-image-picker';
 import { useSelector } from "react-redux";
 import { Image } from "react-native";
@@ -15,8 +15,12 @@ export default function addPhotoNameScreen() {
   const dispatch = useDispatch();
   const themeColors = useTheme().theme.colors;
 
-  const photoUri = useSelector((state:any) => state.content.recipe.photo)
-  const defaultPhoto = require('../../../assets/images/fondoLindo.jpg')
+  const windowHeight = Dimensions.get('window').height;
+  const windowWidth = Dimensions.get('window').width;
+
+  const photoList = useSelector((state:any) => state.content.recipe.photo)
+  const photoUri = useSelector((state:any) => state.content.recipe.photo[0])
+  const defaultPhoto = require('../../../assets/images/fondoLindo.jpg');
   const [ImageSource, setImageSource] = useState(defaultPhoto);
 
   const handleImagePick = async () => {
@@ -25,52 +29,73 @@ export default function addPhotoNameScreen() {
       quality: 1,
     })
     if (!result.canceled) {
-      dispatch(setPhoto(result.assets[0].uri));
+      dispatch(addPhoto(result.assets[0].uri));
     } else {
-      
+      alert("Photo upload canceled")
     }
   }
   useEffect(() => {
     if (photoUri) {
       setImageSource(photoUri)
+    } else {
+      setImageSource(defaultPhoto)
     }
   }, [photoUri])
 
+  const renderImg = (item:string, props: typeof Image) => {
+    return (
+      <Image 
+        source={{uri:item}}
+        resizeMode="contain"
+      />
+      )
+  }
 
   return (
     <View style={styles.container}>
-      <View style={[styles.imageContainer, {borderColor: themeColors.surface}]}>
-          <Image 
-            source={ImageSource} 
-            resizeMode="stretch"
-            style={styles.image}
-          />
-        </View>
-      <Text>
-        {photoUri}
-      </Text>
+      
+      <View style={[styles.imageContainer, {height: windowWidth, width: windowWidth,backgroundColor: themeColors.surface}]}>
+        <FlatList
+          data={photoList}
+          renderItem={({ item }) => 
+            (
+              <>
+                <View>
+                  <Image 
+                    source={{uri:item}}
+                    resizeMode="cover"
+                    style={{marginHorizontal: 7, borderColor: "black", borderWidth: 2,height: windowWidth, width: windowWidth,}}
+                  />
+                </View>
+              </>
+            )
+          }
+          keyExtractor={(item, index) => index.toString()}
+          horizontal
+        />
+        {/* <Image 
+          source={{uri:ImageSource}}
+          resizeMode="contain"
+          style={styles.image}
+        /> */}
+      </View>
+      
       <View style={styles.separator} />
       
       <WideButton 
-        iconName="camera"
-        title="New Photo"
+        iconName="image"
+        title="Gallery"
         onPress={handleImagePick}
       />
-
       
-
       <View style={styles.separator} />
+
+      <WideButton 
+        iconName="camera"
+        title="Camera"
+        onPress={() => router.push('/CameraScreen')}
+      />
       
-        <TouchableOpacity 
-          onPress={() => router.back()}
-          >
-          <View style={styles.goBackContainer}>
-            <Text style={styles.goBackText}>Go back</Text>
-            <CustomIcon name="arrow-u-left-top" size={24}/>
-          </View>
-        </TouchableOpacity>
-        
-        
     </View>
   )
 }
@@ -82,22 +107,28 @@ const styles = StyleSheet.create({
     height: "100%",
     // justifyContent: "center",
     alignItems: "center",
+    // borderColor: "black", borderWidth: 3,
   },
   imageContainer: {
-    // justifyContent: "center",
-    // alignItems: "center",
+    justifyContent: "center",
+    alignItems: "center",
     width: "100%",
-    height: 240,
-    paddingHorizontal: "1%",
-    // borderColor: "green", borderWidth: 1,
+    height: "50%",
+    // borderColor: "black", borderWidth: 3,
   },
   image: {
     width: "100%",
-    height: 240,
+    height: "100%",
   },
   separator: {
     width: "100%",
     marginVertical: 30,
+  },
+  line: {
+    width: "97%",
+    height: 1,
+    borderColor: "black",
+    borderWidth:1,
   },
   goBackContainer: {
     flexDirection: "row",

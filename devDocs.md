@@ -84,6 +84,7 @@
       - Ads
   
   - Content Screen (WIP OCT 30)  
+    - Photo Previewer (WIP 6 NOV)
     - Bottom Tab & Profile ---> Route (DONE 3 NOV)
     - Add Screen (WIP 1 NOV)
       - Alignment & Display (DONE 4 NOV)

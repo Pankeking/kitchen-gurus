@@ -1,23 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { CustomIcon, Text, View } from '../../components/themedCustom';
-import { Button, useTheme } from '@rneui/themed';
+import { useTheme } from '@rneui/themed';
 
 import { launchImageLibraryAsync } from 'expo-image-picker';
 
 import ProfilePicViewer from '../../components/Profile/ProfilePicViewer';
-import ProfileBackGroundViewer from '../../components/Profile/ProfileBackGroundViewer';
 import ProfileCard from '../../components/Profile/ProfileCard';
 
 import { updateProfile } from 'firebase/auth';
-import { FBauth, FBstore } from '../../firebase-config';
+import { FBauth} from '../../firebase-config';
 import { LinearGradient } from 'expo-linear-gradient';
 import { updateProfileBackground, updateProfilePicture } from '../../utils/firebaseUtils';
-import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { router } from 'expo-router';
 import { useSelector } from 'react-redux';
-import { AuthState, selectBackgroundPhoto, selectProfilePhoto, selectUser } from '../../redux/slices/authSlice';
 import WideButton from '../../components/WideButton';
 
 

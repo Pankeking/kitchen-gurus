@@ -15,7 +15,6 @@ export default function AddLayout() {
           headerRight: () => (
             <Link href={'/cancelModal'} asChild >
               <Pressable
-                onPress={() => console.log("changed / cancelled")}
                 >
                 {({ pressed }) => (
                   <Text>CANCEL</Text>
@@ -34,6 +33,10 @@ export default function AddLayout() {
           headerShown: false,
           presentation: "modal",
           headerRight: () => null
+        }} />
+        <Stack.Screen name="CameraScreen" options={{
+          headerShown: false,
+          headerRight: () => (<Text>asdasdsa</Text>)
         }} />
         <Stack.Screen name="addPhotoName" options={{
           headerBackVisible: true,

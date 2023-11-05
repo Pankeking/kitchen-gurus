@@ -25,7 +25,7 @@ export default function AddContentScreen() {
   
   const userPhoto = FBauth.currentUser?.photoURL;
   const [InputDisabled, setInputDisabled] = useState(true);
-  const [ButtonTitle, setButtonTitle] = useState("Name Your Culinary Creation");
+  const [ButtonTitle, setButtonTitle] = useState("");
   const [RecipeName, setRecipeName] = useState("");
   
   const inputRef:any = useRef(null);
@@ -42,10 +42,10 @@ export default function AddContentScreen() {
   useEffect(() => {
     if (!InputDisabled) {
       inputRef.current.focus()
-      setButtonTitle("Savor Your Creation's Name");
+      setButtonTitle("Confirm Your Creation's Name");
     } else {
       inputRef.current.blur()
-      setButtonTitle("Refine Your Cuisine");
+      setButtonTitle("Name Your Culinary Creation");
     }
   }, [InputDisabled])
 
@@ -77,20 +77,12 @@ export default function AddContentScreen() {
             containerStyle={styles.input}
             disabled={InputDisabled}
           />
-        
-
-
       </View>
-
-
-
-
 
       <View style={styles.linksContainer}>
         <View style={{width: 150, height: 30}}>
           <TouchableOpacity onPress={() => setTempTest((prev) => !prev)}>
             {TempTest ? <Text>DONE</Text> : <Text>NOT DONE</Text>}
-            
           </TouchableOpacity>
         </View>
 
@@ -103,11 +95,12 @@ export default function AddContentScreen() {
           onPress={handleNameChange}
         />
 
+        <View style={[styles.line, {backgroundColor: themeColors.lightText}]} />
+
         <CheckList 
           iconName={"camera"}
           title="Add a Dash of Flavor with Pictures!"
           done={isPhoto}
-          
           onPress={() => router.push('/addPhotoName')} 
         />
 
@@ -161,7 +154,6 @@ export default function AddContentScreen() {
           iconName="form-select"
           onPress={() => alert("Uploaded")}
         />
-        
     </View>
   )
 }
