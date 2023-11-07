@@ -40,7 +40,7 @@ export default function AddLayout() {
         }} />
         <Stack.Screen name="addPhotoName" options={{
           headerBackVisible: true,
-          headerTitle: "Pictures",
+          headerTitle: "Add Photos",
         }}/>
         <Stack.Screen name="addInstructions" options={{
           headerBackVisible: true,

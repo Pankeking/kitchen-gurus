@@ -57,6 +57,7 @@ export default function ProfileScreen() {
       const userId = FBauth.currentUser?.uid;
       if (userId) {
         const imageUri = result.assets[0].uri;
+        const imageRaw = result.assets[0];
         await updateProfileBackground(userId, imageUri);
         setBackgroundPic(imageUri);
       } else {

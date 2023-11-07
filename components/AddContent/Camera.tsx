@@ -1,15 +1,24 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { CustomIcon, View } from "../themedCustom";
-import { Camera, CameraType } from 'expo-camera'
+import { CustomIcon, Text, View } from "../themedCustom";
+import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera'
 import { useEffect, useRef, useState } from "react";
 import { router } from "expo-router";
 import { useDispatch } from "react-redux";
 import { addPhoto } from "../../redux/slices/contentSlice";
+import PhotoEditor from "./PhotoEditor";
+
+import {manipulateAsync, FlipType, Action} from 'expo-image-manipulator'
 
 export default function CameraComp(props: {
   
 }) {
   
+  
+  // console.log("from Camera.tsx/camera comp router back")
+  // router.replace('/(content)/(add)/addPhotoName');
+  
+  const [isEditing, setEditing] = useState(false);
+  const [newImage, setNewImage] = useState<CameraCapturedPicture>();
   
   const cameraRef = useRef<Camera>(null);
   const [status, requestPermission] = Camera.useCameraPermissions();
@@ -45,19 +54,58 @@ export default function CameraComp(props: {
     }
   }
 
+  const autoCrop = async (newPhoto: CameraCapturedPicture) => {
+    try {
+      let actions :Action[] = []
+      console.log(`width: ${newPhoto.width}, height: ${newPhoto.height}`)
+      if (newPhoto.width > newPhoto.height) {
+        actions.push( {crop: {
+          originX: newPhoto.width / 4,
+          originY: 0,
+          width: newPhoto.width / 2,
+          height: newPhoto.height
+        }} )
+      } else {
+        actions.push( 
+          {crop: {
+            originX: 0,
+            originY: newPhoto.height / 4,
+            width: newPhoto.width,
+            height: newPhoto.height / 2
+          }} )
+        
+      }
+      actions.push(
+        {resize: {
+          width: 300,
+          height: 300
+        }}
+      )
+      const cropedResult = await manipulateAsync(
+        newPhoto.uri,
+        actions
+      )
+      setNewImage(cropedResult)
+      setEditing(true)
+    } catch (e) {
+      console.error("error: ", e);
+    }
+  }
+
+
   const handleTakePicture = async () => {
     if (isReady) {
       if (cameraRef.current) {
         try {
           const newPhoto = await cameraRef.current.takePictureAsync();
-          console.log(newPhoto);
-          dispatch(addPhoto(newPhoto.uri))
-          handleClose();
-
+          if (newPhoto) {
+            autoCrop(newPhoto)
+          }
         } catch (e) {
           alert("Camera Failed, try again");
           console.error("error: ", e);
         }
+        
       } 
 
 
@@ -69,7 +117,9 @@ export default function CameraComp(props: {
 
   return (
     <View style={styles.container}>
-      
+      {isEditing && newImage ? (
+        <PhotoEditor newImage={newImage} />
+        ) : (
       <Camera
         ref={cameraRef}
         style={styles.camera}
@@ -78,9 +128,8 @@ export default function CameraComp(props: {
           setReady(true);
         }}
       >
-        
         <View style={styles.mask} />
-        <View style={[styles.mask, {top: "60%"}]} />
+        <View style={[styles.mask, {top: "50%"}]} />
 
         <View style={styles.close}>
           <TouchableOpacity
@@ -107,19 +156,15 @@ export default function CameraComp(props: {
           </TouchableOpacity>
         </View>
 
-        
-        
-
         <View style={styles.shutter}>
           <TouchableOpacity 
             style={styles.innerCircle}  
             onPress={handleTakePicture} 
           />
         </View>
-
-
       </Camera>
-      
+        )
+      }
     </View>
   )
 }
@@ -134,7 +179,7 @@ const styles = StyleSheet.create({
   },
   mask: {
     width: "100%",
-    height: "20%",
+    height: "25%",
     opacity: 0.7,
     backgroundColor: "black"
   },
