@@ -1,12 +1,11 @@
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Text, View } from "../../../components/themedCustom";
+import { CustomIcon, Text, View } from "../../../components/themedCustom";
 import { Input, useTheme } from "@rneui/themed";
 import { router } from "expo-router";
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { nullifyRecipe, setName } from "../../../redux/slices/contentSlice";
-import { FBauth } from "../../../firebase-config";
 import CheckList from "../../../components/AddContent/CheckList";
 import WideButton from "../../../components/WideButton";
 
@@ -21,9 +20,9 @@ export default function AddContentScreen() {
   const themeColors = useTheme().theme.colors;
   const dispatch = useDispatch();
 
-  const [TempTest, setTempTest] = useState(false);
+  const [TempTest, setTempTest] = useState(true);
   
-  const userPhoto = FBauth.currentUser?.photoURL;
+  const mainPhoto        = useSelector((state:any) => state.content.recipe.photo[0]);
   const [InputDisabled, setInputDisabled] = useState(true);
   const [ButtonTitle, setButtonTitle] = useState("");
   const [RecipeName, setRecipeName] = useState("");
@@ -31,7 +30,7 @@ export default function AddContentScreen() {
   const inputRef:any = useRef(null);
   const handleNameChange = () => {
     if (inputRef.current) {
-      setInputDisabled(false)
+      // setInputDisabled(false)
     }
   }
   const handleConfirmName = () => {
@@ -42,29 +41,22 @@ export default function AddContentScreen() {
   useEffect(() => {
     if (!InputDisabled) {
       inputRef.current.focus()
-      setButtonTitle("Confirm Your Creation's Name");
+      setButtonTitle("Confirm");
     } else {
       inputRef.current.blur()
-      setButtonTitle("Name Your Culinary Creation");
+      setButtonTitle("Name");
     }
   }, [InputDisabled])
 
 
   return (
     <View style={styles.container}>
-      <View style={{marginVertical: 10}} />
       <View style={styles.inputContainer} >
-        <View style={styles.photoContainer}>
-        {userPhoto ?
-          <Image 
-            source={{uri: userPhoto}} 
-            style={[styles.photo, {borderColor: themeColors.surface}]}
-            resizeMode="stretch"
-          />
-          : <Text> Loading... </Text>
-        }
-        </View>
-
+        <CustomIcon 
+          name="chef-hat"
+          style={{color: themeColors.lightText}}
+          size={120}
+        />
           <Input 
             ref={inputRef}
             autoCapitalize="sentences"
@@ -75,18 +67,15 @@ export default function AddContentScreen() {
             onChangeText={setRecipeName}
             onSubmitEditing={handleConfirmName}
             containerStyle={styles.input}
-            disabled={InputDisabled}
+            // autoCorrect={false}
+            spellCheck={false}
+            inputStyle={{fontSize: 40, textAlign:"center"}}
+            inputContainerStyle={{borderBottomWidth: 0}}
+            // disabled={InputDisabled}
           />
       </View>
 
       <View style={styles.linksContainer}>
-        <View style={{width: 150, height: 30}}>
-          <TouchableOpacity onPress={() => setTempTest((prev) => !prev)}>
-            {TempTest ? <Text>DONE</Text> : <Text>NOT DONE</Text>}
-          </TouchableOpacity>
-        </View>
-
-        <View style={[styles.line, {backgroundColor: themeColors.lightText}]} />
 
         <CheckList
           iconName="abacus"
@@ -95,64 +84,46 @@ export default function AddContentScreen() {
           onPress={handleNameChange}
         />
 
-        <View style={[styles.line, {backgroundColor: themeColors.lightText}]} />
-
         <CheckList 
           iconName={"camera"}
-          title="Add a Dash of Flavor with Pictures!"
+          title="Photos"
           done={isPhoto}
           onPress={() => router.push('/addPhotoName')} 
         />
 
-        <View style={[styles.line, {backgroundColor: themeColors.lightText}]} />
-
         <CheckList 
           iconName={"file-document-multiple"}
-          title="Craft a Culinary Tale..."
+          title="Instructions"
           done={TempTest}
           onPress={() => router.push('/addInstructions')} 
         />
 
-        <View style={[styles.line, {backgroundColor: themeColors.lightText}]} />
-
         <CheckList 
           iconName={"information"}
-          title="Serve with a Side of Information"
+          title="Details"
           done={TempTest}
           onPress={() => router.push('/addOther')} 
         />
 
-          
-        <View style={[styles.line, {backgroundColor: themeColors.lightText}]} />
-
         <CheckList 
           iconName={"clock-edit"}
-          title="List the Stars of Your Dish"
+          title="Ingredients"
           done={TempTest}
           onPress={() => router.push('/addDetails')} 
         />
 
       </View>
 
-      <View style={[styles.line, {backgroundColor: themeColors.lightText}]} />
-
       <View style={styles.separator} />
 
-        <TouchableOpacity
-          onPress={() => {
-            dispatch(nullifyRecipe())
-            router.replace('/(tabs)/');
-          }}
-        >
-          <Text style={{color: "blue"}}>Go Home</Text>
-        </TouchableOpacity>
-        
-        <View style={styles.separator} />
-        
         <WideButton 
           title="Finish Uploading"
           iconName="form-select"
-          onPress={() => alert("Uploaded")}
+          onPress={() => {
+            alert("Uploaded");
+            dispatch(nullifyRecipe())
+            router.replace('/(tabs)/');
+          }}
         />
     </View>
   )
@@ -166,30 +137,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputContainer: {
-    flexDirection: "row",
+    // flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     height: 140,
     width: "100%",
-    marginBottom: 30,
+    marginVertical: 30,
     // borderColor:"green",borderWidth:1,
   },
-  photoContainer: {
-    width: 90,
-    height: 120,
-    // borderColor:"#f00f00",borderWidth:4,
-    marginHorizontal: 5,
-  },
-  photo: {
-    width: 90,
-    height: 120,
-    borderWidth: 3,
-  },
-  
   input: {
-    // height: "30%",
-    width: "60%",
-    // maxWidth: "50%",
+    // height: 20,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 4,
     // borderColor: "blue", borderWidth: 1,
-
   },
   linksContainer: {
     width: "100%",
