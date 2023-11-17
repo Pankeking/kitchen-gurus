@@ -1,26 +1,31 @@
 import { router } from "expo-router";
-import { Text, View } from "../../../components/themedCustom";
-import { Dimensions, FlatList, StyleSheet } from "react-native";
+import { CustomIcon, Text, View } from "../../../components/themedCustom";
+import { FlatList, StyleSheet, useWindowDimensions } from "react-native";
 import { useDispatch } from "react-redux";
 import { addPhoto } from "../../../redux/slices/contentSlice";
 import * as ImagePicker from 'expo-image-picker';
 import { useSelector } from "react-redux";
 import { Image } from "react-native";
 import { useTheme } from "@rneui/themed";
+import { useRef, useState } from "react";
+import SmallButton from "../../../components/SmallButton";
 import WideButton from "../../../components/WideButton";
-import { useEffect, useRef, useState } from "react";
 
-const windowHeight = Dimensions.get('window').height;
-const windowWidth = Dimensions.get('window').width;
 
 export default function addPhotoNameScreen() {
 
   const dispatch = useDispatch();
   const themeColors = useTheme().theme.colors;
-
+  
+  const isName = useSelector((state:any) => state.content.isName);
+  const recipeName = useSelector((state:any) => state.content.recipe.name);
+  
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const deviceWidth = useWindowDimensions().width;
+  
+  const ICON_SIZE = 40;
 
   const photoList = useSelector((state:any) => state.content.recipe.photo)
   const photoUri = useSelector((state:any) => state.content.recipe.photo[0]);
@@ -50,14 +55,18 @@ export default function addPhotoNameScreen() {
     }
   };
 
+  const backToMenu = () => {
+      router.push('/(content)/(add)')
+  }
+
   const RenderImg = ({ item } : any) => {
     return (
         <>
-          <View style={styles.imageContainer}>
+          <View style={[styles.imageContainer, {width: deviceWidth, height: deviceWidth}]}>
             <Image 
               source={item}
               resizeMode="contain"
-              style={[styles.image, {aspectRatio: 1}]}
+              style={[styles.image, {width: deviceWidth, height: deviceWidth ,aspectRatio: 1}]}
             />
           </View>
         </>
@@ -66,68 +75,117 @@ export default function addPhotoNameScreen() {
 
   return (
     <View style={styles.container}>
-      <WideButton 
-        iconName="image"
-        title="From Gallery"
-        onPress={handleImagePick}
-      />
-        {/* <View style={[styles.imageContainer, {backgroundColor: themeColors.surface}]}>
-        </View> */}
-      {photoUri != null &&
+      <View style={styles.header}>
+        <CustomIcon 
+          name="chef-hat"
+          style={[styles.null, { color: themeColors.lightText}]}
+          size={100}
+        />
+        <Text style={styles.headerText}>
+          {isName ? recipeName : "New Recipe"}
+        </Text>
+      </View>
+
+      <View style={[styles.flatListContainer, {backgroundColor: themeColors.lightText}]}>
+        
+        {photoUri != null &&
           <FlatList
-          ref={flatListRef}
-            data={photoList}
-            renderItem={({ item }) => <RenderImg item={item} /> }
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            contentContainerStyle={styles.flatListContainer}
+            ref={flatListRef}
+              data={photoList}
+              renderItem={({ item }) => <RenderImg item={item} /> }
+              keyExtractor={(item, index) => index.toString()}
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.flatList}
           />
-      }
-      <WideButton 
-        iconName="camera"
-        title="With Camera"
-        onPress={() => router.push('/CameraScreen')}
-      />
+        }
+      </View>
+      <View style={styles.topButtons}>
+        <SmallButton
+          size={ICON_SIZE}
+          iconName={"camera"}
+          title="Photo"
+          onPress={() => router.push('/CameraScreen')}
+        />
+        <SmallButton
+          size={ICON_SIZE}
+          iconName={"image"}
+          title="Gallery"
+          onPress={handleImagePick}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <WideButton 
+          iconName={"check-circle"}
+          title="Continue"
+          onPress={backToMenu}
+        />
+      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  null: {},
   container: {
     flex: 1,
-    width: "90%",
-    height: "90%",
-    marginHorizontal: "2.5%",
+    height: "100%",
     alignItems: "center",
     justifyContent: "center",
-    borderColor: "black", borderWidth: 4,
+    // borderColor: "black", borderWidth: 4,
+  },
+  header: {
+    flex: 1,
+    // justifyContent: "center",
+    alignItems: "center",
+    // height: "10%",
+    width: "100%",
+  },
+  headerText: {
+    fontFamily: "PlaypenBold",
+    fontSize: 28,
+  },
+  flatListContainer: {
+    // flex: 1,
+    height: "50%",
+    width: "100%",
+    // borderColor: "red", borderWidth: 4,
+  },
+  flatList: {
+    height: 324,
+    // borderColor: "blue", borderWidth: 4,
   },
   imageContainer: {
     alignItems: "center",
     flex:1,
-    width: 300,
-    height: 300,
-    marginHorizontal: 20,
-    borderColor: "green", borderWidth: 4,
-  },
-  flatListContainer: {
-    // flex: 1,
-    height: "100%",
-    // width: windowWidth,
-    // alignItems: "center",
-    // justifyContent: "center",
-    borderColor: "blue", borderWidth: 4,
+    // marginHorizontal: 20,
+    // borderColor: "green", borderWidth: 4,
   },
   image: {
     flex: 1,
-    width: 300,
-    height: 300,
-    // aspectRatio: 1952/4224,
-    // resizeMode: "cover",
     backgroundColor: "black",
-    borderColor: "orange", borderWidth: 4,
+    // borderColor: "orange", borderWidth: 4,
+  },
+  topButtons: {
+    paddingHorizontal: "10%",
+    // paddingVertical: "10%",
+    width: "100%",
+    height: "15%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    // borderColor: "orange", borderWidth: 4,
+  },
+  buttonContainer: {
+    width: "100%",
+    marginHorizontal:"auto",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: "10%"
   },
   goBackContainer: {
+
     flexDirection: "row",
     justifyContent: "center",
   },

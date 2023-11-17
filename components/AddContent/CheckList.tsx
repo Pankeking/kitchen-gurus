@@ -10,7 +10,7 @@ export default function CheckList(props: {
   }) {
     
     const themeColors = useTheme().theme.colors;
-    const ICON_SIZE = 36;
+    const ICON_SIZE = 28;
     
     const onPress = () => props.onPress();
     const iconName = props.iconName;
@@ -69,6 +69,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 28,
+    fontSize: 22,
   },
 })

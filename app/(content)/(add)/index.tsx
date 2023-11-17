@@ -28,9 +28,10 @@ export default function AddContentScreen() {
   const [RecipeName, setRecipeName] = useState("");
   
   const inputRef:any = useRef(null);
+
   const handleNameChange = () => {
     if (inputRef.current) {
-      // setInputDisabled(false)
+      inputRef.current.focus()
     }
   }
   const handleConfirmName = () => {
@@ -55,7 +56,7 @@ export default function AddContentScreen() {
         <CustomIcon 
           name="chef-hat"
           style={{color: themeColors.lightText}}
-          size={120}
+          size={100}
         />
           <Input 
             ref={inputRef}
@@ -69,7 +70,7 @@ export default function AddContentScreen() {
             containerStyle={styles.input}
             // autoCorrect={false}
             spellCheck={false}
-            inputStyle={{fontSize: 40, textAlign:"center"}}
+            inputStyle={{fontSize: 28, textAlign:"center", fontFamily: "PlaypenSemiBold"}}
             inputContainerStyle={{borderBottomWidth: 0}}
             // disabled={InputDisabled}
           />
@@ -78,7 +79,7 @@ export default function AddContentScreen() {
       <View style={styles.linksContainer}>
 
         <CheckList
-          iconName="abacus"
+          iconName="alpha-a-box"
           title={ButtonTitle}
           done={isName}
           onPress={handleNameChange}

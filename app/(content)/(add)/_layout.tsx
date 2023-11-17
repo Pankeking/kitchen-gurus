@@ -2,9 +2,13 @@ import { useTheme } from '@rneui/themed';
 import { Link, Stack } from 'expo-router';
 import { Pressable } from 'react-native';
 import { CustomIcon, Text } from '../../../components/themedCustom';
+import { useSelector } from 'react-redux';
 
 export default function AddLayout() {
   const themeColors = useTheme().theme.colors;
+
+  const isName = useSelector((state:any) => state.content.isName);
+  const recipeName = useSelector((state:any) => state.content.recipe.name);
   return (
       <Stack
         screenOptions={{
@@ -25,8 +29,9 @@ export default function AddLayout() {
         }}
       >
         <Stack.Screen name="index" options={{
-          headerBackVisible: true,
-          headerTitle: "New Recipe",
+          // headerBackVisible: true,
+          headerTitle: isName ? recipeName : "New Recipe",
+          headerTitleStyle: {fontFamily: "PlaypenMedium"}
           
         }}/>
         <Stack.Screen name="cancelModal" options={{
@@ -39,11 +44,9 @@ export default function AddLayout() {
           headerRight: () => (<Text>asdasdsa</Text>)
         }} />
         <Stack.Screen name="addPhotoName" options={{
-          headerBackVisible: true,
           headerTitle: "Add Photos",
         }}/>
         <Stack.Screen name="addInstructions" options={{
-          headerBackVisible: true,
           headerTitle: "Instructions",
         }}/>
         <Stack.Screen name="addOther" options={{

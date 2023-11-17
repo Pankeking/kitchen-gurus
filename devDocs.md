@@ -115,6 +115,8 @@
 
 ## Work Done (DATE)
 
+- VACATIONS (NOV 8 - NOV 16)
+
 - Profile Items persistance (DONE 29 OCT)
   - FireStore Visualization
   - FireBase Cloud Storage

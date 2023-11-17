@@ -24,6 +24,15 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Handlee: require('../assets/fonts/Handlee-Regular.ttf'),
+    PlaypenBold: require('../assets/fonts/PlaypenSans-Bold.ttf'),
+    PlaypenExtraBold: require('../assets/fonts/PlaypenSans-ExtraBold.ttf'),
+    PlaypenExtraLight: require('../assets/fonts/PlaypenSans-ExtraLight.ttf'),
+    PlaypenLight: require('../assets/fonts/PlaypenSans-Light.ttf'),
+    PlaypenMedium: require('../assets/fonts/PlaypenSans-Medium.ttf'),
+    PlaypenRegular: require('../assets/fonts/PlaypenSans-Regular.ttf'),
+    PlaypenSemiBold: require('../assets/fonts/PlaypenSans-SemiBold.ttf'),
+    PlaypenThin: require('../assets/fonts/PlaypenSans-Thin.ttf'),
     ...FontAwesome.font,
   });
 
