@@ -12,8 +12,9 @@ export default function AddLayout() {
   return (
       <Stack
         screenOptions={{
+          headerBackVisible: false,
           headerStyle: {backgroundColor: themeColors.surface},
-          headerTitleStyle: {fontSize: 14},
+          headerTitleStyle: {fontSize: 14, fontFamily: "PlaypenMedium"},
           headerTintColor: themeColors.lightText,
           navigationBarColor:"red",
           headerRight: () => (
@@ -21,7 +22,7 @@ export default function AddLayout() {
               <Pressable
                 >
                 {({ pressed }) => (
-                  <Text>CANCEL</Text>
+                  <CustomIcon name="cancel" style={{color: themeColors.lightText}} size={32} />
                   )}
               </Pressable>
             </Link>
@@ -29,10 +30,7 @@ export default function AddLayout() {
         }}
       >
         <Stack.Screen name="index" options={{
-          // headerBackVisible: true,
           headerTitle: isName ? recipeName : "New Recipe",
-          headerTitleStyle: {fontFamily: "PlaypenMedium"}
-          
         }}/>
         <Stack.Screen name="cancelModal" options={{
           headerShown: false,
@@ -41,7 +39,6 @@ export default function AddLayout() {
         }} />
         <Stack.Screen name="CameraScreen" options={{
           headerShown: false,
-          headerRight: () => (<Text>asdasdsa</Text>)
         }} />
         <Stack.Screen name="addPhotoName" options={{
           headerTitle: "Add Photos",
@@ -50,11 +47,9 @@ export default function AddLayout() {
           headerTitle: "Instructions",
         }}/>
         <Stack.Screen name="addOther" options={{
-          headerBackVisible: true,
           headerTitle: "Other",
         }}/>
         <Stack.Screen name="addDetails" options={{
-          headerBackVisible: true,
           headerTitle: "Details",
         }}/>
       </Stack>

@@ -67,6 +67,7 @@
 - Email Link
 - Email template
 - On boarding tunnel
+- Delete Image, Limit 10 Photos -> Content-Add Photo Screen/
 
 ## Current working tree - files (DATE)
 
@@ -84,14 +85,20 @@
       - Ads
   
   - Content Screen (WIP OCT 30)  
-    - Photo Previewer (WIP 6 NOV)
     - Bottom Tab & Profile ---> Route (DONE 3 NOV)
-    - Add Screen (WIP 1 NOV)
+    - Index Screen (WIP 1 NOV)
       - Alignment & Display (DONE 4 NOV)
       - Re-usable CheckList Component (DONE 4 NOV)
       - Add Name (DONE 4 NOV)
-      - Add Photo (WIP 5 NOV)
-      - Add Instructions (WIP)
+      - Add Photo (WIP 5 NOV -> DONE 17 NOV)
+        - Photo Previewer (WIP 6 NOV -> DONE 17 NOV)
+        - Camera Component/Screen (DONE 17 NOV)
+      - Add Instructions (WIP 18 NOV)
+        - Instructions Layout
+        - Step Layout
+        - Step-Title
+        - Step-Text
+        - Numerated Steps? with Max?
       - Add Details (WIP)
       - Add Extras (WIP)
     - Edit

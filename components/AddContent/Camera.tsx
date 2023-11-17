@@ -5,13 +5,15 @@ import { useEffect, useRef, useState } from "react";
 import { router } from "expo-router";
 import { useDispatch } from "react-redux";
 import PhotoEditor from "./PhotoEditor";
+import { useTheme } from "@rneui/themed";
 
 export default function CameraComp(props: {
   
 }) {
   // console.log("from Camera.tsx/camera comp router back")
   // router.replace('/(content)/(add)/addPhotoName');
-  
+  const themeColors = useTheme().theme.colors;
+  const ICON_SIZE = 22;
   const [isEditing, setEditing] = useState(false);
   const [newImage, setNewImage] = useState<CameraCapturedPicture>();
   
@@ -29,20 +31,6 @@ export default function CameraComp(props: {
     })
   }, [])
   
-  // useEffect(() => {
-  //   const unsub =  () => {
-  //     if (!permission) {
-  //       requestPermission;
-  //     } else if (permission?.granted !== true) {
-  //       console.log("what: ",permission.granted);
-  //       requestPermission();
-  //       alert("denied");
-  //     }
-  //     requestPermission();
-  //     console.log("onMount: ",permission);
-  //   }
-  //   return () => unsub();
-  // }, [])
   if (!permission) return <Text>hallo</Text>
 
   function ToggleCameraType() {
@@ -56,9 +44,6 @@ export default function CameraComp(props: {
       router.replace('/(content)/(add)/addPhotoName')
     }
   }
-
-  
-
 
   const handleTakePicture = async () => {
     if (isReady && cameraRef.current) {
@@ -84,27 +69,29 @@ export default function CameraComp(props: {
         <PhotoEditor newImage={newImage} />
         ) : (
       <>
-      <View style={styles.mask}>
+      <View style={[styles.mask, {backgroundColor: themeColors.background}]}>
         <View style={styles.closeContainer}>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={handleClose}
           >
             <CustomIcon 
-              style={styles.closeIcon}
+              style={[styles.closeIcon, {color: themeColors.lightText}]}
               name="window-close"
-              size={32}
+              size={40}
             />
           </TouchableOpacity>
         </View>
 
-        <View style={styles.rotateContainer}>
+        <View style={[styles.rotateContainer, {backgroundColor: themeColors.lightText}]}>
           <TouchableOpacity
             onPress={() => ToggleCameraType()}
-            style={styles.rotateButton}
+            style={[styles.rotateButton, {backgroundColor: themeColors.lightText, borderColor: themeColors.background}]}
           >
             <CustomIcon
               name="rotate-3d-variant"
+              size={ICON_SIZE}
+              style={{color: themeColors.background}}
             />
           </TouchableOpacity>
         </View>
@@ -121,10 +108,10 @@ export default function CameraComp(props: {
       >
       </Camera>
 
-      <View style={styles.mask}>
-        <View style={styles.shutter}>
+      <View style={[styles.mask, {backgroundColor: themeColors.background}]}>
+        <View style={[styles.shutter, {backgroundColor: themeColors.lightText}]}>
           <TouchableOpacity 
-            style={styles.innerCircle}  
+            style={[styles.innerCircle, {borderColor: themeColors.background , backgroundColor: themeColors.lightText}]}  
             onPress={handleTakePicture} 
           />
         </View>
@@ -146,7 +133,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     height: "25%",
-    backgroundColor: "black"
   },
   camera: {
     flex: 1,
@@ -158,13 +144,12 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: "white",
   },
   innerCircle: {
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 32,
-    borderColor: "black", 
+    // borderColor: "black", 
     borderWidth: 3,
     width: "80%",
     height: "80%",

@@ -95,7 +95,7 @@ export default function AddContentScreen() {
         <CheckList 
           iconName={"file-document-multiple"}
           title="Instructions"
-          done={TempTest}
+          done={isInstructions}
           onPress={() => router.push('/addInstructions')} 
         />
 

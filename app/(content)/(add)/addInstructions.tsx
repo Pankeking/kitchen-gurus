@@ -1,46 +1,83 @@
 import { Link, router } from "expo-router";
 import { CustomIcon, Text, View } from "../../../components/themedCustom";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
+import { useSelector } from "react-redux";
+import Steps from "../../../components/AddContent/Steps";
 
 export default function addInstructionsScreen() {
+
+  const isPhoto = useSelector((state:any) => state.content.isPhoto)
+  const mainPhoto = useSelector((state:any) => state.content.recipe.photo[0])
+
   return (
     <View style={styles.container}>
-      <Text>Add Instructions to do your recipe</Text>
-      <View style={styles.separator} />
-      <Link href={'/addDetails'}>
-        <Text style={{ color: "green" }}>Add Details</Text>
-      </Link>
-      <View style={styles.separator} />
-      <TouchableOpacity 
-          onPress={() => router.back()}
-          >
-          <View style={styles.goBackContainer}>
-            <Text style={styles.goBackText}>Go back</Text>
-            <CustomIcon name="arrow-u-left-top" size={24}/>
+        <ImageBackground 
+          source={isPhoto ? mainPhoto : null} 
+          resizeMode="cover"
+          style={styles.ImageBackground}
+        >
+          <View style={styles.steps}>
+            <Steps 
+              title="Masas" 
+              steps={["Add Instructions to do your recipe"]}
+            />
+            <Steps 
+              title="Preparacion" 
+              steps={[
+                "and this",
+                "and maybe this tooand maybe this tooand maybe this tooand maybe this too",
+                "cocinar la masa",
+                "otro paso"
+              ]}
+            />
+            <Steps 
+              title="Servir" 
+              steps={[
+                "otro paso",
+                "paso a pasito",
+              ]}
+            />
+            
+            <Steps 
+              title="ultimo" 
+              steps={[
+                "{index}.{index}.{index}.{index}.{index}.",
+                "paso a pasito",
+                "paso a pasito",
+                "paso a pasito",
+              ]}
+            />
+            <Steps 
+              title="prasdasjda" 
+              steps={[
+                "otro paso",
+                "otro paso",
+                "paso a paotro pasosito",
+                "paso a paotro pasopaso a paotro pasopaso a paotro pasopaso a paotro pasosito",
+              ]}
+            />
           </View>
-        </TouchableOpacity>
+        </ImageBackground>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  null: {},
   container: {
     flex: 1,
     width: "100%",
     height: "100%",
+  },
+  ImageBackground: {
+    flex: 1,
     justifyContent: "center",
+    opacity: 1,
+  },
+  steps: {
+    flex: 1,
     alignItems: "center",
-  },
-  separator: {
-    width: "100%",
-    marginVertical: 30,
-  },
-  goBackContainer: {
-    flexDirection: "row",
     justifyContent: "center",
-  },
-  goBackText: {
-    fontSize: 20,
-    color: "blue",
+    backgroundColor: "transparent",
   },
 })

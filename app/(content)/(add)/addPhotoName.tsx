@@ -17,13 +17,15 @@ export default function addPhotoNameScreen() {
   const dispatch = useDispatch();
   const themeColors = useTheme().theme.colors;
   
-  const isName = useSelector((state:any) => state.content.isName);
-  const recipeName = useSelector((state:any) => state.content.recipe.name);
-  
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const deviceWidth = useWindowDimensions().width;
+  const resizedWidth = deviceWidth * 0.9;
+  const containerDimensions = {
+    width: resizedWidth,
+    height: resizedWidth
+  }
   
   const ICON_SIZE = 40;
 
@@ -62,11 +64,11 @@ export default function addPhotoNameScreen() {
   const RenderImg = ({ item } : any) => {
     return (
         <>
-          <View style={[styles.imageContainer, {width: deviceWidth, height: deviceWidth}]}>
+          <View style={[styles.imageContainer, containerDimensions]}>
             <Image 
               source={item}
               resizeMode="contain"
-              style={[styles.image, {width: deviceWidth, height: deviceWidth ,aspectRatio: 1}]}
+              style={[styles.image, containerDimensions, {aspectRatio: 1}]}
             />
           </View>
         </>
@@ -81,23 +83,23 @@ export default function addPhotoNameScreen() {
           style={[styles.null, { color: themeColors.lightText}]}
           size={100}
         />
-        <Text style={styles.headerText}>
+        {/* <Text style={styles.headerText}>
           {isName ? recipeName : "New Recipe"}
-        </Text>
+        </Text> */}
       </View>
 
-      <View style={[styles.flatListContainer, {backgroundColor: themeColors.lightText}]}>
+      <View style={[styles.flatListContainer, containerDimensions, {backgroundColor: themeColors.lightText}]}>
         
         {photoUri != null &&
           <FlatList
             ref={flatListRef}
-              data={photoList}
-              renderItem={({ item }) => <RenderImg item={item} /> }
-              keyExtractor={(item, index) => index.toString()}
-              horizontal
-              pagingEnabled
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.flatList}
+            data={photoList}
+            renderItem={({ item }) => <RenderImg item={item} /> }
+            keyExtractor={(item, index) => index.toString()}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.flatList}
           />
         }
       </View>
@@ -139,7 +141,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // justifyContent: "center",
     alignItems: "center",
-    // height: "10%",
+    marginTop: "5%",
     width: "100%",
   },
   headerText: {
@@ -147,19 +149,14 @@ const styles = StyleSheet.create({
     fontSize: 28,
   },
   flatListContainer: {
-    // flex: 1,
-    height: "50%",
-    width: "100%",
     // borderColor: "red", borderWidth: 4,
   },
   flatList: {
-    height: 324,
     // borderColor: "blue", borderWidth: 4,
   },
   imageContainer: {
     alignItems: "center",
     flex:1,
-    // marginHorizontal: 20,
     // borderColor: "green", borderWidth: 4,
   },
   image: {
@@ -182,7 +179,8 @@ const styles = StyleSheet.create({
     marginHorizontal:"auto",
     justifyContent: "center",
     alignItems: "center",
-    paddingBottom: "10%"
+    paddingTop: "5%",
+    paddingBottom: "20%"
   },
   goBackContainer: {
 

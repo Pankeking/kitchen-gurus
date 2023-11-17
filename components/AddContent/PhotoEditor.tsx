@@ -14,7 +14,7 @@ export default function PhotoEditor(props: {
 
   const handleFinishEdit = () => {
     dispatch(addPhoto(props.newImage));
-    router.back()
+    router.replace('/addPhotoName')
   }
 
   const autoCrop = async (newPhoto: CameraCapturedPicture) => {
