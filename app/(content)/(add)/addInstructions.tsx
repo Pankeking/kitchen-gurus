@@ -11,7 +11,12 @@ import { useDispatch } from "react-redux";
 import { setInstructions } from "../../../redux/slices/contentSlice";
 
 export default function addInstructionsScreen() {
-  
+
+  // STEPS COMPONENT 
+  // MAP RENDERING 
+  // UPDATE AND DISPATCH STORE
+  // DISPLAY TOTAL INSTRUCTIONS
+
   const dispatch = useDispatch();
 
   type InstructionType = {
@@ -39,8 +44,13 @@ export default function addInstructionsScreen() {
   const mainPhoto = useSelector((state:any) => state.content.recipe.photo[0])
 
   const handleConfirmTitle = () => {
-    setEditingTitle(false);
-    setEditingSteps(true);
+    if (Title != '') {
+      setEditingTitle(false);
+      setEditingSteps(true);
+    } else {
+      titleInputRef.current.focus();
+      titleInputRef.current.shake();
+    }
   }
   
   const handleAddStep = () => {
@@ -86,7 +96,6 @@ export default function addInstructionsScreen() {
         steps: ['']
       }])
     } else {
-      handleConfirmInstruction();
       console.log("error catched")
     }
   }
@@ -96,7 +105,6 @@ export default function addInstructionsScreen() {
   },[StepInstructions])
 
   useEffect(() => {
-    console.log(`${Step} <--step : arr--> ${StepsArray}`)
     stepInputRef.current.clear();
     stepInputRef.current.focus();
   }, [StepsArray])
@@ -124,7 +132,10 @@ export default function addInstructionsScreen() {
                   title={"New Title"}
                   size={32}
                   iconName="plus"
-                  onPress={() => setEditingTitle(true)}
+                  onPress={() => {
+                    setEditingTitle(true)
+                    titleInputRef.current.focus()
+                  }}
                 />
                 ) : (
                   <SmallButton 
@@ -189,14 +200,13 @@ export default function addInstructionsScreen() {
           <View style={styles.steps}>
             {isInstructions ? (
               <Steps 
-              instructions={storeInstructions}
-            />
+                instructions={storeInstructions}
+              />
             ) : (
               <Steps 
                 instructions={StepInstructions}
               />
             )
-
             }
             
           </View>
@@ -205,7 +215,6 @@ export default function addInstructionsScreen() {
               title="Save & Continue"
               iconName="check-circle"
               onPress={handleSubmitInstructions}
-              
             />
           </View>
         </ImageBackground>

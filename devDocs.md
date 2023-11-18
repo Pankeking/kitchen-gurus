@@ -94,11 +94,12 @@
         - Photo Previewer (WIP 6 NOV -> DONE 17 NOV)
         - Camera Component/Screen (DONE 17 NOV)
       - Add Instructions (WIP 18 NOV)
-        - Instructions Layout
-        - Step Layout
-        - Step-Title
-        - Step-Text
-        - Numerated Steps? with Max?
+        - Instructions Layout (DONE 18 NOV)
+        - Step Layout (DONE 18 NOV)
+        - Step-Title (DONE 18 NOV)
+        - Step-Text (DONE 18 NOV)
+        - Numerated Steps? with Max? (WIP 19 NOV)
+        - Update/Dispatch + Auto-Display (WIP 19 NOV)
       - Add Details (WIP)
       - Add Extras (WIP)
     - Edit
