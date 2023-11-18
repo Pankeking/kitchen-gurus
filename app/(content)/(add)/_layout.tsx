@@ -27,15 +27,25 @@ export default function AddLayout() {
               </Pressable>
             </Link>
           ),
+          headerLeft: () => (
+            <Link href={'/(content)/(add)/'} asChild >
+              <Pressable
+                >
+                {({ pressed }) => (
+                  <CustomIcon name="arrow-u-left-top" style={{color: themeColors.lightText}} size={32} />
+                  )}
+              </Pressable>
+            </Link>
+          ),
         }}
       >
         <Stack.Screen name="index" options={{
           headerTitle: isName ? recipeName : "New Recipe",
+          headerLeft: () => null
         }}/>
         <Stack.Screen name="cancelModal" options={{
           headerShown: false,
           presentation: "modal",
-          headerRight: () => null
         }} />
         <Stack.Screen name="CameraScreen" options={{
           headerShown: false,

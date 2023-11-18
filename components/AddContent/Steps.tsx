@@ -2,61 +2,73 @@ import { FlatList, StyleSheet } from "react-native"
 import { Text, View } from "../themedCustom";
 
 export default function Steps(props: {
-  title: string;
-  steps: string[];
+  instructions: {
+    subtitle:string;
+    steps: string[];
+  }[]
 }) {
-  const { steps, title } = props;
+  const { instructions } = props;
 
-  const RenderStep = ({ item, index } : any) => {
+  const RenderInstruction = ({ item } : any) => {
+    const { subtitle, steps } = item;
     return (
-      <View style={styles.step}>
-        <Text style={styles.stepText}> {index + 1}. {item}</Text>
-      </View>
+      <>
+        <View style={styles.title}>
+          <Text style={styles.titleText}>{subtitle}</Text>
+        </View>
+        {
+          steps.map((element:string, index:number) => (
+            <View style={styles.step} key={index}>
+              <Text style={styles.stepText}>
+                {index + 1}. {element}
+              </Text>
+            </View>
+            )
+          )
+        }
+      </>
     )
   }
 
   
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.titleText}>{title}</Text>
-      </View>
       <FlatList 
-        data={steps}
-        renderItem={({ item, index }) => <RenderStep index={index} item={item} />}
+        data={instructions}
+        renderItem={({ item }) => (
+            <RenderInstruction item={item} />
+          )
+        }
       />
-      
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: "75%",
-    justifyContent: "space-around",
-    alignItems: "flex-start",
-    height: "20%",
-    // opacity: 0.5,
+    width: "90%",
     backgroundColor: "transparent",
-    marginVertical: 5,
   },
   title: {
     backgroundColor: "#ffffffc0",
     padding: 7,
     borderRadius: 7,
-    marginBottom: 5,
+    marginTop: 50,
+    marginBottom: 7,
   },
   titleText: {
     fontSize: 32,
+    fontFamily: "PlaypenSemiBold",
     color: "black",
   },
   step: {
     backgroundColor: "#ffffffc0",
-    marginTop: 5,
+    marginTop: 7,
     padding: 7,
     borderRadius: 7,
   },
   stepText: {
-    fontSize: 16,
+    fontSize: 16, 
+    fontFamily: "PlaypenSemiBold",
   },
 })

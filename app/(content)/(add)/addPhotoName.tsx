@@ -80,15 +80,12 @@ export default function addPhotoNameScreen() {
       <View style={styles.header}>
         <CustomIcon 
           name="chef-hat"
-          style={[styles.null, { color: themeColors.lightText}]}
+          style={{ color: themeColors.lightText}}
           size={100}
         />
-        {/* <Text style={styles.headerText}>
-          {isName ? recipeName : "New Recipe"}
-        </Text> */}
       </View>
 
-      <View style={[styles.flatListContainer, containerDimensions, {backgroundColor: themeColors.lightText}]}>
+      <View style={[containerDimensions, {backgroundColor: themeColors.lightText}]}>
         
         {photoUri != null &&
           <FlatList
@@ -99,7 +96,6 @@ export default function addPhotoNameScreen() {
             horizontal
             pagingEnabled
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.flatList}
           />
         }
       </View>
@@ -135,11 +131,9 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
-    // borderColor: "black", borderWidth: 4,
   },
   header: {
     flex: 1,
-    // justifyContent: "center",
     alignItems: "center",
     marginTop: "5%",
     width: "100%",
@@ -148,31 +142,21 @@ const styles = StyleSheet.create({
     fontFamily: "PlaypenBold",
     fontSize: 28,
   },
-  flatListContainer: {
-    // borderColor: "red", borderWidth: 4,
-  },
-  flatList: {
-    // borderColor: "blue", borderWidth: 4,
-  },
   imageContainer: {
     alignItems: "center",
     flex:1,
-    // borderColor: "green", borderWidth: 4,
   },
   image: {
     flex: 1,
     backgroundColor: "black",
-    // borderColor: "orange", borderWidth: 4,
   },
   topButtons: {
     paddingHorizontal: "10%",
-    // paddingVertical: "10%",
     width: "100%",
     height: "15%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // borderColor: "orange", borderWidth: 4,
   },
   buttonContainer: {
     width: "100%",

@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   container: {
     width: "80%",
     height: 50,
+    backgroundColor: "transparent",
   },
   button: {
     backgroundColor: "transparent",

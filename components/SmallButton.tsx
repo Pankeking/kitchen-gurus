@@ -31,6 +31,7 @@ export default function SmallButton(props: {
 
 const styles = StyleSheet.create({
   buttonContainer: {
+    backgroundColor: "transparent",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",

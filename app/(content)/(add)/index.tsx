@@ -1,5 +1,5 @@
-import { Image, StyleSheet, TouchableOpacity } from "react-native";
-import { CustomIcon, Text, View } from "../../../components/themedCustom";
+import { StyleSheet } from "react-native";
+import { CustomIcon, View } from "../../../components/themedCustom";
 import { Input, useTheme } from "@rneui/themed";
 import { router } from "expo-router";
 import { useSelector } from "react-redux";
@@ -68,11 +68,9 @@ export default function AddContentScreen() {
             onChangeText={setRecipeName}
             onSubmitEditing={handleConfirmName}
             containerStyle={styles.input}
-            // autoCorrect={false}
             spellCheck={false}
             inputStyle={{fontSize: 28, textAlign:"center", fontFamily: "PlaypenSemiBold"}}
             inputContainerStyle={{borderBottomWidth: 0}}
-            // disabled={InputDisabled}
           />
       </View>
 
@@ -101,15 +99,15 @@ export default function AddContentScreen() {
 
         <CheckList 
           iconName={"information"}
-          title="Details"
-          done={TempTest}
+          title="Extra"
+          done={isExtra}
           onPress={() => router.push('/addOther')} 
         />
 
         <CheckList 
           iconName={"clock-edit"}
           title="Ingredients"
-          done={TempTest}
+          done={isDetails}
           onPress={() => router.push('/addDetails')} 
         />
 

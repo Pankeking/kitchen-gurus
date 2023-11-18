@@ -13,7 +13,10 @@ interface Details {
 }
 interface Recipe {
   name: string;
-  instructions: string[];
+  instructions: {
+    subtitle: string;
+    steps: string[];
+  }[];
   photo: string[];
   details: Details;
   extra: Extra;
@@ -30,11 +33,16 @@ interface ContentState {
   photoCounter: number;
 }
 
+
+
 const initialState: ContentState = {
   recipe: {
     name: '',
     photo: [],
-    instructions: [],
+    instructions: [{
+      subtitle: '',
+      steps: ['']
+    }],
     details: {},
     extra: {},
   },
@@ -68,8 +76,15 @@ const contentSlice = createSlice({
       state.photoCounter = state.photoCounter + 1;
     },
     setInstructions: (state, action) => {
-      state.recipe.instructions = action.payload;
-      state.isInstructions = true;
+      
+      if (state.recipe.instructions[0].subtitle == '' 
+        && state.recipe.instructions[0].steps[0] == '') {
+          state.recipe.instructions = action.payload;
+          state.isInstructions = true;
+      } else {
+        state.recipe.instructions = [...state.recipe.instructions, action.payload]
+      }
+      console.log(state.recipe.instructions)
     },
     setDetails: (state, action) => {
       const { duration, ingredients, cuisine } = action.payload;
@@ -89,7 +104,10 @@ const contentSlice = createSlice({
     nullifyRecipe: (state) => {
       state.recipe = {
         name: '',
-        instructions: [],
+        instructions: [{
+          subtitle: '',
+          steps: ['']
+        }],
         photo: [],
         details: {},
         extra: {},
