@@ -99,7 +99,7 @@
         - Step-Title (DONE 18 NOV)
         - Step-Text (DONE 18 NOV)
         - Numerated Steps? with Max? (WIP 19 NOV)
-        - Update/Dispatch + Auto-Display (WIP 19 NOV)
+        - Update/Dispatch + Auto-Display (DONE 19 NOV)
       - Add Details (WIP)
       - Add Extras (WIP)
     - Edit

@@ -9,13 +9,9 @@ import { Input } from "@rneui/themed";
 import { Text } from "@rneui/base";
 import { useDispatch } from "react-redux";
 import { setInstructions } from "../../../redux/slices/contentSlice";
+import { router } from "expo-router";
 
 export default function addInstructionsScreen() {
-
-  // STEPS COMPONENT 
-  // MAP RENDERING 
-  // UPDATE AND DISPATCH STORE
-  // DISPLAY TOTAL INSTRUCTIONS
 
   const dispatch = useDispatch();
 
@@ -24,10 +20,18 @@ export default function addInstructionsScreen() {
     steps: string[];
   }[]
 
+  const nullInstruction = [{subtitle: '', steps: ['']}]
+
   const storeInstructions = useSelector((state:any) => state.content.recipe.instructions)
   const isInstructions = useSelector((state:any) => state.content.isInstructions)
 
-  const [StepInstructions, setStepInstructions] = useState<InstructionType>([]);
+  const [StepInstructions, setStepInstructions] = useState<InstructionType>(() => {
+    if (isInstructions) {
+      return storeInstructions
+    } else {
+      return nullInstruction
+    }
+  });
 
   const [EditingTitle, setEditingTitle] = useState(false);
   const [EditingSteps, setEditingSteps] = useState(false);
@@ -42,6 +46,12 @@ export default function addInstructionsScreen() {
 
   const isPhoto = useSelector((state:any) => state.content.isPhoto)
   const mainPhoto = useSelector((state:any) => state.content.recipe.photo[0])
+
+
+  const handleEditTitle = () => {
+    setEditingTitle(true)
+    titleInputRef.current.focus()
+  }
 
   const handleConfirmTitle = () => {
     if (Title != '') {
@@ -89,15 +99,17 @@ export default function addInstructionsScreen() {
   }
 
   const handleSubmitInstructions = () => {
-    if (StepInstructions[0] != undefined) {
+    if (Title != '') {
+      alert('First confirm instruction')
+      console.log("error catched")
+    } else if (StepInstructions[0] != nullInstruction[0]) {
       dispatch(setInstructions(StepInstructions))
       setStepInstructions([{
         subtitle: '',
         steps: ['']
       }])
-    } else {
-      console.log("error catched")
-    }
+      router.replace('/(content)/(add)/')
+    } else {}
   }
 
   useEffect(() => {
@@ -128,30 +140,33 @@ export default function addInstructionsScreen() {
         >
           <View style={styles.topButtons}>
             {!EditingSteps ? (
+              <View style={styles.topButtonsMask}> 
                 <SmallButton 
                   title={"New Title"}
                   size={32}
                   iconName="plus"
-                  onPress={() => {
-                    setEditingTitle(true)
-                    titleInputRef.current.focus()
-                  }}
+                  onPress={handleEditTitle}
                 />
+              </View>
                 ) : (
-                  <SmallButton 
-                    title={"New Step"}
-                    size={32}
-                    iconName="plus"
-                    onPress={handleAddStep}
-                  />
+                  <View style={styles.topButtonsMask}> 
+                    <SmallButton 
+                      title={"New Step"}
+                      size={32}
+                      iconName="plus"
+                      onPress={handleAddStep}
+                    />
+                  </View>
               )
             }
-            <SmallButton 
-              title={"Confirm"}
-              size={32}
-              iconName="check"
-              onPress={handleConfirmInstruction}
-            />
+            <View style={styles.topButtonsMask}>
+              <SmallButton 
+                title={"Confirm"}
+                size={32}
+                iconName="check"
+                onPress={handleConfirmInstruction}
+              />
+            </View>
           </View>
           <View style={styles.inputContainer}>
             <Input 
@@ -163,7 +178,6 @@ export default function addInstructionsScreen() {
               returnKeyType="done"
               onChangeText={setTitle}
               onSubmitEditing={handleConfirmTitle}
-              disabled={!EditingTitle}
               inputStyle={styles.titleInput}
               disabledInputStyle={styles.titleInput}
               inputContainerStyle={{borderBottomWidth: 0}}
@@ -198,17 +212,9 @@ export default function addInstructionsScreen() {
             </View>
           </View>
           <View style={styles.steps}>
-            {isInstructions ? (
-              <Steps 
-                instructions={storeInstructions}
-              />
-            ) : (
-              <Steps 
-                instructions={StepInstructions}
-              />
-            )
-            }
-            
+            <Steps 
+              instructions={StepInstructions.slice(1)}
+            />
           </View>
           <View style={styles.bottomButton}>
             <WideButton 
@@ -241,6 +247,11 @@ const styles = StyleSheet.create({
     marginVertical: "10%",
     paddingTop: "10%",
   },
+  topButtonsMask: {
+    backgroundColor: "#ffffffc0",
+    borderRadius: 7,
+    padding: 3,
+  },
   topButtons: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -250,7 +261,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     paddingHorizontal: "2.5%",
     paddingTop: "5%",
-    height: "35%", 
+    height: "30%", 
     backgroundColor: "transparent"
   },
   titleInput: {
@@ -262,6 +273,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
   },
   stepInput: {
+    opacity: 1,
     color: "black",
     fontSize: 16, 
     fontFamily: "PlaypenSemiBold",

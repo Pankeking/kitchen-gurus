@@ -49,6 +49,15 @@ export default function AddContentScreen() {
     }
   }, [InputDisabled])
 
+  const handleRouting = (route:any) => {
+    if (isPhoto) {
+      router.push(route)
+    } else {
+      alert('First Add a Photo')
+      router.push('/(content)/(add)/addPhotoName')
+    }
+  }
+
 
   return (
     <View style={styles.container}>
@@ -94,21 +103,22 @@ export default function AddContentScreen() {
           iconName={"file-document-multiple"}
           title="Instructions"
           done={isInstructions}
-          onPress={() => router.push('/addInstructions')} 
+          // onPress={() => router.push('/addInstructions')} 
+          onPress={() => handleRouting('/addInstructions')} 
         />
 
         <CheckList 
           iconName={"information"}
           title="Extra"
           done={isExtra}
-          onPress={() => router.push('/addOther')} 
+          onPress={() => handleRouting('/addOther')} 
         />
 
         <CheckList 
           iconName={"clock-edit"}
           title="Ingredients"
           done={isDetails}
-          onPress={() => router.push('/addDetails')} 
+          onPress={() => handleRouting('/addDetails')} 
         />
 
       </View>

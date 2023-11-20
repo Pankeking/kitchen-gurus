@@ -1,7 +1,7 @@
 import { useTheme } from '@rneui/themed';
 import { Link, Stack } from 'expo-router';
 import { Pressable } from 'react-native';
-import { CustomIcon, Text } from '../../../components/themedCustom';
+import { CustomIcon } from '../../../components/themedCustom';
 import { useSelector } from 'react-redux';
 
 export default function AddLayout() {
@@ -9,6 +9,8 @@ export default function AddLayout() {
 
   const isName = useSelector((state:any) => state.content.isName);
   const recipeName = useSelector((state:any) => state.content.recipe.name);
+  const instructionsAmount = useSelector((state:any) => state.content.recipe.instructions.length) - 1 // Account for null[0]
+
   return (
       <Stack
         screenOptions={{
@@ -54,7 +56,7 @@ export default function AddLayout() {
           headerTitle: "Add Photos",
         }}/>
         <Stack.Screen name="addInstructions" options={{
-          headerTitle: "Instructions",
+          headerTitle: `${instructionsAmount} Instructions`,
         }}/>
         <Stack.Screen name="addOther" options={{
           headerTitle: "Other",

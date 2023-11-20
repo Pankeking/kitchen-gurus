@@ -8,7 +8,7 @@ export default function Steps(props: {
   }[]
 }) {
   const { instructions } = props;
-
+  
   const RenderInstruction = ({ item } : any) => {
     const { subtitle, steps } = item;
     return (
@@ -70,5 +70,6 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16, 
     fontFamily: "PlaypenSemiBold",
+    color: "black",
   },
 })

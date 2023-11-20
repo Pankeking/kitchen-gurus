@@ -70,20 +70,18 @@ const contentSlice = createSlice({
     addPhoto: (state, action) => {
       const newPhoto = action.payload;
       state.recipe.photo.push(newPhoto);
-      console.log("array",state.recipe.photo);
-      console.log("length",state.recipe.photo.length);
       state.isPhoto = true;
       state.photoCounter = state.photoCounter + 1;
     },
     setInstructions: (state, action) => {
-      
+      const newInstructions = action.payload;
       if (state.recipe.instructions[0].subtitle == '' 
         && state.recipe.instructions[0].steps[0] == '') {
-          state.recipe.instructions = action.payload;
-          state.isInstructions = true;
+          state.recipe.instructions = newInstructions;
       } else {
-        state.recipe.instructions = [...state.recipe.instructions, action.payload]
+          state.recipe.instructions.push(newInstructions)
       }
+      state.isInstructions = true;
       console.log(state.recipe.instructions)
     },
     setDetails: (state, action) => {
