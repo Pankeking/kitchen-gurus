@@ -35,8 +35,17 @@
 - View: Default View with background theme color
 - ToggleMode: button to toggle dark/light theme mode
 
-### Default Icon: MaterialCommunityIcons from @expo/vector-icons
+## Styling Selection
 
+- Default Icon: MaterialCommunityIcons from @expo/vector-icons
+  - Icon Size: 32
+- Font Family
+  - Main
+    - PlaypenSans: SemiBold | Bold
+  - Optional
+    - Handlee: Regular
+    - SpaceMono: Regular
+  
 ## Database Firestore Collections
 
 - Users
@@ -159,3 +168,7 @@
 
 - expo-image-picker
 - expo-linear-gradient
+
+## Dev Notes
+
+- Decided to make the details screen only of ingredients -> moved cuisine type and approximate time to extra info screen. Reason for this is a better display and understanding of the ingredient actions (adding, editing, removing, selecting).

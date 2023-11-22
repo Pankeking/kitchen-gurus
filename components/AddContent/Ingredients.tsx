@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { CustomIcon, Text, View } from "../themedCustom";
+import { useTheme } from "@rneui/themed";
 
 export default function Ingredients(props: {
   name?: string;
@@ -7,7 +8,8 @@ export default function Ingredients(props: {
   measureType?: string;
   quantity?: number;
 }) {
-  const ICON_SIZE = 32;
+  const ICON_SIZE = 24;
+  const themeColors = useTheme().theme.colors;
 
   const { name, quantity } = props;
 
@@ -37,7 +39,7 @@ export default function Ingredients(props: {
 
   switch (props.measureType) {
     case "kilogram":
-      measureIcon = "kilogram";
+      measureIcon = "weight-kilogram";
       break;
     case "liter":
       measureIcon = "cup-water";
@@ -49,18 +51,29 @@ export default function Ingredients(props: {
         
 
   return (
-    <View style={styles.container}>
-      <View style={styles.null}>
-        <CustomIcon 
-          name={mainIcon}
-          size={ICON_SIZE}
-        />
-        <Text>{name}</Text>
-        <CustomIcon
-          name={measureIcon}
-          size={ICON_SIZE}
-        />
-        <Text>{quantity}</Text>
+    <View style={[
+      styles.container, {
+        backgroundColor: themeColors.surface,
+        shadowColor: themeColors.lightText
+      }
+      ]}>
+      <View style={[styles.side, styles.left, {backgroundColor: themeColors.surface}]}>
+        <View style={[styles.leftIcon, {backgroundColor: themeColors.surface}]}>
+          <CustomIcon 
+            name={mainIcon}
+            size={ICON_SIZE}
+          />
+        </View>
+        <Text style={styles.title}>{name}</Text>
+      </View>
+      <View style={[styles.side, styles.right, {backgroundColor: themeColors.surface}]}>
+        <Text style={styles.info}>{quantity}</Text>
+        <View style={[styles.rightIcon, {backgroundColor: themeColors.surface}]}>
+          <CustomIcon
+            name={measureIcon}
+            size={ICON_SIZE * 0.6}
+          />
+        </View>
       </View>
     </View>
   )
@@ -69,7 +82,44 @@ export default function Ingredients(props: {
 const styles = StyleSheet.create({
   null: {},
   container: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 11,
+    marginHorizontal: 10,
+    padding: 10,
+    borderRadius: 12,
+    shadowOffset: {width: 3, height: 1},
+    shadowRadius: 6,
+    shadowColor: "white",
+    shadowOpacity: 0.4,
+    
+    // borderColor: "blue", borderWidth: 5,
+  },
+  side: {
+    width: "35%",
     flexDirection: "row",
   },
-
+  left: {
+    // justifyContent: "space-between",
+  },
+  leftIcon: {
+    paddingHorizontal: 10,
+  },
+  right: {
+    justifyContent: "flex-end",
+  },
+  rightIcon: {
+    flexDirection: "column",
+    justifyContent: "flex-start",
+  },
+  title: {
+    fontFamily: "PlaypenSemiBold",
+    fontSize: 18,
+  },
+  info: {
+    paddingHorizontal: "5%",
+    fontFamily: "PlaypenSemiBold",
+    fontSize: 18,
+  },
 })
