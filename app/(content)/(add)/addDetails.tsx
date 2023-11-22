@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { Text, View } from "../../../components/themedCustom";
-import { StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import WideButton from "../../../components/WideButton";
 import Ingredients from "../../../components/AddContent/Ingredients";
 import { useState } from "react";
@@ -27,6 +27,7 @@ export default function addDetailsScreen() {
 
   }
 
+
   return (
     <View style={styles.container}>
       <Text>Add additional details to your recipe</Text>
@@ -35,6 +36,19 @@ export default function addDetailsScreen() {
         type="fruit"
         quantity={2}
         measureType="kilogram"
+      />
+      <FlatList 
+        data={ingredientList}
+        renderItem={({ item, index }) => (
+          <View>
+            <Ingredients 
+              name={item.name}
+              type={item.type}
+              quantity={item.quantity}
+              measureType={item.measureType}
+            />
+          </View>
+        )}
       />
       <WideButton
         title="Save & Continue"
