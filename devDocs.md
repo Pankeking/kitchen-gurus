@@ -93,14 +93,19 @@
       - Add Photo (WIP 5 NOV -> DONE 17 NOV)
         - Photo Previewer (WIP 6 NOV -> DONE 17 NOV)
         - Camera Component/Screen (DONE 17 NOV)
-      - Add Instructions (WIP 18 NOV)
+      - Add Instructions (WIP 18 NOV -> DONE 22 NOV)
         - Instructions Layout (DONE 18 NOV)
         - Step Layout (DONE 18 NOV)
         - Step-Title (DONE 18 NOV)
         - Step-Text (DONE 18 NOV)
-        - Numerated Steps? with Max? (WIP 19 NOV)
+        - Numerated Steps? with Max? (DONE 19 NOV)
         - Update/Dispatch + Auto-Display (DONE 19 NOV)
-      - Add Details (WIP)
+      - Add Details (WIP 22 NOV)
+        - Align & Display
+        - Add Duration
+        - Add Ingredients
+        - Add Cuisine Type
+        - Save in Store
       - Add Extras (WIP)
     - Edit
     - Share

@@ -106,6 +106,7 @@ export default function LoginScreen() {
               placeholder="Email"
               style={styles.input}
               onChangeText={setEmail}
+              spellCheck={false}
             />
           </View>
           <View style={styles.form}>

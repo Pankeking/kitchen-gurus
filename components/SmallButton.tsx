@@ -5,11 +5,14 @@ import { useTheme } from "@rneui/themed";
 export default function SmallButton(props: {
   iconName: React.ComponentProps<typeof CustomIcon>['name']; 
   title: string;
+  Color?: string;
   size: number;
   onPress: () => void;
 }) {
   const themeColors = useTheme().theme.colors;
-  const { onPress, title, size, iconName } = props;
+  const { onPress, title, size, iconName, Color } = props;
+
+  const finalColor = Color ?? themeColors.lightText;
   
   return (
     <TouchableOpacity
@@ -19,9 +22,9 @@ export default function SmallButton(props: {
         <CustomIcon 
           name={iconName}
           size={size}
-          style={{ color: themeColors.lightText}}
+          style={{ color: finalColor}}
         />
-        <Text style={{ color: themeColors.lightText, fontSize: size/2}}>
+        <Text style={{ color: finalColor, fontSize: size/2}}>
           {title}
         </Text>
       </View>

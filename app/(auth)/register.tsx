@@ -91,6 +91,7 @@ export default function RegisterScreen() {
             placeholder="Email"
             onChangeText={setEmail}
             autoCapitalize="none"
+            spellCheck={false}
           />
         </View>
         <View style={styles.innerDeepContainer}>
@@ -98,6 +99,7 @@ export default function RegisterScreen() {
             style={styles.input}
             placeholder="Username"
             onChangeText={setDisplayName}
+            spellCheck={false}
           />
         </View>
 

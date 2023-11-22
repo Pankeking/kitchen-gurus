@@ -108,17 +108,17 @@ export default function AddContentScreen() {
         />
 
         <CheckList 
+          iconName={"clock-edit"}
+          title="Details"
+          done={isDetails}
+          onPress={() => handleRouting('/addDetails')} 
+        />
+
+        <CheckList 
           iconName={"information"}
           title="Extra"
           done={isExtra}
           onPress={() => handleRouting('/addOther')} 
-        />
-
-        <CheckList 
-          iconName={"clock-edit"}
-          title="Ingredients"
-          done={isDetails}
-          onPress={() => handleRouting('/addDetails')} 
         />
 
       </View>

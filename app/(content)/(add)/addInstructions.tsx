@@ -146,15 +146,17 @@ export default function addInstructionsScreen() {
                   size={32}
                   iconName="plus"
                   onPress={handleEditTitle}
+                  Color="black"
                 />
               </View>
                 ) : (
                   <View style={styles.topButtonsMask}> 
                     <SmallButton 
-                      title={"New Step"}
-                      size={32}
                       iconName="plus"
+                      size={32}
+                      title={"New Step"}
                       onPress={handleAddStep}
+                      Color="black"
                     />
                   </View>
               )
@@ -165,6 +167,7 @@ export default function addInstructionsScreen() {
                 size={32}
                 iconName="check"
                 onPress={handleConfirmInstruction}
+                Color="black"
               />
             </View>
           </View>

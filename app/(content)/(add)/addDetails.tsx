@@ -1,29 +1,52 @@
-import { Link, router } from "expo-router";
-import { CustomIcon, Text, View } from "../../../components/themedCustom";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
+import { Text, View } from "../../../components/themedCustom";
+import { StyleSheet } from "react-native";
+import WideButton from "../../../components/WideButton";
+import Ingredients from "../../../components/AddContent/Ingredients";
+import { useState } from "react";
 
-export default function addDetailssScreen() {
+export default function addDetailsScreen() {
+
+  const [ingredientList, setIngredientList] = useState(
+    [
+      {
+        name: "Cherry",
+        type: "fruit",
+        quantity: 2,
+        measureType: "kilogram"
+      }
+    ]
+  )
+
+  const handleSubmitDetails = () => {
+    router.replace('/(content)/(add)/')
+  }
+
+  // SPLICE(INDEX, 1) WOULD BE USEFUL FOR LISTS
+  const addIngredient = () => {
+
+  }
+
   return (
     <View style={styles.container}>
       <Text>Add additional details to your recipe</Text>
-      <View style={styles.separator} />
-      <Link href={'/addOther'}>
-        <Text style={{ color: "green" }}>Add Other Information</Text>
-      </Link>
-      <View style={styles.separator} />
-      <TouchableOpacity 
-          onPress={() => router.back()}
-          >
-          <View style={styles.goBackContainer}>
-            <Text style={styles.goBackText}>Go back</Text>
-            <CustomIcon name="arrow-u-left-top" size={24}/>
-          </View>
-        </TouchableOpacity>
+      <Ingredients 
+        name="Cherry"
+        type="fruit"
+        quantity={2}
+        measureType="kilogram"
+      />
+      <WideButton
+        title="Save & Continue"
+        iconName="check-circle"
+        onPress={handleSubmitDetails}
+      />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  null: {},
   container: {
     flex: 1,
     width: "100%",
@@ -31,16 +54,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  separator: {
-    width: "100%",
-    marginVertical: 30,
-  },
-  goBackContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  goBackText: {
-    fontSize: 20,
-    color: "blue",
-  },
+  
 })
