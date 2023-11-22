@@ -111,9 +111,7 @@
         - Update/Dispatch + Auto-Display (DONE 19 NOV)
       - Add Details (WIP 22 NOV)
         - Align & Display
-        - Add Duration
-        - Add Ingredients
-        - Add Cuisine Type
+        - Add Ingredients Format (DONE 22 NOV)
         - Save in Store
       - Add Extras (WIP)
     - Edit

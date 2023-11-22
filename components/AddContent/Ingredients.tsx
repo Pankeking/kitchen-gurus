@@ -20,31 +20,31 @@ export default function Ingredients(props: {
   let measureIcon;
 
   switch (props.type) {
-    case "fruit":
+    case "Fruit":
       mainIcon = "fruit-cherries";
       break;
-    case "vegetable":
+    case "Vegetable":
       mainIcon = "carrot";
       break;
-    case "meat":
+    case "Meat":
       mainIcon = "food-turkey";
       break;
-    case "beverage":
+    case "Beverage":
       mainIcon = "bottle-soda";
       break;
-    case "other":
+    case "Other":
       mainIcon = "dots-hexagon";
       break;
   }
 
   switch (props.measureType) {
-    case "kilogram":
+    case "Kilogram":
       measureIcon = "weight-kilogram";
       break;
-    case "liter":
+    case "Liter":
       measureIcon = "cup-water";
       break;
-    case "unit":
+    case "Unit":
       measureIcon = "numeric";
       break;
   }
