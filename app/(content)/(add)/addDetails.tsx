@@ -125,7 +125,7 @@ export default function addDetailsScreen() {
           />
         </View>
 
-        <View style={[styles.formItem, {marginBottom: 10}]}>
+        <View style={styles.formRotation}>
           <TouchableOpacity
             style={styles.formButton}
             onPress={rotateType}
@@ -133,10 +133,12 @@ export default function addDetailsScreen() {
             <Text style={styles.formText}>
               {Types[TypeIndex][0]}
             </Text>
-            <CustomIcon 
-              name={Types[TypeIndex][1]}
-              size={ICON_SIZE}
-            />
+            <View style={styles.rotateIcon}>
+              <CustomIcon 
+                name={Types[TypeIndex][1]}
+                size={ICON_SIZE}
+              />
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -146,25 +148,26 @@ export default function addDetailsScreen() {
           <View style={styles.amountContainer}>
             <TouchableOpacity 
               style={styles.amountButton}
+              onPress={lessAmount}>
+              <CustomIcon 
+                name="minus-circle"
+                size={ICON_SIZE}
+                color="green"
+              />
+            </TouchableOpacity>
+            <Text style={styles.amountText}>{Amount}</Text>
+            <TouchableOpacity 
+              style={styles.amountButton}
               onPress={addAmount}>
               <CustomIcon 
                 name="plus-circle"
                 size={ICON_SIZE}
               />
             </TouchableOpacity>
-            <Text style={styles.amountText}>{Amount}</Text>
-            <TouchableOpacity 
-              style={styles.amountButton}
-              onPress={lessAmount}>
-              <CustomIcon 
-                name="minus-circle"
-                size={ICON_SIZE}
-              />
-            </TouchableOpacity>
           </View>
         </View>
         
-        <View style={styles.formItem}>
+        <View style={styles.formRotation}>
           <TouchableOpacity
             style={styles.formButton}
             onPress={rotateMeasure}
@@ -172,10 +175,12 @@ export default function addDetailsScreen() {
             <Text style={styles.formText}>
               {Measures[MeasureIndex][0]}
             </Text>
-            <CustomIcon
-              name={Measures[MeasureIndex][1]}
-              size={ICON_SIZE}
-            />
+            <View style={styles.rotateIcon}>
+              <CustomIcon
+                name={Measures[MeasureIndex][1]}
+                size={ICON_SIZE}
+              />
+            </View>
           </TouchableOpacity>
         </View>
         
@@ -239,12 +244,21 @@ const styles = StyleSheet.create({
   formItem: {
     marginVertical: 11,
     flexDirection: "row",
+    justifyContent: "space-between",
     // borderColor: "black", borderWidth: 5,
+  },
+  formRotation: {
+    marginVertical: 0,
+    marginBottom: 11,
+    backgroundColor: "snow",
+    padding: 11,
+    borderRadius: 16,
+    // borderColor: "green", borderWidth: 5,
   },
   formButton: {
     width: "100%",
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     flexDirection: "row",
   },
   formText: {
@@ -270,5 +284,9 @@ const styles = StyleSheet.create({
   },
   amountButton: {
     marginHorizontal: 11,
-  }
+  },
+  rotateIcon: {
+    marginRight: 45,
+    backgroundColor: "snow",
+  },
 })
