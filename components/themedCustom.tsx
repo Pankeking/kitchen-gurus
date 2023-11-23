@@ -51,12 +51,13 @@ export function View(props: ViewProps) {
 
 // CUSTOM ICON
 export function CustomIcon(props: any) {
-  const { style } = props;
+  const { style, color } = props;
   const themeColors = useTheme().theme.colors;
+  const finalColor = color ?? themeColors.secondary;
   return (
     <DefaultIcon
       {...props}
-      style={[{color: themeColors.secondary}, style]}
+      style={[{color: finalColor}, style]}
     />
   )
 }

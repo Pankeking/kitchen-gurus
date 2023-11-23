@@ -112,6 +112,9 @@
       - Add Details (WIP 22 NOV)
         - Align & Display
         - Add Ingredients Format (DONE 22 NOV)
+        - Flatlist Display Ingredients (DONE 23 NOV)
+        - New Ingredient (WIP 23 NOV)
+        - BLACK COLOR IN DETAILS CHECK <<<>>>
         - Save in Store
       - Add Extras (WIP)
     - Edit

@@ -17,13 +17,15 @@ export default function addDetailsScreen() {
   const ICON_SIZE = 32;
 
 
+  
   const Types = [
-    ["Fruit","fruit-cherries"],
-    ["Vegetable","carrot"],
-    ["Meat","food-turkey"],
-    ["Beverage","bottle-soda"],
-    ["Other","dots-hexagon"],
+    {type: "Fruit",     iconName: "fruit-cherries", color: "red"},
+    {type: "Vegetable", iconName: "carrot",         color: "green"},
+    {type: "Meat",      iconName: "food-turkey",    color: "brown"},
+    {type: "Beverage",  iconName: "bottle-soda",    color: "blue"},
+    {type: "Other",     iconName: "dots-hexagon",   color: "snow"}
   ]
+
   const Measures = [
     ["Kilogram","weight-kilogram"],
     ["Liter","cup-water"],
@@ -65,8 +67,8 @@ export default function addDetailsScreen() {
     console.log(`Item: ${item.name} is on Index: ${index}`)
   }
 
-  const removeIngredient = () => {
-    // splice index
+  const removeIngredient = (index: number) => {
+    setIngredientList(current => current.splice(index, 1))
   }
 
   const rotateType = () => {
@@ -125,17 +127,18 @@ export default function addDetailsScreen() {
           />
         </View>
 
-        <View style={styles.formRotation}>
+        <View style={[styles.formRotation, {backgroundColor: Types[TypeIndex].color}]}>
           <TouchableOpacity
             style={styles.formButton}
             onPress={rotateType}
           >
             <Text style={styles.formText}>
-              {Types[TypeIndex][0]}
+              {Types[TypeIndex].type}
             </Text>
             <View style={styles.rotateIcon}>
               <CustomIcon 
-                name={Types[TypeIndex][1]}
+                style={{backgroundColor: Types[TypeIndex].color}}
+                name={Types[TypeIndex].iconName}
                 size={ICON_SIZE}
               />
             </View>
@@ -150,9 +153,8 @@ export default function addDetailsScreen() {
               style={styles.amountButton}
               onPress={lessAmount}>
               <CustomIcon 
-                name="minus-circle"
+                name="arrow-down-drop-circle"
                 size={ICON_SIZE}
-                color="green"
               />
             </TouchableOpacity>
             <Text style={styles.amountText}>{Amount}</Text>
@@ -160,7 +162,7 @@ export default function addDetailsScreen() {
               style={styles.amountButton}
               onPress={addAmount}>
               <CustomIcon 
-                name="plus-circle"
+                name="arrow-up-drop-circle"
                 size={ICON_SIZE}
               />
             </TouchableOpacity>
@@ -188,11 +190,11 @@ export default function addDetailsScreen() {
         
         
       </View>
-      <View style={styles.ingredientContainer}>
+      <View style={[styles.ingredientContainer, {height: ingredientList.length < 3 ? `${ingredientList.length * 10}%` : "30%"}]}>
         <FlatList 
           data={ingredientList}
           renderItem={({ item, index }) => (
-            <View>
+            <View style={{flexDirection: "row"}}>
               <TouchableOpacity
                 onPress={() => editIngredient(item, index)}
               >
@@ -201,6 +203,14 @@ export default function addDetailsScreen() {
                   type={item.type}
                   quantity={item.quantity}
                   measureType={item.measureType}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setIngredientList(current => current.splice(index))}
+              >
+                <CustomIcon 
+                  name="minus-circle"
+                  color="red"
                 />
               </TouchableOpacity>
             </View>
@@ -232,7 +242,7 @@ const styles = StyleSheet.create({
   },
   ingredientContainer: {
     width: "80%",
-    height: "30%",
+    // height: "30%",
     marginVertical: 30,
     // borderWidth: 4, borderColor: "black",
   },
