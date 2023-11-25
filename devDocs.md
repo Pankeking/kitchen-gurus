@@ -77,6 +77,7 @@
 - Email template
 - On boarding tunnel
 - Delete Image, Limit 10 Photos -> Content-Add Photo Screen/
+- Re-work Login/Register Screens -> [Example Template](https://reactnativeexample.com/react-native-starter-kit-with-firebase-auth-and-facebook-login/)
 
 ## Current working tree - files (DATE)
 
@@ -114,7 +115,6 @@
         - Add Ingredients Format (DONE 22 NOV)
         - Flatlist Display Ingredients (DONE 23 NOV)
         - New Ingredient (WIP 23 NOV)
-        - BLACK COLOR IN DETAILS CHECK <<<>>>
         - Save in Store
       - Add Extras (WIP)
     - Edit

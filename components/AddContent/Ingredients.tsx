@@ -17,23 +17,33 @@ export default function Ingredients(props: {
   // cup-water
   // numeric
   let mainIcon;
+  let mainColor;
   let measureIcon;
 
   switch (props.type) {
     case "Fruit":
       mainIcon = "fruit-cherries";
+      mainColor = "#e74c3c"; // Alizarin
       break;
     case "Vegetable":
       mainIcon = "carrot";
+      mainColor = "#2ecc71"; // Emerald
       break;
     case "Meat":
       mainIcon = "food-turkey";
+      mainColor = "#8B4513"; // Saddle Brown
       break;
     case "Beverage":
       mainIcon = "bottle-soda";
+      mainColor = "#3498db"; // Dodger Blue
+      break;
+    case "Grain":
+      mainIcon = "corn";
+      mainColor = "#DAA520"; // Goldenrod
       break;
     case "Other":
       mainIcon = "dots-hexagon";
+      mainColor = themeColors.lightText;
       break;
   }
 
@@ -60,6 +70,7 @@ export default function Ingredients(props: {
       <View style={[styles.side, styles.left, {backgroundColor: themeColors.surface}]}>
         <View style={[styles.leftIcon, {backgroundColor: themeColors.surface}]}>
           <CustomIcon 
+            color={mainColor}
             name={mainIcon}
             size={ICON_SIZE}
           />
@@ -94,19 +105,21 @@ const styles = StyleSheet.create({
     shadowColor: "white",
     shadowOpacity: 0.4,
     
-    // borderColor: "blue", borderWidth: 5,
+    // borderColor: "green", borderWidth: 5,
   },
   side: {
-    width: "35%",
     flexDirection: "row",
+    // borderColor: "blue", borderWidth: 5,
   },
   left: {
-    // justifyContent: "space-between",
+    width: "65%",
   },
   leftIcon: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 3,
+    justifyContent: "center",
   },
   right: {
+    width: "25%",
     justifyContent: "flex-end",
   },
   rightIcon: {
@@ -116,6 +129,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "PlaypenSemiBold",
     fontSize: 18,
+    // borderColor: "red", borderWidth: 5,
   },
   info: {
     paddingHorizontal: "5%",

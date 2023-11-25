@@ -1,7 +1,7 @@
 import { useTheme } from '@rneui/themed';
 import { Link, Stack } from 'expo-router';
 import { Pressable } from 'react-native';
-import { CustomIcon } from '../../../components/themedCustom';
+import { CustomIcon, ToggleMode } from '../../../components/themedCustom';
 import { useSelector } from 'react-redux';
 
 export default function AddLayout() {
@@ -20,6 +20,7 @@ export default function AddLayout() {
           headerTintColor: themeColors.lightText,
           navigationBarColor:"red",
           headerRight: () => (
+            <>
             <Link href={'/cancelModal'} asChild >
               <Pressable
                 >
@@ -28,6 +29,8 @@ export default function AddLayout() {
                   )}
               </Pressable>
             </Link>
+            <ToggleMode />
+            </>
           ),
           headerLeft: () => (
             <Link href={'/(content)/(add)/'} asChild >
@@ -62,7 +65,7 @@ export default function AddLayout() {
           headerTitle: "Other",
         }}/>
         <Stack.Screen name="addDetails" options={{
-          headerTitle: "Details",
+          headerTitle: "Ingredients",
         }}/>
       </Stack>
         
