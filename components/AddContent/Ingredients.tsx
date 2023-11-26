@@ -51,8 +51,14 @@ export default function Ingredients(props: {
     case "Kilogram":
       measureIcon = "weight-kilogram";
       break;
+    case "Gram":
+      measureIcon = "weight-gram";
+      break;
     case "Liter":
-      measureIcon = "cup-water";
+      measureIcon = "cup";
+      break;
+    case "Mililiter":
+      measureIcon = "cup-water"
       break;
     case "Unit":
       measureIcon = "numeric";

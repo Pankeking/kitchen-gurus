@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     // borderColor: "black", borderWidth: 1,
     shadowOffset: {width: 2, height: 3},
     shadowRadius: 5,
-    shadowColor: "white",
     shadowOpacity: 0.4,
   },
   leftContainer: {

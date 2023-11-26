@@ -269,6 +269,7 @@ const styles = StyleSheet.create({
   },
   titleInput: {
     opacity: 1,
+    color: "black",
     fontSize: 32, 
     fontFamily: "PlaypenSemiBold",
     backgroundColor: "#ffffffc0",

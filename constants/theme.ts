@@ -1,16 +1,21 @@
 import { createTheme } from '@rneui/themed';
 
-const black = '#121212';
-const midnight = '#00040D'
 const orange = '#FF9900'; 
 const gradOrange = '#FF2222'
+const altOrange = '#DB5223'; 
+
 const rose = '#D81B60';
-const snowWhite = '#F3F6FB'
-const white = '#FFF'
+
+const black = '#121212';
+const midnight__ = '#00040D'
+const lightMidnight = '#00061A'; // Lighter Midnight blue
+
 const grey = '#86939e'
 
-const altOrange = '#DB5223'; 
-const ivory = "ivory"
+const white = '#FFF'
+const snowWhite__ = '#F3F6FB'
+const ivoryWhite = '#F7F5E6';
+
 
 // Create default theme
 const defaultTheme = createTheme({
@@ -19,22 +24,22 @@ const defaultTheme = createTheme({
     secondary: black,
     accent: gradOrange,
 
-    background: snowWhite,
+    background: ivoryWhite,
     surface: white,
 
-    lightText: midnight,
-    darkText: snowWhite,
+    lightText: lightMidnight,
+    darkText: ivoryWhite,
   },
   darkColors: {
     primary: rose,
-    secondary: black,
+    secondary: white,
     accent: gradOrange,
 
-    background: midnight,
+    background: lightMidnight,
     surface: black,
 
-    lightText: snowWhite,
-    darkText: midnight,
+    lightText: ivoryWhite,
+    darkText: lightMidnight,
   },
   components: {
     Button: {
