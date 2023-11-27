@@ -64,7 +64,7 @@ export default function AddLayout() {
         <Stack.Screen name="addOther" options={{
           headerTitle: "Other",
         }}/>
-        <Stack.Screen name="addDetails" options={{
+        <Stack.Screen name="addIngredients" options={{
           headerTitle: "Ingredients",
         }}/>
       </Stack>

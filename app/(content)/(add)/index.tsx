@@ -11,11 +11,13 @@ import WideButton from "../../../components/WideButton";
 
 export default function AddContentScreen() {
 
-  const isPhoto        = useSelector((state:any) => state.content.isPhoto);
-  const isName         = useSelector((state:any) => state.content.isName);
-  const isInstructions = useSelector((state:any) => state.content.isInstructions);
-  const isDetails      = useSelector((state:any) => state.content.isDetails);
-  const isExtra        = useSelector((state:any) => state.content.isExtra);
+  const isPhoto         = useSelector((state:any) => state.content.isPhoto);
+  const isName          = useSelector((state:any) => state.content.isName);
+  const isInstructions  = useSelector((state:any) => state.content.isInstructions);
+  const isIngredients   = useSelector((state:any) => state.content.isIngredients);
+  const isExtra         = useSelector((state:any) => state.content.isExtra);
+
+  const storeRecipeName = useSelector((state:any) => state.content.recipe.name)
 
   const themeColors = useTheme().theme.colors;
   const dispatch = useDispatch();
@@ -109,9 +111,9 @@ export default function AddContentScreen() {
 
         <CheckList 
           iconName={"clock-edit"}
-          title="Details"
-          done={isDetails}
-          onPress={() => handleRouting('/addDetails')} 
+          title="Ingredients"
+          done={isIngredients}
+          onPress={() => handleRouting('/addIngredients')} 
         />
 
         <CheckList 

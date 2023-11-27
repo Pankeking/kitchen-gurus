@@ -6,10 +6,12 @@ interface Extra {
   glutenFree?: boolean;
   lactoseFree?: boolean;
 }
-interface Details {
-  duration?: string;
-  ingredients?: string[];
-  cuisine?: string;
+
+interface Ingredient {
+  name: string;
+  type: string;
+  quantity: number;
+  measureType: string;
 }
 interface Recipe {
   name: string;
@@ -18,7 +20,7 @@ interface Recipe {
     steps: string[];
   }[];
   photo: string[];
-  details: Details;
+  ingredients: Ingredient[];
   extra: Extra;
 }
 
@@ -27,7 +29,7 @@ interface ContentState {
   isPhoto: boolean;
   isName: boolean;
   isInstructions: boolean;
-  isDetails: boolean;
+  isIngredients: boolean;
   isExtra: boolean;
   isLoading: boolean;  
   photoCounter: number;
@@ -43,14 +45,14 @@ const initialState: ContentState = {
       subtitle: '',
       steps: ['']
     }],
-    details: {},
+    ingredients: [],
     extra: {},
   },
   photoCounter: 0,
   isName: false,
   isPhoto: false,
   isInstructions: false,
-  isDetails: false,
+  isIngredients: false,
   isExtra: false,
   isLoading: false,
 }
@@ -84,12 +86,9 @@ const contentSlice = createSlice({
       state.isInstructions = true;
       console.log(state.recipe.instructions)
     },
-    setDetails: (state, action) => {
-      const { duration, ingredients, cuisine } = action.payload;
-      state.recipe.details.duration = duration;
-      state.recipe.details.ingredients = ingredients;
-      state.recipe.details.cuisine = cuisine;
-      state.isDetails = true;
+    setIngredients: (state, action) => {
+      state.recipe.ingredients = action.payload;
+      state.isIngredients = true;
     },
     setExtra: (state, action) => {
       const { vegan, vegetarian, glutenFree, lactoseFree } = action.payload;
@@ -97,7 +96,7 @@ const contentSlice = createSlice({
       state.recipe.extra.vegetarian = vegetarian;
       state.recipe.extra.glutenFree = glutenFree;
       state.recipe.extra.lactoseFree = lactoseFree;
-      state.isDetails = true;
+      state.isExtra = true;
     },
     nullifyRecipe: (state) => {
       state.recipe = {
@@ -107,14 +106,14 @@ const contentSlice = createSlice({
           steps: ['']
         }],
         photo: [],
-        details: {},
+        ingredients: [],
         extra: {},
       }
       state.photoCounter   = 0;
       state.isName         = false;
       state.isPhoto        = false;
       state.isInstructions = false;
-      state.isDetails      = false;
+      state.isIngredients  = false;
       state.isExtra        = false;
     }
   },
@@ -122,6 +121,6 @@ const contentSlice = createSlice({
 
 export const selectRecipe = (state: ContentState) => state.recipe;
 
-export const { setName, addPhoto, setInstructions, setDetails, setExtra, nullifyRecipe } = contentSlice.actions;
+export const { setName, addPhoto, setInstructions, setIngredients, setExtra, nullifyRecipe } = contentSlice.actions;
 
 export default contentSlice;

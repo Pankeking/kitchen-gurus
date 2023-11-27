@@ -7,15 +7,17 @@ export default function Ingredients(props: {
   type?: string;
   measureType?: string;
   quantity?: number;
+  highlighted?: boolean;
 }) {
   const ICON_SIZE = 24;
+  const ICON_SMALL = 14;
   const themeColors = useTheme().theme.colors;
 
   const { name, quantity } = props;
 
-  // weight-kilogram
-  // cup-water
-  // numeric
+  const bgColor = props.highlighted ? themeColors.secondary : themeColors.surface;
+  const contrasted = props.highlighted ? themeColors.darkText : themeColors.lightText;
+
   let mainIcon;
   let mainColor;
   let measureIcon;
@@ -69,26 +71,27 @@ export default function Ingredients(props: {
   return (
     <View style={[
       styles.container, {
-        backgroundColor: themeColors.surface,
+        backgroundColor: bgColor,
         shadowColor: themeColors.lightText
       }
       ]}>
-      <View style={[styles.side, styles.left, {backgroundColor: themeColors.surface}]}>
-        <View style={[styles.leftIcon, {backgroundColor: themeColors.surface}]}>
+      <View style={[styles.side, styles.left, {backgroundColor: bgColor}]}>
+        <View style={[styles.leftIcon, {backgroundColor: bgColor}]}>
           <CustomIcon 
             color={mainColor}
             name={mainIcon}
             size={ICON_SIZE}
           />
         </View>
-        <Text style={styles.title}>{name}</Text>
+        <Text style={[styles.title, {color: contrasted}]}>{name}</Text>
       </View>
-      <View style={[styles.side, styles.right, {backgroundColor: themeColors.surface}]}>
-        <Text style={styles.info}>{quantity}</Text>
-        <View style={[styles.rightIcon, {backgroundColor: themeColors.surface}]}>
+      <View style={[styles.side, styles.right, {backgroundColor: bgColor}]}>
+        <Text style={[styles.info, {color: contrasted}]}>{quantity}</Text>
+        <View style={[styles.rightIcon, {backgroundColor: bgColor}]}>
           <CustomIcon
+            color={contrasted}
             name={measureIcon}
-            size={ICON_SIZE * 0.6}
+            size={ICON_SMALL}
           />
         </View>
       </View>

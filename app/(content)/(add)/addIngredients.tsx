@@ -1,12 +1,15 @@
 import { router } from "expo-router";
 import { CustomIcon, Text, View } from "../../../components/themedCustom";
-import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { FlatList, Keyboard, StyleSheet, TouchableOpacity } from "react-native";
 import WideButton from "../../../components/WideButton";
 import Ingredients from "../../../components/AddContent/Ingredients";
 import { useRef, useState } from "react";
 import { Input } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
 import SmallButton from "../../../components/SmallButton";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setIngredients } from "../../../redux/slices/contentSlice";
 
 export default function addDetailsScreen() {
 
@@ -17,16 +20,21 @@ export default function addDetailsScreen() {
     measureType: string;
   }
 
-  const nameInputRef:any = useRef(null)
+  const dispatch = useDispatch();
 
-  const [TypeIndex, setTypeIndex] = useState(0);
-  const [MeasureIndex, setMeasureIndex] = useState(0);
+  const nameInputRef:any = useRef(null);
+  const amountInputRef:any = useRef(null);
+
+  const [TypeIndex, setTypeIndex] = useState('Fruit');
+  const [MeasureIndex, setMeasureIndex] = useState('Kilogram');
 
   const [TypesExtended, setTypesExtended] = useState(false);
   const [MeasureExtended, setMeasureExtended] = useState(false);
 
   const [Name, setName] = useState('');
   const [Amount, setAmount] = useState('0');
+
+  const [EditedIndex, setEditedIndex] = useState(0);
 
 
   // CONSTANTS
@@ -36,41 +44,81 @@ export default function addDetailsScreen() {
   const ICON_SMALL = 16;
   const themeColors = useTheme().theme.colors;
 
-  // Animation
+  type ItemTypeObj = {
+    [key: string]: { type: string; iconName: string; color: string}
+  }
+  const newTypes:ItemTypeObj = {
+    'Fruit': {
+      type: "Fruit",     
+      iconName: "fruit-cherries", 
+      color: "#e74c3c"
+    },
+    'Vegetable': {
+      type: "Vegetable", 
+      iconName: "carrot",         
+      color: "#2ecc71"
+    },
+    'Meat': {
+      type: "Meat",      
+      iconName: "food-turkey",    
+      color: "#8B4513"
+    },
+    'Beverage': {
+      type: "Beverage",  
+      iconName: "bottle-soda",    
+      color: "#3498db"  
+    },
+    'Grain': {
+      type: "Grain",     
+      iconName: "corn",           
+      color: "#DAA520"  
+    },
+    'Other': {
+      type: "Other",     
+      iconName: "dots-hexagon",   
+      color: themeColors.darkText  
+    },
+  }
+  type MeasureObj = {
+    [key: string]: {type: string; iconName: string; info: string}
+  }
+  const newMeasure:MeasureObj = {
+    "Kilogram": {
+      type: "Kilogram", 
+      iconName: "weight-kilogram", 
+      info: "Kg"},
+    "Gram": {
+      type: "Gram", 
+      iconName: "weight-gram", 
+      info: "g"},
+    "Liter": {
+      type: "Liter", 
+      iconName: "cup", 
+      info: "L"},
+    "Mililiter": {
+      type: "Mililiter", 
+      iconName: "cup-water", 
+      info: "ml"},
+    "Unit": {
+      type: "Unit", 
+      iconName: "numeric", 
+      info: "u/n"},
+  }
 
-  const Types = [
-    {type: "Fruit",     iconName: "fruit-cherries", color: "#e74c3c"}, // Alizarin
-    {type: "Vegetable", iconName: "carrot",         color: "#2ecc71"}, // Emerald
-    {type: "Meat",      iconName: "food-turkey",    color: "#8B4513"}, // Saddle Brown
-    {type: "Beverage",  iconName: "bottle-soda",    color: "#3498db"}, // Dodger Blue
-    {type: "Grain",     iconName: "corn",           color: "#DAA520"}, // Goldenrod
-    {type: "Other",     iconName: "dots-hexagon",   color: themeColors.darkText}
-  ]
-  
-  const Measures = [
-    {type: "Kilogram", iconName: "weight-kilogram", info: "Kg"},
-    {type: "Gram", iconName: "weight-gram", info: "g"},
-    {type: "Liter", iconName: "cup", info: "L"},
-    {type: "Mililiter", iconName: "cup-water", info: "ml"},
-    {type: "Unit", iconName: "numeric", info: "u/n"},
-  ]
+  const isIngredients:boolean = useSelector((state:any) => state.content.isIngredients)
+  const storeIngredients:Ingredient[] = useSelector((state:any) => state.content.recipe.ingredients)
+  const nullIngredient = [{ name: "", type: "", quantity: 0, measureType: "" },];
 
-  const sampleArray = [
-    { name: "Apple", type: "Fruit", quantity: 1, measureType: "Unit" },
-    { name: "Banana", type: "Fruit", quantity: 3, measureType: "Unit" },
-    { name: "Carrots straight from garden", type: "Vegetable", quantity: 0.5, measureType: "Kilogram" },
-    { name: "Spinach", type: "Vegetable", quantity: 0.5, measureType: "Kilogram" },
-    { name: "Chicken", type: "Meat", quantity: 2, measureType: "Unit" },
-    { name: "Rice", type: "Grain", quantity: 1, measureType: "Kilogram" },
-    { name: "Milk takenwandering mountain goat", type: "Beverage", quantity: 350, measureType: "Liter" }
-  ];
-  
-
-  const [ingredientList, setIngredientList] = useState(
-    sampleArray
-  )
+  const [ingredientList, setIngredientList] = useState(() => {
+    if (isIngredients) {
+      return storeIngredients
+    } else {
+      return nullIngredient
+    }
+  });
 
   const handleSubmitDetails = () => {
+    dispatch(setIngredients(ingredientList))
     router.replace('/(content)/(add)/')
   }
 
@@ -81,42 +129,66 @@ export default function addDetailsScreen() {
       return;
     }
     let numericValue = parseFloat(Amount)
-    if (isNaN(numericValue)) {
-      numericValue = 0;
+    if (isNaN(numericValue) || numericValue <= 0) {
+      amountInputRef.current.focus();
+      amountInputRef.current.shake();
+      return;
     }
     const IngredientObject = {
       name: Name,
-      type: Types[TypeIndex].type,
+      type: newTypes[TypeIndex].type,
       quantity: numericValue,
-      measureType: Measures[MeasureIndex].type
+      measureType: newMeasure[MeasureIndex].type
     }
     setIngredientList(current => [...current, IngredientObject])
     // CLEAR
-    setTypeIndex(0);
-    setMeasureIndex(0);
     setName('');
     setAmount('0');
-
+    Keyboard.dismiss();
   }
 
   const editIngredient = (item: Ingredient, index: number) => {
-    console.log(`Item: ${item.name} is on Index: ${index}`)
+    setEditedIndex(index);
+    setName(item.name);
+    setAmount(`${item.quantity}`);
+    setTypeIndex(item.type);
+    setMeasureIndex(item.measureType);
+  }
+  const confirmEdit = () => {
+    const numericValue = parseFloat(Amount)
+    if (isNaN(numericValue) || numericValue <= 0) {
+      amountInputRef.current.focus();
+      amountInputRef.current.shake();
+      return;
+    }
+    const editedObject = {
+      name: Name,
+      quantity: numericValue,
+      type: TypeIndex,
+      measureType: MeasureIndex
+    }
+    setIngredientList(current => current.slice(0, EditedIndex).concat(editedObject).concat(current.slice(EditedIndex + 1)))
+    // CLEAR
+    setName('');
+    setAmount('0');
+    setEditedIndex(0)
+    Keyboard.dismiss();
   }
 
   const removeIngredient = (index: number) => {
     setIngredientList(current => current.slice(0,index).concat(current.slice(index + 1)))
   }
 
-  const changeType = ( index: number ) => {
+  const changeType = ( type: string ) => {
     setTypesExtended(current => !current)
     setMeasureExtended(false);
-    setTypeIndex(index)
+    setTypeIndex(type)
   }
 
-  const changeMeasure = (index: number) => {
+  const changeMeasure = ( type: string ) => {
     setMeasureExtended(current => !current)
     setTypesExtended(false);
-    setMeasureIndex(index)
+    setMeasureIndex(type)
   }
 
   const addAmount = () => {
@@ -143,7 +215,7 @@ export default function addDetailsScreen() {
     iconName: string;
     type: string;
     flatList: boolean;
-    index: number;
+    // index: number;
     highlighted: boolean;
   }) => {
     const bgColor = props.highlighted ? themeColors.secondary : themeColors.surface;
@@ -153,7 +225,7 @@ export default function addDetailsScreen() {
     >
       <TouchableOpacity
         style={styles.formButton}
-        onPress={() => changeType(props.index)}
+        onPress={() => changeType(props.type)}
       >
         <View style={[styles.rotateItem, {backgroundColor: bgColor}]}>
           <CustomIcon 
@@ -190,7 +262,6 @@ export default function addDetailsScreen() {
     iconName: string;
     info: string;
     flatList: boolean;
-    index: number;
     highlighted: boolean;
   }) => {
     const bgColor = props.highlighted ? themeColors.secondary : themeColors.surface;
@@ -200,7 +271,7 @@ export default function addDetailsScreen() {
     >
       <TouchableOpacity
         style={styles.formButton}
-        onPress={() => changeMeasure(props.index)}
+        onPress={() => changeMeasure(props.type)}
       >
         <View style={[styles.rotateItem, {backgroundColor: bgColor}]}>
           <CustomIcon
@@ -254,6 +325,7 @@ export default function addDetailsScreen() {
             enterKeyHint="enter"
             returnKeyType="done"
             textAlign="center"
+            value={Name}
             onChangeText={setName}
             // onSubmitEditing={handlerFunction}
             inputStyle={[styles.inputText, {color: themeColors.lightText}]}
@@ -264,25 +336,26 @@ export default function addDetailsScreen() {
         <View>
           {!TypesExtended ? (
               <RenderTypes 
-                color={Types[TypeIndex].color} 
-                type={Types[TypeIndex].type}
-                iconName={Types[TypeIndex].iconName}
-                index={TypeIndex}
+                color={newTypes[TypeIndex].color} 
+                type={newTypes[TypeIndex].type}
+                iconName={newTypes[TypeIndex].iconName}
+                // index={TypeIndex}
                 flatList={false}
                 highlighted={true}
               />
             ) : (
               <FlatList 
                 contentContainerStyle={{paddingBottom: 70}}
-                data={Types}
+                data={Object.values(newTypes)}
+                keyExtractor={(item) => item.type}
                 renderItem={({ item, index }) => (
                     <RenderTypes 
                       color={item.color} 
                       type={item.type} 
                       iconName={item.iconName} 
-                      index={index} 
+                      // index={index} 
                       flatList={true}
-                      highlighted={index == TypeIndex}
+                      highlighted={item.type === newTypes[TypeIndex].type}
                     />
                 )}
               />
@@ -293,25 +366,23 @@ export default function addDetailsScreen() {
         <View>
           {!MeasureExtended ? (
             <RenderMeasure
-              type={Measures[MeasureIndex].type}
-              iconName={Measures[MeasureIndex].iconName}
-              index={MeasureIndex}
-              info={Measures[MeasureIndex].info}
+              type={newMeasure[MeasureIndex].type}
+              iconName={newMeasure[MeasureIndex].iconName}
+              info={newMeasure[MeasureIndex].info}
               flatList={false}
               highlighted={true}
             />
           ) : (
             <FlatList 
             contentContainerStyle={{paddingBottom: 140}}
-              data={Measures}
+              data={Object.values(newMeasure)}
               renderItem={({ item, index }) => (
                 <RenderMeasure 
                   type={item.type}
                   iconName={item.iconName}
                   info={item.info}
                   flatList={true}
-                  index={index}
-                  highlighted={index == MeasureIndex}
+                  highlighted={item.type === MeasureIndex}
                 />
               )}
             />
@@ -342,7 +413,7 @@ export default function addDetailsScreen() {
             
             <View style={{width: "30%", marginRight: "auto"}}>
               <Input 
-                // ref={stepInputRef}
+                ref={amountInputRef}
                 spellCheck={false}
                 keyboardType="numeric"
                 enterKeyHint="enter"
@@ -358,10 +429,10 @@ export default function addDetailsScreen() {
             </View>
             <View style={styles.amounterButtons}>
               <SmallButton 
-                onPress={addIngredient} 
-                title="confirm" 
-                size={32} 
-                Color={themeColors.gradOrange} 
+                onPress={EditedIndex === 0 ? addIngredient : confirmEdit} 
+                title={EditedIndex === 0 ? "Add New" : "Confirm Edit"} 
+                size={ICON_BIG} 
+                Color={themeColors.primary} 
                 iconName={"check-circle"}
               />
             </View>
@@ -375,27 +446,32 @@ export default function addDetailsScreen() {
           data={ingredientList}
           renderItem={({ item, index }) => (
             <View style={styles.flContainer}>
-              <TouchableOpacity
-                style={styles.flItem}
-                onPress={() => editIngredient(item, index)}
-              >
-                <Ingredients 
-                  name={item.name}
-                  type={item.type}
-                  quantity={item.quantity}
-                  measureType={item.measureType}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.flRemove}
-                onPress={() => removeIngredient(index)}
-              >
-                <CustomIcon 
-                  name="minus-circle"
-                  color="red"
-                  size={ICON_MEDIUM}
-                />
-              </TouchableOpacity>
+              {index != 0 && (
+                <>
+                <TouchableOpacity
+                  style={styles.flItem}
+                  onPress={() => editIngredient(item, index)} // +1 Phase for filtered null
+                >
+                  <Ingredients 
+                    name={item.name}
+                    type={item.type}
+                    quantity={item.quantity}
+                    measureType={item.measureType}
+                    highlighted={index === EditedIndex}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.flRemove}
+                  onPress={() => removeIngredient(index)}
+                >
+                  <CustomIcon 
+                    name="minus-circle"
+                    color="red"
+                    size={ICON_MEDIUM}
+                  />
+                </TouchableOpacity>
+                </>
+              )}
             </View>
           )}
         />

@@ -24,7 +24,7 @@ export default function SmallButton(props: {
           size={size}
           style={{ color: finalColor}}
         />
-        <Text style={{ fontFamily: "PlaypenMedium",color: finalColor, fontSize: size/2}}>
+        <Text style={{ fontFamily: "PlaypenMedium",color: themeColors.lightText, fontSize: size/2}}>
           {title}
         </Text>
       </View>
