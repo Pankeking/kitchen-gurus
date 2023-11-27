@@ -110,13 +110,16 @@
         - Step-Text (DONE 18 NOV)
         - Numerated Steps? with Max? (DONE 19 NOV)
         - Update/Dispatch + Auto-Display (DONE 19 NOV)
-      - Add Details (WIP 22 NOV)
-        - Align & Display
+      - Add Ingredients (WIP 22 NOV -> DONE 27 NOV)
+        - Align & Display (DONE 27 NOV)
         - Add Ingredients Format (DONE 22 NOV)
         - Flatlist Display Ingredients (DONE 23 NOV)
-        - New Ingredient (WIP 23 NOV)
-        - Save in Store
-      - Add Extras (WIP)
+        - New Ingredient (WIP 23 NOV -> DONE 27 NOV)
+        - Save in Store (DONE 27 NOV)
+      - Add Extras (WIP NOV 28)
+        - Align Display
+        - Mini Badges Cards ?? what is the name
+        - List -> Veggie, vegan, glutenFree, Ovo, Lactose, SugarFree, other
     - Edit
     - Share
 
