@@ -1,12 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface Extra {
-  vegan?: boolean;
-  vegetarian?: boolean;
-  glutenFree?: boolean;
-  lactoseFree?: boolean;
+type dietOptions = {
+  [key: string] : {label: string; selected: boolean};
 }
-
 interface Ingredient {
   name: string;
   type: string;
@@ -21,7 +17,7 @@ interface Recipe {
   }[];
   photo: string[];
   ingredients: Ingredient[];
-  extra: Extra;
+  extra: dietOptions;
 }
 
 interface ContentState {
@@ -46,7 +42,28 @@ const initialState: ContentState = {
       steps: ['']
     }],
     ingredients: [],
-    extra: {},
+    extra: {
+      "Dairy-Free": { label: "Dairy-Free", selected: false },
+      "Nut-Free": { label: "Nut-Free", selected: false },
+      "Low-Carb": { label: "Low-Carb", selected: false },
+      "High-Protein": { label: "High-Protein", selected: false },
+      "Paleo": { label: "Paleo", selected: false },
+      "Keto-Friendly": { label: "Keto-Friendly", selected: false },
+      "Organic": { label: "Organic", selected: false },
+      "Non-GMO": { label: "Non-GMO", selected: false },
+      "Low-Fat": { label: "Low-Fat", selected: false },
+      "Whole30": { label: "Whole30", selected: false },
+      "Soy-Free": { label: "Soy-Free", selected: false },
+      "Egg-Free": { label: "Egg-Free", selected: false },
+      "Pescatarian": { label: "Pescatarian", selected: false },
+      "Low-Sodium": { label: "Low-Sodium", selected: false },
+      "Heart-Healthy": { label: "Heart-Healthy", selected: false },
+      "Allergen-Free": { label: "Allergen-Free", selected: false },
+      "Vegetarian": { label: "Vegetarian", selected: false },
+      "Vegan": { label: "Vegan", selected: false },
+      "Gluten-Free": { label: "Gluten-Free", selected: false },
+      "Sugar-Free": { label: "Sugar-Free", selected: false },
+    },
   },
   photoCounter: 0,
   isName: false,
@@ -91,11 +108,8 @@ const contentSlice = createSlice({
       state.isIngredients = true;
     },
     setExtra: (state, action) => {
-      const { vegan, vegetarian, glutenFree, lactoseFree } = action.payload;
-      state.recipe.extra.vegan = vegan;
-      state.recipe.extra.vegetarian = vegetarian;
-      state.recipe.extra.glutenFree = glutenFree;
-      state.recipe.extra.lactoseFree = lactoseFree;
+      state.recipe.extra = action.payload;
+      console.log(state.recipe.extra)
       state.isExtra = true;
     },
     nullifyRecipe: (state) => {

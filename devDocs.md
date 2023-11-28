@@ -118,8 +118,8 @@
         - Save in Store (DONE 27 NOV)
       - Add Extras (WIP NOV 28)
         - Align Display
-        - Mini Badges Cards ?? what is the name
-        - List -> Veggie, vegan, glutenFree, Ovo, Lactose, SugarFree, other
+        - Chips of selection (WIP 28 NOV)
+        - List (DONE 28 NOV)
     - Edit
     - Share
 

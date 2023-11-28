@@ -120,7 +120,7 @@ export default function AddContentScreen() {
           iconName={"information"}
           title="Extra"
           done={isExtra}
-          onPress={() => handleRouting('/addOther')} 
+          onPress={() => handleRouting('/addExtra')} 
         />
 
       </View>

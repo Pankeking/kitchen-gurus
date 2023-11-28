@@ -492,23 +492,19 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     alignItems: "center",
-    // borderWidth: 4, borderColor: "black",
   },
   header: {
     marginTop: 15,
-    // borderWidth: 4, borderColor: "black",
   },
   ingredientContainer: {
     width: "80%",
     height: "25%",
     marginVertical: 20,
-    // borderWidth: 4, borderColor: "black",
   },
   formContainer: {
     overflow: "hidden",
     width: "80%",
     height: "40%",
-    // borderWidth: 4, borderColor: "black",
   },
   
   nameTitle: {
