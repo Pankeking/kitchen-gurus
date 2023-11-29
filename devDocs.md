@@ -53,9 +53,8 @@
   - Denormalized Followers/Followed
   
 - Recipes
-  - Each document represents a recipe and has fields like recipeId, title, description, ingredients, instructions, imageUrl, chefId, etc.
-  - The chefId field references the ID of the user who created the recipe.
-
+  - Each document represents a recipe and has fields like recipeId, name, ingredients, instructions, extras, photos, userID, likes, etc.
+  
 - Followers
   - Each document represents a follower relationship between two users and has fields like followerId and followingId.
   - This collection allows you to track which users are following each other.
@@ -81,12 +80,14 @@
 
 ## Current working tree - files (DATE)
 
-- Profile Screen (WIP OCT 23)
-  
-  - DEVELOPER NOTES - ###
-    - First template Sucked ### Had to re-start after whole day's work
-    - The image selector / uri resets and actives useEffect provoking unexpected behavior on state.auth.user.photoURL
+- Home Screen (WIP Nov 30)
+  - Recipe display
+    - Main Photo
+    - Creator username
+    - Touchable Photo ----->> to Recipe Screen
+    - Recipe Name
 
+- Profile Screen (WIP OCT 23)
   - Components (Social Media, Followers, Likes, Recipes)
     - Network Components Container / View
     - Personal Feed
@@ -94,13 +95,6 @@
       - OutOf NetWork content
       - Ads
   
-  - Content Screen (WIP OCT 30)  
-    - Edit
-    - Share
-      - Structure the recipe as JSON/Firebase Format
-      - Make firebase logic
-      - Visualize
-
 - Settings Screen (WIP OCT 24)
   - Alignment
     - Inner options containers
@@ -119,7 +113,12 @@
 
 ## Work Done (DATE)
 
-- Index Screen (wip 1 nov ->>> done 28 NOV)
+- Add Content Screen (wip 30 oct ---> done 29 NOV)  
+  - Content Index Screen (wip 1 nov ->>> done 28 NOV)
+  - Share ---> done 29 NOV
+    - Structure the recipe as JSON/Firebase Format
+    - Make firebase logic
+    - Visualize
   - Alignment & Display
   - Re-usable CheckList Component
   - Add Name

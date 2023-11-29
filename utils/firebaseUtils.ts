@@ -1,8 +1,8 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
-import { addDoc, arrayUnion, collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, setDoc, updateDoc, writeBatch } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { Ingredient, Recipe, dietOptions } from "../redux/slices/contentSlice";
+import { Ingredient, Photo, Recipe, dietOptions } from "../redux/slices/contentSlice";
 
 
 // Register
@@ -158,61 +158,55 @@ const pictureUploadHelper = async (ref: StorageReference, blob: Blob, callback: 
 // SEND RECIPE
 // SEND RECIPE
 export const uploadRecipe = async (uid: string, recipe:Recipe) => {
+
   const cleanedRecipe = cleanRecipe(recipe);
-  // CREATE RECIPE REFERENCE
-  const recipeResponse = await recipeUploader(cleanedRecipe, uid);
-  if (recipeResponse.error) {
-    console.log("Error")
-    return recipeResponse
+  // Get recipes collection add cleaned Recipe
+  const recipesRef = collection(FBstore, "recipes");
+  const recipeDocResp = await addDoc(recipesRef, cleanedRecipe);
+  // Get added recipe ID and update itself with reference for future use
+  const recipeID = recipeDocResp.id;
+  const updateRef = doc(recipesRef, recipeID);
+  await setDoc(updateRef, {
+    recipeID: recipeID,
+    likes: 0,
+    userID: uid
+  }, {merge: true})
+  
+  const photosArray:Photo[] = cleanedRecipe.photo;
+  
+  // Upload every picture to FB storage
+  for (let i = 0; i < photosArray.length; i++) {
+    const storageRef = ref(FBstorage, `recipes/${recipeID}/photo-${i}.jpg`);
+    const response = await fetch(photosArray[i].uri)
+    const imageBlob = await response.blob();
+    pictureUploadHelper(storageRef, imageBlob, async (downloadURL) => {
+      if (!downloadURL) {
+        console.error("Error uploading image");
+        alert("Photo upload failed");
+      }
+      // Update on the spot the Recipe.Photos array
+      await updateDoc(doc(FBstore, "recipes", recipeID), {
+        photosRef: arrayUnion(downloadURL)
+      })
+    });
   }
+  
+  const usersCollectionRef = doc(FBstore, "users", uid);
+  await updateDoc(usersCollectionRef, {
+    userRecipes: arrayUnion(recipeID)
+  })
+  
+  // 
   // GET USER REFERENCE AFTER recipe and add to users recipes
-  const userRecipeResponse = await updateUserRecipes(uid, recipeResponse);
 
   // UPLOAD IMAGES
-  const storageRef = ref(FBstorage, 'recipe-id/imageID[index].png') // <<< RECIPE-ID
-  // RETURN RESPOMNSE
-  const response = userRecipeResponse;
-  return response
+  return recipeID;
 }
 
 
 // HELPERS RECIPE
 // HELPERS RECIPE
 // HELPERS RECIPE
-const recipeUploader = async (recipe:Recipe, uid:string) => {
-  const recipesRef = collection(FBstore, "recipes");
-  try {
-    const docResponse = await addDoc(recipesRef, recipe);
-    const recipeID = docResponse.id;
-
-    const updateRef = doc(recipesRef, recipeID);
-    await setDoc(updateRef, {
-      recipeID: recipeID,
-      likes: 0,
-      userID: uid,
-    }, {merge: true})
-
-    return recipeID;
-
-  } catch (e: any) {
-    console.error(e);
-    return e;
-  }
-}
-
-const updateUserRecipes = async (uid:string, recipeID:string) => {
-  const usersCollectionRef = doc(FBstore, "users", uid);
-  try {
-    const userDocSnapshot = await updateDoc(usersCollectionRef, {
-      userRecipes: arrayUnion(recipeID)
-    });
-    console.log(userDocSnapshot);
-  } catch (e:any) {
-    console.error(e);
-    return e
-  }
-  return null
-}
 
 
 const cleanRecipe = (recipe:Recipe) => {

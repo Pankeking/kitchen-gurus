@@ -70,13 +70,6 @@ export default function ProfileScreen() {
   }
 
 
-  const changeName = () => {
-    const fbUser = FBauth.currentUser;
-    if (fbUser) {
-      const displayName = "Javier"
-      updateProfile(fbUser, {displayName})
-    }
-  }
 
   return (
     <View style={styles.container}>

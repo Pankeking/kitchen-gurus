@@ -12,7 +12,7 @@ export interface Ingredient {
   quantity: number;
   measureType: string;
 }
-interface Photo {
+export interface Photo {
   uri: string;
   type: string;
   width: number;
