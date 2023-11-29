@@ -9,7 +9,7 @@ interface Ingredient {
   quantity: number;
   measureType: string;
 }
-interface Recipe {
+export interface Recipe {
   name: string;
   instructions: {
     subtitle: string;

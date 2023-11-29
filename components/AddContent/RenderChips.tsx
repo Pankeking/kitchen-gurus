@@ -14,7 +14,7 @@ export default function RenderChips(props: {
   return (
     <View style={styles.container}>
       <TouchableOpacity 
-        style={[styles.chip,{backgroundColor: props.selected ? themeColors.secondary : themeColors.surface}]}
+        style={[styles.chip,{backgroundColor: props.selected ? themeColors.secondary : themeColors.surface, shadowColor: themeColors.lightText}]}
         onPress={props.onPress}
       >
         <CustomIcon 
@@ -42,8 +42,9 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     paddingVertical: 12,
     borderRadius: 14,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    shadowOffset: {width: 2, height: 3},
+    shadowRadius: 5,
+    shadowOpacity: 0.4,
   },
   chipIcon: {
     marginHorizontal: 8

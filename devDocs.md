@@ -116,12 +116,16 @@
         - Flatlist Display Ingredients (DONE 23 NOV)
         - New Ingredient (WIP 23 NOV -> DONE 27 NOV)
         - Save in Store (DONE 27 NOV)
-      - Add Extras (WIP NOV 28)
+      - Add Extras (DONE NOV 28)
         - Align Display
-        - Chips of selection (WIP 28 NOV)
+        - Chips of selection (DONE 28 NOV)
         - List (DONE 28 NOV)
+        - Send To Store (DONE NOV 28)
     - Edit
     - Share
+      - Structure the recipe as JSON/Firebase Format
+      - Make firebase logic
+      - Visualize
 
 - Settings Screen (WIP OCT 24)
   - Alignment

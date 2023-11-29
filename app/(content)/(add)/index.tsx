@@ -5,9 +5,10 @@ import { router } from "expo-router";
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { nullifyRecipe, setName } from "../../../redux/slices/contentSlice";
+import { Recipe, nullifyRecipe, setName } from "../../../redux/slices/contentSlice";
 import CheckList from "../../../components/AddContent/CheckList";
 import WideButton from "../../../components/WideButton";
+import { uploadRecipe } from "../../../utils/firebaseUtils";
 
 export default function AddContentScreen() {
 
@@ -17,7 +18,7 @@ export default function AddContentScreen() {
   const isIngredients   = useSelector((state:any) => state.content.isIngredients);
   const isExtra         = useSelector((state:any) => state.content.isExtra);
 
-  const storeRecipeName = useSelector((state:any) => state.content.recipe.name)
+  const storeRecipe = useSelector((state:any) => state.content.recipe)
 
   const themeColors = useTheme().theme.colors;
   const dispatch = useDispatch();
@@ -52,12 +53,38 @@ export default function AddContentScreen() {
   }, [InputDisabled])
 
   const handleRouting = (route:any) => {
-    if (isPhoto) {
-      router.push(route)
-    } else {
+    if (!isPhoto) {
       alert('First Add a Photo')
       router.push('/(content)/(add)/addPhotoName')
     }
+    router.push(route)
+  }
+
+  const handleSubmitRecipe = (recipe:Recipe) => {
+    if (!isPhoto) {
+      alert('First Add a Photo')
+      router.push('/(content)/(add)/addPhotoName')
+    }
+    if (!isName) {
+      alert("Name your recipe")
+    }
+    if (!isInstructions) {
+      alert("Add Instructions")
+      router.push('/(content)/(add)/addInstructions')
+    }
+    if (!isIngredients) {
+      alert("Add Ingredients")
+      router.push('/(content)/(add)/addIngredients')
+    }
+    if (!isExtra) {
+      alert("Add Extra details")
+      router.push('/(content)/(add)/addExtra')
+    }
+
+    alert("Uploaded");
+    // dispatch(nullifyRecipe())
+    router.replace('/(tabs)/');
+    uploadRecipe(storeRecipe);
   }
 
 

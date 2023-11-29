@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setExtra } from "../../../redux/slices/contentSlice";
+import { router } from "expo-router";
 
 export default function addDetailScreen() {
   type dietOptions = {
@@ -27,8 +28,24 @@ export default function addDetailScreen() {
     })
   }
 
-  const changeAll = (trueness:boolean) => {
-    
+  const toggleAll = (trueness:boolean) => {
+    setSelected((current) => {
+      const updatedOptions = {...current};
+      for (const key in updatedOptions) {
+        if (updatedOptions.hasOwnProperty(key)) {
+          updatedOptions[key] = {
+            ...updatedOptions[key],
+            selected: trueness
+          }
+        }
+      }
+      return updatedOptions;
+    })
+  }
+
+  const handleSubmitExtra = () => {
+    dispatch(setExtra(dietOptions));
+    router.replace('/(content)/(add)/');
   }
   
 
@@ -40,14 +57,14 @@ export default function addDetailScreen() {
           label={"Select All"}
           icon={"check-circle"}
           selected={true}
-          onPress={() => null}
+          onPress={() => toggleAll(true)}
         />
         <RenderChips 
           label={"Unselect All"}
           icon={"circle-off-outline"}
           selected={false}
           color="red"
-          onPress={() => null}
+          onPress={() => toggleAll(false)}
         />
       </View>
       <FlatList
@@ -64,12 +81,13 @@ export default function addDetailScreen() {
         numColumns={2} // Display three items per row
         contentContainerStyle={styles.flatlistContainer}
         columnWrapperStyle={styles.columnWrapper}
+        showsVerticalScrollIndicator={false}
       />
       <View style={{marginBottom: 30}}></View>
       <WideButton 
         iconName={"check-circle"}
         title="Save & Continue"
-        onPress={() => dispatch(setExtra(Selected))}
+        onPress={handleSubmitExtra}
       />
       <View style={{marginBottom: 50}}></View>
     </View>
@@ -87,16 +105,15 @@ const styles = StyleSheet.create({
   },
   example: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: "90%"
+    justifyContent: "space-around",
+    width: "100%"
   },
   flatlistContainer: {
     width: "100%",
     marginBottom: 20,
   },
   columnWrapper: {
-    justifyContent: 'space-between', // Adjust as needed
-    marginBottom: 8, // Adjust the separation between rows
+    justifyContent: 'space-around',
+    marginBottom: 8,
   },
-  
 })

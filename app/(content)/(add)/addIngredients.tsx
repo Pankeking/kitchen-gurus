@@ -118,8 +118,8 @@ export default function addDetailsScreen() {
   });
 
   const handleSubmitDetails = () => {
-    dispatch(setIngredients(ingredientList))
-    router.replace('/(content)/(add)/')
+    dispatch(setIngredients(ingredientList));
+    router.replace('/(content)/(add)/');
   }
 
   const addIngredient = () => {

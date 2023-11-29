@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
 import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { Recipe } from "../redux/slices/contentSlice";
 
 
 // Register
@@ -153,4 +154,11 @@ const pictureUploadHelper = async (ref: StorageReference, blob: Blob, callback: 
     const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
     callback(downloadURL);
   })
+}
+
+// SEND RECIPE
+// SEND RECIPE
+// SEND RECIPE
+export const uploadRecipe = async (recipe:Recipe) => {
+  return
 }
