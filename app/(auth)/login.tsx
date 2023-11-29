@@ -12,7 +12,6 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FBauth, FBstore } from "../../firebase-config";
-import { LinearGradient } from "expo-linear-gradient";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import WideButton from "../../components/WideButton";
 

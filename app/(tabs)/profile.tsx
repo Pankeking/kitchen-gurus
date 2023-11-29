@@ -28,44 +28,45 @@ export default function ProfileScreen() {
   const [profilePic, setProfilePic] = useState(() => readyProfilePic);
   const [backgroundPic, setBackgroundPic] = useState(() => readyBackgroundPic);
   
-
+  // PROFILE PIC
   const PickProfileImageAsync = async () => {
     let result = await launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1
     })
-    if (!result.canceled) {
-      const userId = FBauth.currentUser?.uid;
-      if (userId) {
-        const imageUri = result.assets[0].uri;
-        await updateProfilePicture(userId, imageUri);
-        setProfilePic(imageUri);
-      } else {
-        console.error('User ID is undefined.');
-      }
-    } else {
-      alert("You did not select any image");
+    const userId = FBauth.currentUser?.uid;
+    if (!userId) {
+      console.error('User ID is undefined.');
+      return
     }
+    if (!result.canceled) {
+      const imageUri = result.assets[0].uri;
+      await updateProfilePicture(userId, imageUri);
+      setProfilePic(imageUri);
+      alert("New Profile Picture Uploaded")
+      return
+    }
+    alert("You did not select any image");
   }
-
+  // BACKGROUND PIC
   const PickBackgroundImageAsync = async () => {
     let result = await launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1
     })
-    if (!result.canceled) {
-      const userId = FBauth.currentUser?.uid;
-      if (userId) {
-        const imageUri = result.assets[0].uri;
-        const imageRaw = result.assets[0];
-        await updateProfileBackground(userId, imageUri);
-        setBackgroundPic(imageUri);
-      } else {
-        console.error('User ID is undefined.');
-      }
-    } else {
-      alert("You did not select any image");
+    const userId = FBauth.currentUser?.uid;
+    if (!userId) {
+      console.error('User ID is undefined.');
+      return
     }
+    if (!result.canceled) {
+      const imageUri = result.assets[0].uri;
+      await updateProfileBackground(userId, imageUri);
+      setBackgroundPic(imageUri);
+      alert("New Profile Background Picture Uploaded")
+      return
+    }
+    alert("You did not select any image");
   }
 
 

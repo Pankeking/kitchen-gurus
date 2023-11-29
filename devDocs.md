@@ -119,7 +119,6 @@
 
 ## Work Done (DATE)
 
-- Bottom Tab & Profile ---> Route ----> (done 3 NOV)
 - Index Screen (wip 1 nov ->>> done 28 NOV)
   - Alignment & Display
   - Re-usable CheckList Component
@@ -146,6 +145,7 @@
     - Send To Store
 
 - VACATIONS (NOV 8 - NOV 16)
+- Bottom Tab & Profile ---> Route ----> (done 3 NOV)
 
 - Profile Items persistance (DONE 29 OCT)
   - FireStore Visualization

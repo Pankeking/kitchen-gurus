@@ -9,8 +9,48 @@ import { Recipe, nullifyRecipe, setName } from "../../../redux/slices/contentSli
 import CheckList from "../../../components/AddContent/CheckList";
 import WideButton from "../../../components/WideButton";
 import { uploadRecipe } from "../../../utils/firebaseUtils";
+import { FBauth } from "../../../firebase-config";
 
 export default function AddContentScreen() {
+
+  
+
+  const testRecipe = {
+    "name": "Cherry pie",
+    "instructions": [
+      {"subtitle": "", "steps": ["Step 1", "Step 2"]},
+      {"subtitle": "Prepare", "steps": ["Step 3", "Step 4"]},
+      {"subtitle": "Eat", "steps": ["Step 5", "Step 6"]}
+    ],
+    "photo": [
+      {
+        "uri": "file:///var/mobile/Containers/Data/Application/FF65DBA6-5D86-44CD-A111-BCABB76A505A/Library/Caches/ExponentExperienceData/%2540anonymous%252Fhulala-yarn-6b243c9f-e041-4521-ab68-7b358cba9d12/ImagePicker/5923826B-FE9C-4E1F-83D3-1F18CEA8BEFB.jpg",
+        "type": "image",
+        "width": 1904,
+        "height": 1904,
+        "fileSize": 1885197
+      },
+      {
+        "uri": "file:///var/mobile/Containers/Data/Application/FF65DBA6-5D86-44CD-A111-BCABB76A505A/Library/Caches/ExponentExperienceData/%2540anonymous%252Fhulala-yarn-6b243c9f-e041-4521-ab68-7b358cba9d12/ImagePicker/5F89B3C0-747D-491E-B0F8-E9A588B9B2F8.jpg",
+        "type": "image",
+        "width": 1440,
+        "height": 1440,
+        "fileSize": 4185530
+      }
+    ],
+    "ingredients": [
+      {"name": "", "type": "", "quantity": 0, "measureType": ""},
+      {"name": "Jajaaj", "type": "Fruit", "quantity": 3, "measureType": "Kilogram"}
+    ],
+    "extra": {
+      "Allergen-Free": {"label": "Allergen-Free", "selected": false},
+      "Dairy-Free": {"label": "Dairy-Free", "selected": false},
+      "Vegetarian": {"label": "Vegetarian", "selected": false},
+      "Whole30": {"label": "Whole30", "selected": false}
+    }
+  }
+  
+
 
   const isPhoto         = useSelector((state:any) => state.content.isPhoto);
   const isName          = useSelector((state:any) => state.content.isName);
@@ -22,10 +62,7 @@ export default function AddContentScreen() {
 
   const themeColors = useTheme().theme.colors;
   const dispatch = useDispatch();
-
-  const [TempTest, setTempTest] = useState(true);
   
-  const mainPhoto        = useSelector((state:any) => state.content.recipe.photo[0]);
   const [InputDisabled, setInputDisabled] = useState(true);
   const [ButtonTitle, setButtonTitle] = useState("");
   const [RecipeName, setRecipeName] = useState("");
@@ -61,30 +98,43 @@ export default function AddContentScreen() {
   }
 
   const handleSubmitRecipe = (recipe:Recipe) => {
-    if (!isPhoto) {
-      alert('First Add a Photo')
-      router.push('/(content)/(add)/addPhotoName')
+    // MASKED FOR TESTING
+    // if (!isPhoto) {
+    //   alert('First Add a Photo')
+    //   router.push('/(content)/(add)/addPhotoName')
+    // }
+    // if (!isName) {
+    //   alert("Name your recipe")
+    // }
+    // if (!isInstructions) {
+    //   alert("Add Instructions")
+    //   router.push('/(content)/(add)/addInstructions')
+    // }
+    // if (!isIngredients) {
+    //   alert("Add Ingredients")
+    //   router.push('/(content)/(add)/addIngredients')
+    // }
+    // if (!isExtra) {
+    //   alert("Add Extra details")
+    //   router.push('/(content)/(add)/addExtra')
+    // }
+    // MASKED FOR TESTING
+    const userId = FBauth.currentUser?.uid;
+    if (!userId) {
+      console.error('User ID is undefined.');
+      return
     }
-    if (!isName) {
-      alert("Name your recipe")
-    }
-    if (!isInstructions) {
-      alert("Add Instructions")
-      router.push('/(content)/(add)/addInstructions')
-    }
-    if (!isIngredients) {
-      alert("Add Ingredients")
-      router.push('/(content)/(add)/addIngredients')
-    }
-    if (!isExtra) {
-      alert("Add Extra details")
-      router.push('/(content)/(add)/addExtra')
-    }
-
-    alert("Uploaded");
+    alert("Uploading on progress");
     // dispatch(nullifyRecipe())
-    router.replace('/(tabs)/');
-    uploadRecipe(storeRecipe);
+    const response = uploadRecipe(userId,recipe);
+    if (response == null) {
+      alert("Recipe Upload Failed, try again");
+      return
+    }
+    console.log(response);
+    return
+    router.replace('/(tabs)/profile');
+    dispatch(nullifyRecipe);
   }
 
 
@@ -157,11 +207,8 @@ export default function AddContentScreen() {
         <WideButton 
           title="Finish Uploading"
           iconName="form-select"
-          onPress={() => {
-            alert("Uploaded");
-            dispatch(nullifyRecipe())
-            router.replace('/(tabs)/');
-          }}
+          onPress={() => handleSubmitRecipe(storeRecipe)}
+          // onPress={() => handleSubmitRecipe(testRecipe)}
         />
     </View>
   )

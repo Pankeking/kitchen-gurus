@@ -1,13 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-type dietOptions = {
-  [key: string] : {label: string; selected: boolean};
+export type dietOptions = {
+  [key: string] : {
+    label: string; 
+    selected: boolean
+  };
 }
-interface Ingredient {
+export interface Ingredient {
   name: string;
   type: string;
   quantity: number;
   measureType: string;
+}
+interface Photo {
+  uri: string;
+  type: string;
+  width: number;
+  height: number;
+  fileSize: number;
 }
 export interface Recipe {
   name: string;
@@ -15,7 +25,7 @@ export interface Recipe {
     subtitle: string;
     steps: string[];
   }[];
-  photo: string[];
+  photo: Photo[];
   ingredients: Ingredient[];
   extra: dietOptions;
 }

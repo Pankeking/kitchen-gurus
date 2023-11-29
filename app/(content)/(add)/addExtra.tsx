@@ -44,7 +44,7 @@ export default function addDetailScreen() {
   }
 
   const handleSubmitExtra = () => {
-    dispatch(setExtra(dietOptions));
+    dispatch(setExtra(Selected));
     router.replace('/(content)/(add)/');
   }
   

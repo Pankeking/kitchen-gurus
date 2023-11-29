@@ -1,8 +1,8 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
-import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { Recipe } from "../redux/slices/contentSlice";
+import { Ingredient, Recipe, dietOptions } from "../redux/slices/contentSlice";
 
 
 // Register
@@ -27,7 +27,6 @@ export const registerUserDB = async (uid: string, username: string, email: strin
   // Get default picture for anonymous from cloud storage
   const storageRef = ref(FBstorage, 'user-profiles/anonymous-user.png');
   const defaultPic = await getDownloadURL(storageRef)
-  console.log("def ", defaultPic)
   // Declare userData type and values  
   const userData: {
     userID: string;
@@ -47,7 +46,6 @@ export const registerUserDB = async (uid: string, username: string, email: strin
   if (defaultPic != null) {
     userData.profilePicture = defaultPic;
     userData.profileBackground = defaultPic;
-    console.log("updated")
   }
   // Get users collection ref
   const usersCollectionRef = collection(FBstore, "users")
@@ -159,6 +157,75 @@ const pictureUploadHelper = async (ref: StorageReference, blob: Blob, callback: 
 // SEND RECIPE
 // SEND RECIPE
 // SEND RECIPE
-export const uploadRecipe = async (recipe:Recipe) => {
-  return
+export const uploadRecipe = async (uid: string, recipe:Recipe) => {
+  const cleanedRecipe = cleanRecipe(recipe);
+  // CREATE RECIPE REFERENCE
+  const recipeResponse = await recipeUploader(cleanedRecipe, uid);
+  if (recipeResponse.error) {
+    console.log("Error")
+    return recipeResponse
+  }
+  // GET USER REFERENCE AFTER recipe and add to users recipes
+  const userRecipeResponse = await updateUserRecipes(uid, recipeResponse);
+
+  // UPLOAD IMAGES
+  const storageRef = ref(FBstorage, 'recipe-id/imageID[index].png') // <<< RECIPE-ID
+  // RETURN RESPOMNSE
+  const response = userRecipeResponse;
+  return response
+}
+
+
+// HELPERS RECIPE
+// HELPERS RECIPE
+// HELPERS RECIPE
+const recipeUploader = async (recipe:Recipe, uid:string) => {
+  const recipesRef = collection(FBstore, "recipes");
+  try {
+    const docResponse = await addDoc(recipesRef, recipe);
+    const recipeID = docResponse.id;
+
+    const updateRef = doc(recipesRef, recipeID);
+    await setDoc(updateRef, {
+      recipeID: recipeID,
+      likes: 0,
+      userID: uid,
+    }, {merge: true})
+
+    return recipeID;
+
+  } catch (e: any) {
+    console.error(e);
+    return e;
+  }
+}
+
+const updateUserRecipes = async (uid:string, recipeID:string) => {
+  const usersCollectionRef = doc(FBstore, "users", uid);
+  try {
+    const userDocSnapshot = await updateDoc(usersCollectionRef, {
+      userRecipes: arrayUnion(recipeID)
+    });
+    console.log(userDocSnapshot);
+  } catch (e:any) {
+    console.error(e);
+    return e
+  }
+  return null
+}
+
+
+const cleanRecipe = (recipe:Recipe) => {
+  // const filteredIngredients: Ingredient
+  const filteredRecipe: Recipe = {
+    ...recipe,
+    ingredients: recipe.ingredients.slice(1).filter(
+      (ingredient) => ingredient.quantity != 0
+    ),
+    extra: Object.fromEntries(
+      Object.entries(recipe.extra).filter(([key,value])=> value.selected)
+    ),
+    instructions: recipe.instructions.slice(1)
+  }
+  return filteredRecipe;
 }

@@ -118,6 +118,10 @@ export default function addDetailsScreen() {
   });
 
   const handleSubmitDetails = () => {
+    if (ingredientList.length <= 1) {
+      alert("Add ingredient first");
+      return
+    }
     dispatch(setIngredients(ingredientList));
     router.replace('/(content)/(add)/');
   }
