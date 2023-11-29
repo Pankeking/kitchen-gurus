@@ -95,32 +95,6 @@
       - Ads
   
   - Content Screen (WIP OCT 30)  
-    - Bottom Tab & Profile ---> Route (DONE 3 NOV)
-    - Index Screen (WIP 1 NOV)
-      - Alignment & Display (DONE 4 NOV)
-      - Re-usable CheckList Component (DONE 4 NOV)
-      - Add Name (DONE 4 NOV)
-      - Add Photo (WIP 5 NOV -> DONE 17 NOV)
-        - Photo Previewer (WIP 6 NOV -> DONE 17 NOV)
-        - Camera Component/Screen (DONE 17 NOV)
-      - Add Instructions (WIP 18 NOV -> DONE 22 NOV)
-        - Instructions Layout (DONE 18 NOV)
-        - Step Layout (DONE 18 NOV)
-        - Step-Title (DONE 18 NOV)
-        - Step-Text (DONE 18 NOV)
-        - Numerated Steps? with Max? (DONE 19 NOV)
-        - Update/Dispatch + Auto-Display (DONE 19 NOV)
-      - Add Ingredients (WIP 22 NOV -> DONE 27 NOV)
-        - Align & Display (DONE 27 NOV)
-        - Add Ingredients Format (DONE 22 NOV)
-        - Flatlist Display Ingredients (DONE 23 NOV)
-        - New Ingredient (WIP 23 NOV -> DONE 27 NOV)
-        - Save in Store (DONE 27 NOV)
-      - Add Extras (DONE NOV 28)
-        - Align Display
-        - Chips of selection (DONE 28 NOV)
-        - List (DONE 28 NOV)
-        - Send To Store (DONE NOV 28)
     - Edit
     - Share
       - Structure the recipe as JSON/Firebase Format
@@ -144,6 +118,32 @@
     - Settings functionality
 
 ## Work Done (DATE)
+
+- Bottom Tab & Profile ---> Route ----> (done 3 NOV)
+- Index Screen (wip 1 nov ->>> done 28 NOV)
+  - Alignment & Display
+  - Re-usable CheckList Component
+  - Add Name
+  - Add Photo (wip 5 nov ----> done 17 NOV)
+    - Photo Previewer (wip 6 nov ----> done 17 NOV)
+    - Camera Component/Screen
+  - Add Instructions (wip 18 nov ----> done 22 NOV)
+    - Instructions Layout
+    - Step Layout
+    - Step-Title
+    - Step-Text
+    - Update/Dispatch + Auto-Display
+  - Add Ingredients (wip 22 nov ----> done 27 NOV)
+    - Align & Display
+    - Add Ingredients Format
+    - Flatlist Display Ingredients
+    - New Ingredient
+    - Save in Store
+  - Add Extras ----> (done NOV 28)
+    - Align Display
+    - Chips of selection
+    - List
+    - Send To Store
 
 - VACATIONS (NOV 8 - NOV 16)
 
