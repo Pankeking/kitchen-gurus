@@ -195,11 +195,6 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
   await updateDoc(usersCollectionRef, {
     userRecipes: arrayUnion(recipeID)
   })
-  
-  // 
-  // GET USER REFERENCE AFTER recipe and add to users recipes
-
-  // UPLOAD IMAGES
   return recipeID;
 }
 

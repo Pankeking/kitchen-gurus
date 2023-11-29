@@ -89,8 +89,8 @@ export default function AddContentScreen() {
     }
     alert("Uploading on progress");
     // dispatch(nullifyRecipe())
-    const response = uploadRecipe(userId,recipe);
-    if (response == null) {
+    const recipeID = uploadRecipe(userId,recipe);
+    if (recipeID == null) {
       alert("Recipe Upload Failed, try again");
       return
     }
