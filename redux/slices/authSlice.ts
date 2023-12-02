@@ -32,6 +32,14 @@ const authSlice = createSlice({
     setInitialized: (state, action) => {
       state.initialized = action.payload;
     },
+    nullifyUser: (state) => {
+      if (state.user) {
+        state.user.uid = "";
+        state.user.displayName = "";
+        state.user.profilePhoto = "";
+        state.user.backgroundPhoto = "";
+      }
+    }
   },
 });
 
@@ -41,7 +49,7 @@ export const selectUser = (state:AuthState) => state.user;
 export const selectUserId = (state:AuthState) => state.user?.uid;
 
 
-export const { setUser, setInitialized } = authSlice.actions;
+export const { setUser, setInitialized, nullifyUser } = authSlice.actions;
 
 
 // const unsub = onAuthStateChanged(FBauth, (user) => {

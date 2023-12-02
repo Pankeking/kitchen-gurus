@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
-import { addDoc, arrayUnion, collection, doc, getDoc, setDoc, updateDoc, writeBatch } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc, writeBatch } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { Ingredient, Photo, Recipe, dietOptions } from "../redux/slices/contentSlice";
 
@@ -217,4 +217,89 @@ const cleanRecipe = (recipe:Recipe) => {
     instructions: recipe.instructions.slice(1)
   }
   return filteredRecipe;
+}
+
+// HELPER FETCHING RECIPES <<< HOME
+// HELPER FETCHING RECIPES <<< HOME
+// HELPER FETCHING RECIPES <<< HOME
+export const fetchRecipes = async () => {
+  try {
+      const recipesQuerySnap = await getDocs(collection(FBstore, "recipes"))
+      let Recipes = [{
+        uid: "",
+        recipeName: "",
+        likes: 0,
+        username: "",
+        profilePic: "",
+        photo: [""],
+      }]
+      recipesQuerySnap.forEach(async (docu) => {
+        const uid = docu.data().userID;
+        const recipeName = docu.data().name;
+        const likes = docu.data().likes;  
+        // const mainPhoto = docu.data().photosRef;  DEVELOPMENT <<<<
+        const mainPhoto = ["https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.plannthat.com%2Fwp-content%2Fuploads%2F2018%2F07%2F25-Stock-Photo-Sites.jpeg&f=1&nofb=1&ipt=825acb3b9caa343c74ee234ab2826dcee6ee660dc52eabcc222524d44cec8d2b&ipo=images","https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.ikozmik.com%2FContent%2FImages%2Fuploaded%2Fits-free-featured.jpg&f=1&nofb=1&ipt=0b3505ecb8a4dab33ec69e8656cb8e83c25dc0b7d9da9aeded5d1d058446feb6&ipo=images"]
+        const userRef = doc(FBstore, "users", uid);
+        const docSnap = await getDoc(userRef);
+        if (docSnap.exists()) {
+          const username = docSnap.data().username;
+          // const profilePic = docSnap.data().profilePicture; << DEVELOPMENT
+          const profilePic = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.imgur.com%2F4pigoji.jpg&f=1&nofb=1&ipt=0ca9831f18d43132974d0574f6931d9810136cdf5c615d1c025bd23bb2654cbe&ipo=images"
+          const recipes = {
+            uid:uid,
+            recipeName: recipeName,
+            likes: likes,
+            username: username,
+            profilePic: profilePic,
+            photo: mainPhoto
+          }
+          Recipes.push(recipes)
+        }
+        
+      })
+      return Recipes.length > 1 ? Recipes.slice(1) : Recipes;
+  } catch (e) {
+      console.error(e)
+      return [{
+        uid: "",
+        recipeName: "",
+        likes: 0,
+        username: "",
+        profilePic: "",
+        photo: [""],
+      }]
+  }
+}
+
+// HELPER FETCHING FRIENDS <<< HOME
+
+export const fetchFriends = async (uid: string) => {
+  try {
+      const userFollowingSnap = await getDocs(collection(FBstore, "users", uid, "following"))
+      let users = [{
+        uid: "",
+        username: "",
+        pic: "",
+      }]
+      userFollowingSnap.forEach(async (docu) => {
+        const uid = docu.data().userID;
+        const username = docu.data().username;
+        const pic = docu.data().picture;
+        const user = {
+          uid: uid,
+          username: username,
+          pic: pic,
+        }
+        users.push(user)
+      })
+      users = users.slice(1)
+      return [...users, ...users,...users,...users];
+  } catch (e) {
+      console.error(e)
+      return [{
+        uid: "",
+        username: "",
+        pic: "",
+      }]
+  }
 }

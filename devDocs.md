@@ -70,22 +70,27 @@
 ## TODO
 
 - Delete user functionality
-- Password security regEx
+- [IMPORTANT] Password security regEx
 - Email Confirmation
 - Email Link
 - Email template
 - On boarding tunnel
 - Delete Image, Limit 10 Photos -> Content-Add Photo Screen/
-- Re-work Login/Register Screens -> [Example Template](https://reactnativeexample.com/react-native-starter-kit-with-firebase-auth-and-facebook-login/)
+- [IMPORTANT] Re-work Login/Register Screens -> [Example Template](https://reactnativeexample.com/react-native-starter-kit-with-firebase-auth-and-facebook-login/)
+- [IMPORTANT] Re-vamp Recipe creation to add Username and ProfilePhoto during creation, not adding while fetching
 
 ## Current working tree - files (DATE)
 
 - Home Screen (WIP Nov 30)
   - Recipe display
-    - Main Photo
-    - Creator username
+    - Main Photo (done 1 DEC)
+    - Creator username (done 1 DEC)
     - Touchable Photo ----->> to Recipe Screen
     - Recipe Name
+  - Stories Display
+    - Profile Circle (done 1 DEC)
+    - Profile Name (WIP 1 DEC)
+    - Link to Profile (WIP 2 DEC)
 
 - Profile Screen (WIP OCT 23)
   - Components (Social Media, Followers, Likes, Recipes)
@@ -175,6 +180,7 @@
 
 - expo-image-picker
 - expo-linear-gradient
+- FlashList-Shopify
 
 ## Dev Notes
 

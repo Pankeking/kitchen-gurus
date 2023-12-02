@@ -58,6 +58,7 @@ export default function AddContentScreen() {
     if (!isPhoto) {
       alert('First Add a Photo')
       router.push('/(content)/(add)/addPhotoName')
+      return;
     }
     router.push(route)
   }
@@ -66,6 +67,7 @@ export default function AddContentScreen() {
     if (!isPhoto) {
       alert('First Add a Photo')
       router.push('/(content)/(add)/addPhotoName')
+      return
     }
     if (!isName) {
       alert("Name your recipe")
@@ -73,14 +75,17 @@ export default function AddContentScreen() {
     if (!isInstructions) {
       alert("Add Instructions")
       router.push('/(content)/(add)/addInstructions')
+      return
     }
     if (!isIngredients) {
       alert("Add Ingredients")
       router.push('/(content)/(add)/addIngredients')
+      return
     }
     if (!isExtra) {
       alert("Add Extra details")
       router.push('/(content)/(add)/addExtra')
+      return
     }
     const userId = FBauth.currentUser?.uid;
     if (!userId) {

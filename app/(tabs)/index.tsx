@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet } from 'react-native';
+import { Alert, FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 
 import { router } from 'expo-router';
 
@@ -6,27 +6,25 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/slices/authSlice';
 
 import { signOut } from 'firebase/auth';
-import { FBauth, FBstore } from '../../firebase-config';
+import { FBauth} from '../../firebase-config';
 
-import { View, Text } from '../../components/themedCustom';
-import { useSelector } from 'react-redux';
-import { DocumentData, collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import WideButton from '../../components/WideButton';
-import { useState } from 'react';
-import { Image } from '@rneui/base';
+import { View, Text, CustomIcon } from '../../components/themedCustom';
+import { useEffect,useState } from 'react';
+import { Image } from '@rneui/themed';
+import StoryProfile from '../../components/Home/StoryProfiles';
+import { fetchFriends, fetchRecipes } from '../../utils/firebaseUtils';
+
 
 export default function HomeScreen() {
 
   const dispatch = useDispatch();
-  const storeRecipeID = useSelector((state:any) => state.content.recipeID)
+  const ICON_SIZE = 26;
 
-  type RecipsType = {
-    uid: string;
-    recipeName: string;
-    likes: number,
-    username: string,
-    profilePic: string,
-    // photo: ""
+  const deviceWidth = useWindowDimensions().width;
+  const resizedWidth = deviceWidth * 1;
+  const containerDimensions = {
+    width: resizedWidth,
+    height: resizedWidth
   }
 
   const [Recipes, setRecipes] = useState([{
@@ -35,43 +33,33 @@ export default function HomeScreen() {
     likes: 0,
     username: "",
     profilePic: "",
+    photo: [""],
   }])
 
-  const fetchRecipes = async () => {
-    const recipesQuerySnap = await getDocs(collection(FBstore, "recipes"))
-    let Starting = [{
-      uid: "",
-      recipeName: "",
-      likes: 0,
-      username: "",
-      profilePic: "",
-    }]
-    recipesQuerySnap.forEach(async (docu) => {
-      const uid = docu.data().userID;
-      const recipeName = docu.data().name;
-      const likes = docu.data().likes;
-      // const mainPhoto = docu.data().photos[0];
+  const [Users, setUsers] = useState([{
+    uid: "",
+    username: "",
+    pic: ""
+  }])
 
-      const userRef = doc(FBstore, "users", uid);
-      const docSnap = await getDoc(userRef);
-      if (docSnap.exists()) {
-        const username = docSnap.data().username;
-        const profilePic = docSnap.data().profilePicture;
-        const recipes = {
-          uid:uid,
-          recipeName: recipeName,
-          likes: likes,
-          username: username,
-          profilePic: profilePic,
-          // photo: mainPhoto
-        }
-        Starting.push(recipes)
-        // setRecipes(current => [...current,recipes])
-      }
-      
-    })
-    setRecipes(Starting)
+  useEffect(() => {
+    Start();
+  },[])
+
+  const Start = async () => {
+    
+    const uid = FBauth.currentUser?.uid;
+    if (uid) {
+      const users = await fetchFriends(uid);
+      setUsers(users)
+    } else {
+      router.replace('/(auth)/')
+    }
+
+    const recipes = await fetchRecipes();
+    setRecipes(recipes);
   }
+  
 
   const appSignOut = async () => {
     try {
@@ -82,6 +70,21 @@ export default function HomeScreen() {
       console.error(e);
       return { error: e };
     }
+  }
+
+  const RenderImg = (item: any) => {
+    return (
+      // <TouchableOpacity onPress={() => null}>
+        <Image 
+          style={[containerDimensions, {aspectRatio: 1}]} 
+          source={{uri: item.item}} 
+          resizeMode='cover'
+        />
+      // </TouchableOpacity>
+  )}
+
+  const goToRecipe = (recipeID: string) => {
+    console.log(`Transponded to ${recipeID}`)
   }
 
   const handleSignOut = async () => {
@@ -96,34 +99,78 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home Screen</Text>
+      <FlatList 
+        data={Users}
+        renderItem={({ item, index}) => (
+          <View style={styles.stories}>
+            <TouchableOpacity onPress={() => console.log(item.uid)}>
+              <StoryProfile picture={item.pic} />
+            </TouchableOpacity>
+            <Text style={{paddingTop: 3, fontFamily:"PlaypenSemiBold"}} >{item.username}</Text>
+          </View>
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
       
-      <View>
+      <View style={{
+        height: "80%",
+        }}
+      >
         <FlatList 
           data={Recipes}
           renderItem={({ item, index }) => (
             <View>
               {index != 0 && (
                 <>
-                <Text>{item.recipeName}</Text>
-                <Text>{item.likes}</Text>
-                <Text>{item.username}</Text>
-                <Image style={{width: 50,height: 50, borderRadius: 25}} source={{uri: `${item.profilePic}`}} />
+                <View style={styles.card}>
+                  <TouchableOpacity onPress={() => console.log(item.uid)}>
+                    <StoryProfile small picture={item.profilePic} />
+                  </TouchableOpacity>
+                  <View style={{paddingHorizontal: 7}}>
+                    <Text style={styles.recipe}>{item.recipeName}</Text>
+                    <Text style={styles.user}>{item.username}</Text>
+                  </View>
+                </View>
+                <FlatList 
+                  keyExtractor={(item, index) => index.toString()}
+                  data={item.photo}
+                  renderItem={({ item, index}) => (
+                    <RenderImg item={item} />
+                  )}
+                  pagingEnabled 
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                />
+                <View style={styles.icons}>
+                  <TouchableOpacity style={styles.iconButton} onPress={() => alert("like")}>
+                    <CustomIcon 
+                      name="cards-heart-outline"
+                      size={ICON_SIZE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.iconButton} onPress={() => alert("Comment")}>
+                    <CustomIcon 
+                      name="comment-outline"
+                      size={ICON_SIZE - 2}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.iconButton} onPress={() => alert("Share")}>
+                    <CustomIcon 
+                      name="share-all-outline"
+                      size={ICON_SIZE}
+                    />
+                  </TouchableOpacity>
+                  
+                </View>
+                <Text style={styles.likes}>{item.likes} likes</Text>
                 </>
               )
               }
-              {/* <Text>{item.photo}</Text> */}
             </View>
           )}
         />
-        
       </View>
-      <WideButton
-        iconName={"check-circle"}
-        title="recipe"
-        onPress={fetchRecipes}
-      />
-      
     </View>
   );
 }
@@ -131,10 +178,44 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
+    paddingTop: 11,
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 40,
+  stories: {
+    justifyContent:"center",
+    alignItems :"center",
+    marginHorizontal: 7,
+    paddingBottom: 3,
   },
+  card: {
+    flexDirection: "row",
+    alignItems:"center",
+    paddingHorizontal: 7,
+    marginVertical: 7,
+  },
+  recipe: {
+    fontFamily: "PlaypenBold",
+    fontSize: 18
+  },
+  user: {
+    fontFamily: "PlaypenRegular",
+    fontSize: 12,
+  },
+  icons: {
+    marginVertical: 7,
+    marginLeft: 5,
+    flexDirection: "row",
+  },
+  iconButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 9,
+  },
+  likes: {
+    marginLeft: 15,
+    marginTop: 7,
+    marginBottom: 15,
+    fontSize: 18, 
+    fontFamily:"PlaypenMedium"
+  }
 });

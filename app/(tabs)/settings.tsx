@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../redux/slices/authSlice';
+import { nullifyUser, setUser } from '../../redux/slices/authSlice';
 
 import { signOut } from 'firebase/auth';
 import { FBauth } from '../../firebase-config';
@@ -20,8 +20,8 @@ export default function SettingsScreen() {
   const appSignOut = async () => {
     try {
       await signOut(FBauth);
-      dispatch(setUser(null));
-      return { user: null};
+      dispatch(nullifyUser());
+      return null;
     } catch (e) {
       console.error(e);
       return { error: e };
@@ -29,10 +29,9 @@ export default function SettingsScreen() {
   }
 
   const handleSignOut = async () => {
-      const resp = await appSignOut();
-      if (!resp?.error) {
-        dispatch(setUser(null));
-        router.replace('/(auth)')
+    const resp = await appSignOut();
+    if (!resp?.error) {
+      router.replace('/(auth)')
     } else {
       console.error(resp.error)
     }
