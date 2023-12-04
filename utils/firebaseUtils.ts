@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, setDoc, updateDoc, writeBatch } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, increment, setDoc, updateDoc, writeBatch } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { Ingredient, Photo, Recipe, dietOptions } from "../redux/slices/contentSlice";
 
@@ -169,10 +169,20 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
   await setDoc(updateRef, {
     recipeID: recipeID,
     likes: 0,
-    userID: uid
+    userID: uid,
+    username: FBauth?.currentUser?.displayName
   }, {merge: true})
   
-  const photosArray:Photo[] = cleanedRecipe.photo;
+  const photosArray:Photo[] = recipe.photo;
+  // Add to user -> userRecipes collection (firebase de-normalization)
+  const userRecipesCollection = collection(FBstore, "users", uid, "userRecipes");
+  const userRecipesDoc = doc(userRecipesCollection, recipeID);
+  const userRecipeData = {
+    recipeName: cleanedRecipe.name,
+    recipeID: recipeID,
+    vegan: cleanedRecipe.extra.hasOwnProperty("Vegan") && cleanedRecipe.extra["Vegan"].selected
+  }
+  await setDoc(userRecipesDoc, userRecipeData)
   
   // Upload every picture to FB storage
   for (let i = 0; i < photosArray.length; i++) {
@@ -183,18 +193,20 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
       if (!downloadURL) {
         console.error("Error uploading image");
         alert("Photo upload failed");
+        return
+      }
+      if (i == 0) {
+        await updateDoc(userRecipesDoc, {
+          mainPhoto: downloadURL
+        })
       }
       // Update on the spot the Recipe.Photos array
       await updateDoc(doc(FBstore, "recipes", recipeID), {
-        photosRef: arrayUnion(downloadURL)
+        photo: arrayUnion(downloadURL)
       })
     });
   }
-  
-  const usersCollectionRef = doc(FBstore, "users", uid);
-  await updateDoc(usersCollectionRef, {
-    userRecipes: arrayUnion(recipeID)
-  })
+ 
   return recipeID;
 }
 
@@ -214,7 +226,8 @@ const cleanRecipe = (recipe:Recipe) => {
     extra: Object.fromEntries(
       Object.entries(recipe.extra).filter(([key,value])=> value.selected)
     ),
-    instructions: recipe.instructions.slice(1)
+    instructions: recipe.instructions.slice(1),
+    photo: []
   }
   return filteredRecipe;
 }
@@ -222,36 +235,55 @@ const cleanRecipe = (recipe:Recipe) => {
 // HELPER FETCHING RECIPES <<< HOME
 // HELPER FETCHING RECIPES <<< HOME
 // HELPER FETCHING RECIPES <<< HOME
-export const fetchRecipes = async () => {
+export const fetchRecipes = async (currentUser:string) => {
   try {
       const recipesQuerySnap = await getDocs(collection(FBstore, "recipes"))
       let Recipes = [{
         uid: "",
         recipeName: "",
+        recipeID: "",
         likes: 0,
         username: "",
         profilePic: "",
         photo: [""],
+        liked: false,
       }]
       recipesQuerySnap.forEach(async (docu) => {
         const uid = docu.data().userID;
         const recipeName = docu.data().name;
         const likes = docu.data().likes;  
-        // const mainPhoto = docu.data().photosRef;  DEVELOPMENT <<<<
+        const recipeID = docu.data().recipeID;
+        // DEV
+        // const mainPhoto = docu.data().photo;
         const mainPhoto = ["https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.plannthat.com%2Fwp-content%2Fuploads%2F2018%2F07%2F25-Stock-Photo-Sites.jpeg&f=1&nofb=1&ipt=825acb3b9caa343c74ee234ab2826dcee6ee660dc52eabcc222524d44cec8d2b&ipo=images","https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.ikozmik.com%2FContent%2FImages%2Fuploaded%2Fits-free-featured.jpg&f=1&nofb=1&ipt=0b3505ecb8a4dab33ec69e8656cb8e83c25dc0b7d9da9aeded5d1d058446feb6&ipo=images"]
+        // DEV
         const userRef = doc(FBstore, "users", uid);
         const docSnap = await getDoc(userRef);
+
+        let likedBy = false;
+        const likedByRef = collection(FBstore, "recipes", recipeID, "likedBy");
+        const likedSnap = await getDoc(doc(likedByRef, currentUser));
+        if (!likedSnap.exists()) {
+          likedBy = false;
+        } else {
+          likedBy = likedSnap.data().liked;
+        }
+
         if (docSnap.exists()) {
           const username = docSnap.data().username;
-          // const profilePic = docSnap.data().profilePicture; << DEVELOPMENT
+          // DEV <<<
+          // const profilePic = docSnap.data().profilePicture; 
           const profilePic = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.imgur.com%2F4pigoji.jpg&f=1&nofb=1&ipt=0ca9831f18d43132974d0574f6931d9810136cdf5c615d1c025bd23bb2654cbe&ipo=images"
+          // DEV <<<
           const recipes = {
             uid:uid,
             recipeName: recipeName,
+            recipeID: recipeID,
             likes: likes,
             username: username,
             profilePic: profilePic,
-            photo: mainPhoto
+            photo: mainPhoto,
+            liked: likedBy
           }
           Recipes.push(recipes)
         }
@@ -263,10 +295,12 @@ export const fetchRecipes = async () => {
       return [{
         uid: "",
         recipeName: "",
+        recipeID: "",
         likes: 0,
         username: "",
         profilePic: "",
         photo: [""],
+        liked: false,
       }]
   }
 }
@@ -303,3 +337,44 @@ export const fetchFriends = async (uid: string) => {
       }]
   }
 }
+
+export const likeRecipe = async (uid: string, recipeID: string, username: string) => {
+  // This could use a Shard/distributed counter || FIREBASE
+  // return 0 = false
+  // return 1 = true
+  // return -1 = error
+  try {
+    const likesDoc = doc(FBstore, "recipes", recipeID);
+    const likedByRef = collection(FBstore, "recipes", recipeID, "likedBy")
+    const likedByDoc = doc(likedByRef, uid);
+    const docuSnap = await getDoc(likedByDoc);
+    // Set liked by user and default to true
+    if (!docuSnap.exists()) {
+      const userLikeData = {
+        liked: true,
+        uid: uid,
+        username: username
+      }
+      await setDoc(likedByDoc, userLikeData)
+      // Add 1 like to counter
+      await updateDoc(likesDoc, {
+        likes: increment(1)
+      })
+      return 1;
+    }
+    const likeStatus:boolean = docuSnap.data().liked;
+    await setDoc(likedByDoc, {
+      liked: !likeStatus
+    }, {merge: true})
+    // Add or remove 1 like to counter
+    await updateDoc(likesDoc, {
+      likes: increment(!likeStatus ? 1 : -1)
+    })
+    return !likeStatus ? 1 : 0;
+    
+  } catch (e) {
+    console.error(e);
+    return -1;
+  }
+}
+

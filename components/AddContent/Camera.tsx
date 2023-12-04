@@ -3,15 +3,12 @@ import { CustomIcon, Text, View } from "../themedCustom";
 import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera'
 import { useEffect, useRef, useState } from "react";
 import { router } from "expo-router";
-import { useDispatch } from "react-redux";
 import PhotoEditor from "./PhotoEditor";
 import { useTheme } from "@rneui/themed";
 
 export default function CameraComp(props: {
   
 }) {
-  // console.log("from Camera.tsx/camera comp router back")
-  // router.replace('/(content)/(add)/addPhotoName');
   const themeColors = useTheme().theme.colors;
   const ICON_SIZE = 22;
   const [isEditing, setEditing] = useState(false);

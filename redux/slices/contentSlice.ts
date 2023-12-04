@@ -53,26 +53,27 @@ const initialState: ContentState = {
     }],
     ingredients: [],
     extra: {
-      "Dairy-Free": { label: "Dairy-Free", selected: false },
-      "Nut-Free": { label: "Nut-Free", selected: false },
-      "Low-Carb": { label: "Low-Carb", selected: false },
-      "High-Protein": { label: "High-Protein", selected: false },
-      "Paleo": { label: "Paleo", selected: false },
-      "Keto-Friendly": { label: "Keto-Friendly", selected: false },
-      "Organic": { label: "Organic", selected: false },
-      "Non-GMO": { label: "Non-GMO", selected: false },
-      "Low-Fat": { label: "Low-Fat", selected: false },
-      "Whole30": { label: "Whole30", selected: false },
-      "Soy-Free": { label: "Soy-Free", selected: false },
-      "Egg-Free": { label: "Egg-Free", selected: false },
-      "Pescatarian": { label: "Pescatarian", selected: false },
-      "Low-Sodium": { label: "Low-Sodium", selected: false },
-      "Heart-Healthy": { label: "Heart-Healthy", selected: false },
-      "Allergen-Free": { label: "Allergen-Free", selected: false },
       "Vegetarian": { label: "Vegetarian", selected: false },
       "Vegan": { label: "Vegan", selected: false },
       "Gluten-Free": { label: "Gluten-Free", selected: false },
       "Sugar-Free": { label: "Sugar-Free", selected: false },
+      "Dairy-Free": { label: "Dairy-Free", selected: false },
+      "High-Protein": { label: "High-Protein", selected: false },
+      "Organic": { label: "Organic", selected: false },
+      "Egg-Free": { label: "Egg-Free", selected: false },
+      "Low-Sodium": { label: "Low-Sodium", selected: false },
+      "Low-Carb": { label: "Low-Carb", selected: false },
+      "Nut-Free": { label: "Nut-Free", selected: false },
+      "Paleo": { label: "Paleo", selected: false },
+      "Keto-Friendly": { label: "Keto-Friendly", selected: false },
+      "Non-GMO": { label: "Non-GMO", selected: false },
+      "Low-Fat": { label: "Low-Fat", selected: false },
+      "Whole30": { label: "Whole30", selected: false },
+      "Soy-Free": { label: "Soy-Free", selected: false },
+      "Pescatarian": { label: "Pescatarian", selected: false },
+      "Heart-Healthy": { label: "Heart-Healthy", selected: false },
+      "Allergen-Free": { label: "Allergen-Free", selected: false },
+      
     },
   },
   photoCounter: 0,
@@ -131,8 +132,9 @@ const contentSlice = createSlice({
         }],
         photo: [],
         ingredients: [],
-        extra: {},
+        extra: toggleExtra(state.recipe.extra, false),
       }
+      
       state.photoCounter   = 0;
       state.isName         = false;
       state.isPhoto        = false;
@@ -142,6 +144,19 @@ const contentSlice = createSlice({
     }
   },
 });
+
+const toggleExtra = (extra: dietOptions, trueness:boolean) => {
+  const updatedExtra = {...extra};
+  for (const key in updatedExtra) {
+    if (updatedExtra.hasOwnProperty(key)) {
+      updatedExtra[key] = {
+        ...updatedExtra[key],
+        selected: trueness
+      }
+    }
+  }
+  return updatedExtra
+}
 
 export const selectRecipe = (state: ContentState) => state.recipe;
 

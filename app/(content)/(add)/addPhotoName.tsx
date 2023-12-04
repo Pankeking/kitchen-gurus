@@ -35,6 +35,7 @@ export default function addPhotoNameScreen() {
   const handleImagePick = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         quality: 1,
       })

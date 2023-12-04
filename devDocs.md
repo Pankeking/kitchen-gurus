@@ -83,14 +83,15 @@
 
 - Home Screen (WIP Nov 30)
   - Recipe display
+    - Touchable Photo ----->> to Recipe Screen (wip 1 DEC)
     - Main Photo (done 1 DEC)
     - Creator username (done 1 DEC)
-    - Touchable Photo ----->> to Recipe Screen
-    - Recipe Name
+    - Recipe Name (done 4 DEC)
+    - Likable (done 4 DEC)
   - Stories Display
     - Profile Circle (done 1 DEC)
-    - Profile Name (WIP 1 DEC)
-    - Link to Profile (WIP 2 DEC)
+    - Profile Name (done 4 DEC)
+    - Touchable Profile-Photo ----->> to Profile Screen (WIP 2 DEC)
 
 - Profile Screen (WIP OCT 23)
   - Components (Social Media, Followers, Likes, Recipes)

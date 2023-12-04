@@ -1,4 +1,4 @@
-import { Alert, FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 
 import { router } from 'expo-router';
 
@@ -10,15 +10,18 @@ import { FBauth} from '../../firebase-config';
 
 import { View, Text, CustomIcon } from '../../components/themedCustom';
 import { useEffect,useState } from 'react';
-import { Image } from '@rneui/themed';
+import { Image, useTheme } from '@rneui/themed';
 import StoryProfile from '../../components/Home/StoryProfiles';
-import { fetchFriends, fetchRecipes } from '../../utils/firebaseUtils';
+import { fetchFriends, fetchRecipes, likeRecipe } from '../../utils/firebaseUtils';
 
 
 export default function HomeScreen() {
 
   const dispatch = useDispatch();
   const ICON_SIZE = 26;
+  const themeColors = useTheme().theme.colors;
+
+  const [render, reRender] = useState(2);
 
   const deviceWidth = useWindowDimensions().width;
   const resizedWidth = deviceWidth * 1;
@@ -30,10 +33,12 @@ export default function HomeScreen() {
   const [Recipes, setRecipes] = useState([{
     uid: "",
     recipeName: "",
+    recipeID: "",
     likes: 0,
     username: "",
     profilePic: "",
     photo: [""],
+    liked: false
   }])
 
   const [Users, setUsers] = useState([{
@@ -42,23 +47,27 @@ export default function HomeScreen() {
     pic: ""
   }])
 
+
   useEffect(() => {
+    const Start = async () => {
+      try {
+        const currentUser = FBauth.currentUser?.uid;
+        if (currentUser) {
+          const users = await fetchFriends(currentUser);
+          setUsers(users)
+        } else {
+          router.replace('/(auth)/')
+          return
+        }
+        const recipes = await fetchRecipes(currentUser);
+        setRecipes(recipes);
+      } catch (e) {
+        console.error(e)
+      }
+    }
     Start();
   },[])
 
-  const Start = async () => {
-    
-    const uid = FBauth.currentUser?.uid;
-    if (uid) {
-      const users = await fetchFriends(uid);
-      setUsers(users)
-    } else {
-      router.replace('/(auth)/')
-    }
-
-    const recipes = await fetchRecipes();
-    setRecipes(recipes);
-  }
   
 
   const appSignOut = async () => {
@@ -95,6 +104,45 @@ export default function HomeScreen() {
     } else {
       console.error(resp.error)
     }
+  }
+
+  const handleLike = async (recipeID:string) => {
+    const user = FBauth?.currentUser;
+    const username = user?.displayName;
+    if (!user || !username) {
+      alert("You must login first");
+      router.replace('/(auth)/')
+      return
+    }
+    const likeResp = await likeRecipe(user.uid, recipeID, username)
+    const updated = await fetchRecipes(user.uid)
+    setRecipes((currentRecipes) => {
+      return currentRecipes.map((recipe) => {
+        if (recipe.recipeID == recipeID) {
+          const newLike = likeResp === 1 ? 1 : -1;
+          return {...recipe, 
+            liked: likeResp === 1 ? true : false, 
+            likes: recipe.likes + newLike}
+        }
+        return recipe;
+      })
+    });
+    console.log(likeResp)
+  }
+
+  const HeartIcon = (props: {
+    liked: boolean;
+  }) => {
+    const name = props.liked ? "cards-heart" : "cards-heart-outline";
+    const size = props.liked ? ICON_SIZE + 4 : ICON_SIZE;
+    const color = props.liked ? "red" : themeColors.secondary;
+    return (
+      <CustomIcon 
+        name={name}
+        size={size}
+        color={color}
+      />
+    )
   }
 
   return (
@@ -143,11 +191,10 @@ export default function HomeScreen() {
                   showsHorizontalScrollIndicator={false}
                 />
                 <View style={styles.icons}>
-                  <TouchableOpacity style={styles.iconButton} onPress={() => alert("like")}>
-                    <CustomIcon 
-                      name="cards-heart-outline"
-                      size={ICON_SIZE}
-                    />
+                  <TouchableOpacity style={styles.iconButton} onPress={() => handleLike(item.recipeID)}>
+                   
+                    <HeartIcon liked={item.liked} />
+
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.iconButton} onPress={() => alert("Comment")}>
                     <CustomIcon 
