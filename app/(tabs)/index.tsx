@@ -178,7 +178,9 @@ export default function HomeScreen() {
                       <StoryProfile small picture={item.profilePic} />
                     </TouchableOpacity>
                     <View style={{paddingHorizontal: 7}}>
-                      <Text style={styles.recipe}>{item.recipeName}</Text>
+                      <TouchableOpacity onPress={() => router.push(`/(content)/(view)/${item.recipeName}?recipeID=${item.recipeID}`)}>
+                        <Text style={styles.recipe}>{item.recipeName}</Text>
+                      </TouchableOpacity>
                       <Text style={styles.user}>{item.username}</Text>
                     </View>
                   </View>

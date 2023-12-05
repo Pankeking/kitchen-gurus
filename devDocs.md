@@ -82,8 +82,8 @@
 ## Current working tree - files (DATE)
 
 - Home Screen (WIP Nov 30)
-  - Recipe display
-    - Touchable Photo ----->> to Recipe Screen (wip 1 DEC)
+  - Recipe display (done 5 DEC)
+    - Touchable Photo ----->> to Recipe Screen (done 5 DEC)
     - Main Photo (done 1 DEC)
     - Creator username (done 1 DEC)
     - Recipe Name (done 4 DEC)
