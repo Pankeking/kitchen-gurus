@@ -235,7 +235,7 @@ const cleanRecipe = (recipe:Recipe) => {
 // HELPER FETCHING RECIPES <<< HOME
 // HELPER FETCHING RECIPES <<< HOME
 // HELPER FETCHING RECIPES <<< HOME
-export const fetchRecipes = async (currentUser:string) => {
+export const fetchAllRecipes = async (currentUser:string) => {
   try {
       const recipesQuerySnap = await getDocs(collection(FBstore, "recipes"))
       let Recipes = [{
@@ -378,3 +378,63 @@ export const likeRecipe = async (uid: string, recipeID: string, username: string
   }
 }
 
+export const queryUserRecipes = async (queryUserID: string) => {
+  try {
+    const userQSnap = await getDocs(collection(FBstore, "users", queryUserID, "userRecipes"));
+    let minimizedRecipes = [{
+      mainPhoto: "",
+      recipeID: "",
+      recipeName: "",
+      vegan: false,
+    }]
+    userQSnap.forEach((docu) => {
+      // DEV PHOTO -- NO API USAGE
+      // const mainPhoto = docu.data().mainPhoto;
+      const mainPhoto = "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.ikozmik.com%2FContent%2FImages%2Fuploaded%2Fits-free-featured.jpg&f=1&nofb=1&ipt=0b3505ecb8a4dab33ec69e8656cb8e83c25dc0b7d9da9aeded5d1d058446feb6&ipo=images"
+      // DEV PHOTO -- NO API USAGE
+      
+      const recipeName = docu.data().recipeName;
+      const recipeID = docu.data().recipeID;
+      const vegan = docu.data().vegan;
+      const minRecipe = {
+        recipeName: recipeName,
+        recipeID: recipeID,
+        vegan: vegan,
+        mainPhoto: mainPhoto,
+      }
+      minimizedRecipes.push(minRecipe)
+    })
+    return minimizedRecipes.slice(1);
+
+  } catch (e) {
+    console.error(e)
+    return;
+  }
+}
+
+
+export const fetchRecipeById = async (queryId: string) => {
+  try {
+    const docRef = doc(FBstore, "recipes", queryId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) {
+      return null
+    }
+    const { recipeID, userID, username, photo, name, likes, ingredients, instructions, extra, 
+    }  = docSnap.data();
+    return {
+      recipeID: recipeID,
+      userID: userID,
+      username: username,
+      photo: photo,
+      name: name,
+      likes: likes,
+      ingredients: ingredients,
+      instructions: instructions,
+      extra: extra,
+    }
+  } catch (e) {
+    console.error(e)
+    return null
+  }
+}

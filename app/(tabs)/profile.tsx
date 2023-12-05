@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { CustomIcon, Text, View } from '../../components/themedCustom';
 import { useTheme } from '@rneui/themed';
@@ -9,13 +9,13 @@ import { launchImageLibraryAsync } from 'expo-image-picker';
 import ProfilePicViewer from '../../components/Profile/ProfilePicViewer';
 import ProfileCard from '../../components/Profile/ProfileCard';
 
-import { updateProfile } from 'firebase/auth';
 import { FBauth} from '../../firebase-config';
 import { LinearGradient } from 'expo-linear-gradient';
-import { updateProfileBackground, updateProfilePicture } from '../../utils/firebaseUtils';
+import { queryUserRecipes, updateProfileBackground, updateProfilePicture } from '../../utils/firebaseUtils';
 import { router } from 'expo-router';
 import { useSelector } from 'react-redux';
 import WideButton from '../../components/WideButton';
+import MiniRecipe from '../../components/Profile/MiniRecipe';
 
 
 export default function ProfileScreen() {
@@ -27,6 +27,37 @@ export default function ProfileScreen() {
   
   const [profilePic, setProfilePic] = useState(() => readyProfilePic);
   const [backgroundPic, setBackgroundPic] = useState(() => readyBackgroundPic);
+
+  const [miniRecipe, setMiniRecipe] = useState([{
+    mainPhoto: "",
+    recipeID: "",
+    recipeName: "",
+    vegan: false,
+  }])
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const Start = async () => {
+      try {
+        const currentUser = FBauth.currentUser?.uid;
+        if (!currentUser) {
+          router.replace('/(auth)');
+          return
+        }
+        const minRecipeResp = await queryUserRecipes(currentUser);
+        if (!minRecipeResp) {
+          alert("Error searching userRecipes")
+          return
+        }
+        setMiniRecipe(minRecipeResp);
+        setLoaded(true);
+      } catch (e) {
+        console.error(e)
+        return
+      }
+    }
+    Start()
+  }, [])
   
   // PROFILE PIC
   const PickProfileImageAsync = async () => {
@@ -134,17 +165,17 @@ export default function ProfileScreen() {
 
       <View style={styles.networkContainer}>
         <View style={styles.netInfoContainer}>
-          <Text style={styles.networkText}>Likes</Text>
+          <Text style={styles.networkTextTitle}>Likes</Text>
           <Text style={styles.networkText}>5</Text>
         </View>
 
         <View style={styles.netInfoContainer}>
-          <Text style={styles.networkText}>Followers</Text>
+          <Text style={styles.networkTextTitle}>Followers</Text>
           <Text style={styles.networkText}>10</Text>
         </View>
 
         <View style={styles.netInfoContainer}>
-          <Text style={styles.networkText}>Recipes</Text>
+          <Text style={styles.networkTextTitle}>Recipes</Text>
           <Text style={styles.networkText}>2</Text>
         </View>
       </View>
@@ -159,10 +190,34 @@ export default function ProfileScreen() {
         </View>
 
       <View style={styles.itemsContainer}>
-        <Text>imagenes</Text>
-        <Text>video</Text>
-        <Text>{"<FOTOS/VIDEOS>"}</Text>
-        <Text></Text>
+        {loaded ? (
+          <FlatList 
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            columnWrapperStyle={{}}
+            data={miniRecipe}
+            renderItem={({ item, index}) => (
+              <>
+              <MiniRecipe 
+                name={item.recipeName}
+                id={item.recipeID}
+                vegan={item.vegan}
+                photo={item.mainPhoto} 
+                onPress={() => console.log(item.recipeID)}
+              />
+              </>
+            )}
+          />
+
+        ) : (
+          <View style={{justifyContent: "center", alignItems: "center", flex: 1}}>
+          <ActivityIndicator size={'large'}/>
+          </View>
+            
+        )
+
+        }
+       
       </View>
     </View>
   );
@@ -265,7 +320,6 @@ const styles = StyleSheet.create({
     flexDirection: "row", 
     justifyContent: "space-evenly",
     alignItems: "center",
-    // borderColor: "black",borderWidth: 1,
     paddingVertical: "5%",
     width: "100%",
     height: "10%",
@@ -275,9 +329,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  networkTextTitle: {
+    fontFamily: "PlaypenRegular",
+    fontSize: 16,
+  },
   networkText: {
     fontSize: 22,
-    fontFamily: "SpaceMono",
+    fontFamily: "PlaypenExtraBold",
     marginHorizontal: 5,
     // borderColor: "black",borderWidth: 1,
   },
@@ -294,10 +352,10 @@ const styles = StyleSheet.create({
   // ITEMS
   itemsContainer: {
     flex: 1,
-    height: "15%",
-    alignItems: "center",
-    justifyContent: "center",
-    // borderColor: "black",borderWidth: 1,
+    height: "10%",
+    paddingTop: 7,
+    // alignItems: "center",
+    // justifyContent: "center",
   },
   
   separator: {

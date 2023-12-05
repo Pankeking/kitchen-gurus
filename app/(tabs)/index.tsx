@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 
 import { router } from 'expo-router';
 
@@ -12,16 +12,17 @@ import { View, Text, CustomIcon } from '../../components/themedCustom';
 import { useEffect,useState } from 'react';
 import { Image, useTheme } from '@rneui/themed';
 import StoryProfile from '../../components/Home/StoryProfiles';
-import { fetchFriends, fetchRecipes, likeRecipe } from '../../utils/firebaseUtils';
+import { fetchFriends, fetchAllRecipes, likeRecipe } from '../../utils/firebaseUtils';
 
 
 export default function HomeScreen() {
 
   const dispatch = useDispatch();
-  const ICON_SIZE = 26;
+  const ICON_MEDIUM = 26;
+  const ICON_BIG = 32;
   const themeColors = useTheme().theme.colors;
 
-  const [render, reRender] = useState(2);
+  const [loaded, setLoaded] = useState(false);
 
   const deviceWidth = useWindowDimensions().width;
   const resizedWidth = deviceWidth * 1;
@@ -52,15 +53,15 @@ export default function HomeScreen() {
     const Start = async () => {
       try {
         const currentUser = FBauth.currentUser?.uid;
-        if (currentUser) {
-          const users = await fetchFriends(currentUser);
-          setUsers(users)
-        } else {
+        if (!currentUser) {
           router.replace('/(auth)/')
           return
         }
-        const recipes = await fetchRecipes(currentUser);
+        const users = await fetchFriends(currentUser);
+        setUsers(users)
+        const recipes = await fetchAllRecipes(currentUser);
         setRecipes(recipes);
+        setLoaded(true);
       } catch (e) {
         console.error(e)
       }
@@ -115,7 +116,7 @@ export default function HomeScreen() {
       return
     }
     const likeResp = await likeRecipe(user.uid, recipeID, username)
-    const updated = await fetchRecipes(user.uid)
+    const updated = await fetchAllRecipes(user.uid)
     setRecipes((currentRecipes) => {
       return currentRecipes.map((recipe) => {
         if (recipe.recipeID == recipeID) {
@@ -134,7 +135,7 @@ export default function HomeScreen() {
     liked: boolean;
   }) => {
     const name = props.liked ? "cards-heart" : "cards-heart-outline";
-    const size = props.liked ? ICON_SIZE + 4 : ICON_SIZE;
+    const size = props.liked ? ICON_BIG : ICON_MEDIUM;
     const color = props.liked ? "red" : themeColors.secondary;
     return (
       <CustomIcon 
@@ -164,59 +165,61 @@ export default function HomeScreen() {
       <View style={{
         height: "80%",
         }}
-      >
-        <FlatList 
-          data={Recipes}
-          renderItem={({ item, index }) => (
-            <View>
-              {index != 0 && (
-                <>
-                <View style={styles.card}>
-                  <TouchableOpacity onPress={() => console.log(item.uid)}>
-                    <StoryProfile small picture={item.profilePic} />
-                  </TouchableOpacity>
-                  <View style={{paddingHorizontal: 7}}>
-                    <Text style={styles.recipe}>{item.recipeName}</Text>
-                    <Text style={styles.user}>{item.username}</Text>
+      > 
+        {loaded ? (
+          <FlatList 
+            data={Recipes}
+            renderItem={({ item, index }) => (
+              <View>
+                {index != 0 && (
+                  <>
+                  <View style={styles.card}>
+                    <TouchableOpacity onPress={() => console.log(item.uid)}>
+                      <StoryProfile small picture={item.profilePic} />
+                    </TouchableOpacity>
+                    <View style={{paddingHorizontal: 7}}>
+                      <Text style={styles.recipe}>{item.recipeName}</Text>
+                      <Text style={styles.user}>{item.username}</Text>
+                    </View>
                   </View>
-                </View>
-                <FlatList 
-                  keyExtractor={(item, index) => index.toString()}
-                  data={item.photo}
-                  renderItem={({ item, index}) => (
-                    <RenderImg item={item} />
-                  )}
-                  pagingEnabled 
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                />
-                <View style={styles.icons}>
-                  <TouchableOpacity style={styles.iconButton} onPress={() => handleLike(item.recipeID)}>
-                   
-                    <HeartIcon liked={item.liked} />
-
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.iconButton} onPress={() => alert("Comment")}>
-                    <CustomIcon 
-                      name="comment-outline"
-                      size={ICON_SIZE - 2}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.iconButton} onPress={() => alert("Share")}>
-                    <CustomIcon 
-                      name="share-all-outline"
-                      size={ICON_SIZE}
-                    />
-                  </TouchableOpacity>
-                  
-                </View>
-                <Text style={styles.likes}>{item.likes} likes</Text>
-                </>
-              )
-              }
-            </View>
-          )}
-        />
+                  <FlatList 
+                    keyExtractor={(item, index) => index.toString()}
+                    data={item.photo}
+                    renderItem={({ item, index}) => (
+                      <RenderImg item={item} />
+                    )}
+                    pagingEnabled 
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                  />
+                  <View style={styles.icons}>
+                    <TouchableOpacity style={styles.iconButton} onPress={() => handleLike(item.recipeID)}>
+                      <HeartIcon liked={item.liked} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.iconButton} onPress={() => alert("Comment")}>
+                      <CustomIcon 
+                        name="comment-outline"
+                        size={ICON_MEDIUM - 2}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.iconButton} onPress={() => alert("Share")}>
+                      <CustomIcon 
+                        name="share-all-outline"
+                        size={ICON_MEDIUM}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={styles.likes}>{item.likes} likes</Text>
+                  </>
+                )
+                }
+              </View>
+            )}
+          />
+        ) : (
+          <ActivityIndicator size='large' />
+        )
+        }
       </View>
     </View>
   );

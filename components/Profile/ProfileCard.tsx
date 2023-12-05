@@ -27,7 +27,6 @@ export default function ProfileCard() {
 
   const handleBioUpdate = async () => {
     if (userId) {
-
       const userDocRef = doc(FBstore, "users", userId)
       await updateDoc(userDocRef, {
         bio: bioText
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    fontFamily: "Arial",
+    fontFamily: "PlaypenBold",
   },
   bioScrollContainer: {
     // borderColor: "green", borderWidth: 2,
@@ -103,6 +102,7 @@ const styles = StyleSheet.create({
   },
   bioText: {
     lineHeight: 20,
+    fontFamily: "PlaypenMedium"
     // borderColor: "green", borderWidth: 2,
   },
   readMoreText: {
