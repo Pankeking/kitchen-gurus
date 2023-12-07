@@ -5,8 +5,9 @@ import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 
 import reduxStore from "../redux/store";
-import { ThemeProvider } from '@rneui/themed';
+import { ThemeProvider, useTheme, useThemeMode, withTheme } from '@rneui/themed';
 import theme from "../constants/theme"
+import { StatusBar } from 'react-native';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -55,6 +56,9 @@ export default function RootLayout() {
 }
 
 function Navigator() {
+  const themeMode = useTheme().theme.mode;
+  StatusBar.setBarStyle(themeMode === 'dark' ? 'light-content' : 'dark-content')
+  
   return (
     <Stack>
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
@@ -65,7 +69,7 @@ function Navigator() {
 }
 
 function RootLayoutNav() {
-
+  
   return (
     <Provider store={reduxStore}>
       <ThemeProvider theme={theme}>

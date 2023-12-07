@@ -158,7 +158,16 @@ const pictureUploadHelper = async (ref: StorageReference, blob: Blob, callback: 
 // SEND RECIPE
 // SEND RECIPE
 export const uploadRecipe = async (uid: string, recipe:Recipe) => {
-
+  // Get User data --> picture & name
+  const userDocSnap = await getDoc(doc(FBstore, "users", uid))
+  if (!userDocSnap.exists()) {
+    alert("Error uploading, please try again")
+    console.error("Error fetching user profile picture")
+    return
+  }
+  const userProfilePicture = userDocSnap.data().profilePicture;
+  const username = userDocSnap.data().username;
+  // Remove falsys from recipe
   const cleanedRecipe = cleanRecipe(recipe);
   // Get recipes collection add cleaned Recipe
   const recipesRef = collection(FBstore, "recipes");
@@ -170,7 +179,8 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
     recipeID: recipeID,
     likes: 0,
     userID: uid,
-    username: FBauth?.currentUser?.displayName
+    username: username,
+    profilePicture: userProfilePicture
   }, {merge: true})
   
   const photosArray:Photo[] = recipe.photo;
@@ -253,43 +263,31 @@ export const fetchAllRecipes = async (currentUser:string) => {
         const recipeName = docu.data().name;
         const likes = docu.data().likes;  
         const recipeID = docu.data().recipeID;
-        // DEV
+        const username = docu.data().username;
+
+        // DEV <<<
+        // const profilePic = docu.data().profilePicture; 
+        const profilePic = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.imgur.com%2F4pigoji.jpg&f=1&nofb=1&ipt=0ca9831f18d43132974d0574f6931d9810136cdf5c615d1c025bd23bb2654cbe&ipo=images"
+        // DEV <<<
         // const mainPhoto = docu.data().photo;
         const mainPhoto = ["https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.plannthat.com%2Fwp-content%2Fuploads%2F2018%2F07%2F25-Stock-Photo-Sites.jpeg&f=1&nofb=1&ipt=825acb3b9caa343c74ee234ab2826dcee6ee660dc52eabcc222524d44cec8d2b&ipo=images","https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.ikozmik.com%2FContent%2FImages%2Fuploaded%2Fits-free-featured.jpg&f=1&nofb=1&ipt=0b3505ecb8a4dab33ec69e8656cb8e83c25dc0b7d9da9aeded5d1d058446feb6&ipo=images"]
-        // DEV
-        const userRef = doc(FBstore, "users", uid);
-        const docSnap = await getDoc(userRef);
-
-        let likedBy = false;
-        const likedByRef = collection(FBstore, "recipes", recipeID, "likedBy");
-        const likedSnap = await getDoc(doc(likedByRef, currentUser));
-        if (!likedSnap.exists()) {
-          likedBy = false;
-        } else {
-          likedBy = likedSnap.data().liked;
-        }
-
-        if (docSnap.exists()) {
-          const username = docSnap.data().username;
-          // DEV <<<
-          // const profilePic = docSnap.data().profilePicture; 
-          const profilePic = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.imgur.com%2F4pigoji.jpg&f=1&nofb=1&ipt=0ca9831f18d43132974d0574f6931d9810136cdf5c615d1c025bd23bb2654cbe&ipo=images"
-          // DEV <<<
-          const recipes = {
-            uid:uid,
-            recipeName: recipeName,
-            recipeID: recipeID,
-            likes: likes,
-            username: username,
-            profilePic: profilePic,
-            photo: mainPhoto,
-            liked: likedBy
-          }
-          Recipes.push(recipes)
-        }
+        // DEV <<<
+        const likedBy = await recipeLikedBy(currentUser, recipeID);
         
+        const recipes = {
+          uid:uid,
+          recipeName: recipeName,
+          recipeID: recipeID,
+          likes: likes,
+          username: username,
+          profilePic: profilePic,
+          photo: mainPhoto,
+          liked: likedBy
+        }
+        Recipes.push(recipes)
       })
-      return Recipes.length > 1 ? Recipes.slice(1) : Recipes;
+      Recipes.shift()
+      return Recipes;
   } catch (e) {
       console.error(e)
       return [{
@@ -303,6 +301,17 @@ export const fetchAllRecipes = async (currentUser:string) => {
         liked: false,
       }]
   }
+}
+
+
+// HELPER LIKED BY 
+export const recipeLikedBy = async (uid: string, recipeID: string) => {
+  const likedByRef = collection(FBstore, "recipes", recipeID, "likedBy");
+  const likedSnap = await getDoc(doc(likedByRef, uid));
+  if (!likedSnap.exists()) {
+    return false;
+  }
+  return likedSnap.data().liked;
 }
 
 // HELPER FETCHING FRIENDS <<< HOME
@@ -420,12 +429,13 @@ export const fetchRecipeById = async (queryId: string) => {
     if (!docSnap.exists()) {
       return null
     }
-    const { recipeID, userID, username, photo, name, likes, ingredients, instructions, extra, 
+    const { profilePicture, recipeID, userID, username, photo, name, likes, ingredients, instructions, extra, 
     }  = docSnap.data();
     return {
       recipeID: recipeID,
       userID: userID,
       username: username,
+      profilePicture: profilePicture,
       photo: photo,
       name: name,
       likes: likes,

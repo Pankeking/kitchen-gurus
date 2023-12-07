@@ -82,15 +82,13 @@ export default function HomeScreen() {
     }
   }
 
-  const RenderImg = (item: any) => {
+  const RenderImg = (item: {item: string}) => {
     return (
-      // <TouchableOpacity onPress={() => null}>
         <Image 
           style={[containerDimensions, {aspectRatio: 1}]} 
           source={{uri: item.item}} 
           resizeMode='cover'
         />
-      // </TouchableOpacity>
   )}
 
   const goToRecipe = (recipeID: string) => {
@@ -116,7 +114,6 @@ export default function HomeScreen() {
       return
     }
     const likeResp = await likeRecipe(user.uid, recipeID, username)
-    const updated = await fetchAllRecipes(user.uid)
     setRecipes((currentRecipes) => {
       return currentRecipes.map((recipe) => {
         if (recipe.recipeID == recipeID) {
@@ -169,9 +166,10 @@ export default function HomeScreen() {
         {loaded ? (
           <FlatList 
             data={Recipes}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item, index }) => (
               <View>
-                {index != 0 && (
+                {loaded && (
                   <>
                   <View style={styles.card}>
                     <TouchableOpacity onPress={() => console.log(item.uid)}>

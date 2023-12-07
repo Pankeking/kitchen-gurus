@@ -81,6 +81,12 @@
 
 ## Current working tree - files (DATE)
 
+- Recipe Search Screen (WIP DEC 6)
+  - Recipe Photos (done 6 DEC)
+  - Username/Photo (done 6 DEC)
+  - Extra info and fading (done 6 DEC)
+  - Recipe fetch
+
 - Home Screen (WIP Nov 30)
   - Recipe display (done 5 DEC)
     - Touchable Photo ----->> to Recipe Screen (done 5 DEC)
@@ -94,12 +100,9 @@
     - Touchable Profile-Photo ----->> to Profile Screen (WIP 2 DEC)
 
 - Profile Screen (WIP OCT 23)
-  - Components (Social Media, Followers, Likes, Recipes)
+  - Personal Network (Followers, Likes, Recipes)
     - Network Components Container / View
-    - Personal Feed
-      - NetWork content
-      - OutOf NetWork content
-      - Ads
+  - Personal Recipes fetch-->display (done 5 DEC)
   
 - Settings Screen (WIP OCT 24)
   - Alignment
