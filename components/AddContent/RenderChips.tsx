@@ -4,7 +4,6 @@ import { useTheme } from "@rneui/themed";
 
 export default function RenderChips(props: {
   label: string;
-  icon: string;
   selected: boolean;
   color?: string;
   onPress: () => void;

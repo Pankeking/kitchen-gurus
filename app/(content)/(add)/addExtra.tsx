@@ -10,7 +10,7 @@ import { router } from "expo-router";
 
 export default function addDetailScreen() {
   type dietOptions = {
-    [key: string] : {label: string; icon: string; selected: boolean};
+    [key: string] : {label: string; selected: boolean};
   }
   const dietOptions:dietOptions = useSelector((state:any) => state.content.recipe.extra)
   const [Selected, setSelected] = useState(dietOptions);
@@ -55,13 +55,11 @@ export default function addDetailScreen() {
       <View style={styles.example}>
         <RenderChips 
           label={"Select All"}
-          icon={"check-circle"}
           selected={true}
           onPress={() => toggleAll(true)}
         />
         <RenderChips 
           label={"Unselect All"}
-          icon={"circle-off-outline"}
           selected={false}
           color="red"
           onPress={() => toggleAll(false)}
@@ -72,7 +70,6 @@ export default function addDetailScreen() {
         renderItem={({ item, index}) => (
             <RenderChips
               label={item.label}
-              icon={item.icon}
               selected={item.selected}
               onPress={() => updateItem(item.label)}
             />

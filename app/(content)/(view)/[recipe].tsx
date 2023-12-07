@@ -9,6 +9,8 @@ import StoryProfile from "../../../components/Home/StoryProfiles";
 import { FBauth } from "../../../firebase-config";
 import { LinearGradient } from "expo-linear-gradient";
 import Ingredients from "../../../components/AddContent/Ingredients";
+import SmallButton from "../../../components/SmallButton";
+import RenderChips from "../../../components/AddContent/RenderChips";
 
 export default function Recipe() {
 
@@ -20,6 +22,7 @@ export default function Recipe() {
   
   const ICON_BIG = 50;
   const ICON_MEDIUM = 30;
+  const ICON_SMALL = 20;
 
   const [loaded, setLoaded] = useState(false);
 
@@ -34,7 +37,7 @@ export default function Recipe() {
     subtitle: string;
   }
   type dietOptions = {
-    [key: string] : {label: string; icon: string; selected: boolean};
+    [key: string] : {label: string; selected: boolean};
   }
   type UserRecipeType = {
     recipeID: string;
@@ -49,12 +52,21 @@ export default function Recipe() {
     extra: dietOptions;
   }
 
+  type flRecipeType = [
+    ingredients: IngredientType[],
+    instructions: InstructionType[],
+    extra: dietOptions
+  ]
+  
+
   const [FullRecipe, setFullRecipe] = useState<UserRecipeType>();
   const [LikedStatus, setLikedStatus] = useState(false);
   const [totalLikes, setTotalLikes] = useState(0);
 
   const themeColors = useTheme().theme.colors;
 
+  const [selectedData, setSelectedData] = useState(0);
+  const [flRecipe, setFlRecipe] = useState<flRecipeType>();
   
 
   useEffect(() => {
@@ -71,6 +83,10 @@ export default function Recipe() {
         setLikedStatus(likeStatus);
         setTotalLikes(resp.likes);
         setFullRecipe(resp);
+        const extra = resp.extra;
+        const ingredients = resp.ingredients;
+        const instructions = resp.instructions;
+        setFlRecipe([ingredients, instructions, extra])
         setLoaded(true);
       } catch (e) {
         console.error(e);
@@ -111,7 +127,6 @@ export default function Recipe() {
     liked: boolean;
   }) => {
     const name = props.liked ? "cards-heart" : "cards-heart-outline";
-    const size = props.liked ? ICON_BIG : ICON_MEDIUM;
     const color = props.liked ? "red" : themeColors.secondary;
     return (
       <CustomIcon 
@@ -120,6 +135,12 @@ export default function Recipe() {
         color={color}
       />
     )
+  }
+
+  const renderTab = ({ item }: any) => {
+    switch (selectedData) {
+      
+    }
   }
 
   if (loaded) {
@@ -172,24 +193,94 @@ export default function Recipe() {
         </View>
 
         <View style={styles.lowContainer}>
-          <View style={styles.topInfo}>
-            
+          <View>
             <FlatList 
-              data={FullRecipe?.ingredients}
+              contentContainerStyle={styles.selectedContainer}
               horizontal
-              renderItem={({ item, index}) => (
-                    <Ingredients 
-                      quantity={item.quantity}
-                      measureType={item.measureType}
-                      type={item.type}
-                      name={item.name}
-                    />
+              scrollEnabled={false}
+              data={["ingredients","instructions","extra"]}
+              renderItem={({ item, index }) => (
+                <View>
+                  <SmallButton  
+                    Color={index === selectedData ? "green" : "gray"}
+                    iconName={"leaf"} 
+                    title={`${item}`} 
+                    size={ICON_SMALL} 
+                    onPress={() => setSelectedData(index)} />
+                </View>
               )}
             />
-            
           </View>
-          
-          
+
+            <FlatList 
+              data={flRecipe}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item, index}) => {
+                if (index !== selectedData) {
+                  return (<></>)
+                }
+                if (selectedData === 0) {
+                  return (
+                    <View style={styles.ingredientsContainer}>
+                      <FlatList 
+                        showsVerticalScrollIndicator={false}
+                        data={FullRecipe?.ingredients}
+                        renderItem={({ item, index}) => (
+                          <View>
+                            <Ingredients 
+                              quantity={item.quantity}
+                              measureType={item.measureType}
+                              type={item.type}
+                              name={item.name}
+                            />
+                          </View>
+                        )}
+                      />
+                    </View>
+                    )
+                }
+                if (selectedData === 1) {
+                  console.log(item)
+                  return (
+                      <FlatList 
+                        data={FullRecipe?.instructions}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item, index}) => (
+                          <View style={styles.stepsContainer}>
+                            <Text style={[styles.titleText, {color: themeColors.secondary}]}>{item.subtitle}</Text>
+                            {item.steps.map((steps, index) => 
+                              <Text style={[styles.stepText,{color: themeColors.lightText}]} key={index}>{steps}</Text>
+                            )}
+                          </View>
+                        )}
+                      />
+                    )
+                }
+                if (selectedData === 2) {
+                  return (
+                    <View>
+                    <FlatList 
+                      data={Object.values(FullRecipe?.extra || {label: "Nothing", selected: false})}
+                      numColumns={2}
+                      columnWrapperStyle={{flex: 1, justifyContent: "space-between"}}
+                      showsVerticalScrollIndicator={false}
+                      keyExtractor={(item, index) => `${item.label}-${index}`}
+                      renderItem={({ item, index}) => (
+                          <RenderChips 
+                            label={item.label}
+                            selected={item.selected}
+                            onPress={() => null}
+                          />
+                      )}
+                    />
+                    </View>
+                    )
+                }
+                return (<></>)
+              }
+              } 
+            />
+
         <TouchableOpacity style={{margin: 40}} onPress={() => router.replace('/(tabs)/profile')}>
           <Text>BACK</Text>
         </TouchableOpacity>
@@ -277,13 +368,37 @@ const styles = StyleSheet.create({
   },
   lowContainer: {
     flex: 1,
-    paddingHorizontal: "5%",
-    borderColor: "green", borderWidth: 4,
+    paddingHorizontal: "4%",
+    // borderColor: "green", borderWidth: 4,
   },
-  topInfo: {
-    alignItems: "center",
+  selectedContainer: {
+    marginVertical: 10,
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+    paddingRight: "10%",
+    width: "100%"
+  },
+  ingredientsContainer: {
+    width: "100%",
     justifyContent: "space-between",
     flexDirection: "row",
-    marginVertical: 5,
+  },
+  stepsContainer: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  titleText: {
+    fontSize: 22,
+    fontFamily: "PlaypenBold",
+    marginBottom: 10,
+    
+    textTransform: 'uppercase', 
+  },
+  stepText: {
+    fontSize: 16,
+    marginBottom: 4,
+    fontFamily: "PlaypenRegular",
+    fontStyle: 'italic', // customize text style
   },
 })

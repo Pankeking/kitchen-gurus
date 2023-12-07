@@ -81,12 +81,6 @@
 
 ## Current working tree - files (DATE)
 
-- Recipe Search Screen (WIP DEC 6)
-  - Recipe Photos (done 6 DEC)
-  - Username/Photo (done 6 DEC)
-  - Extra info and fading (done 6 DEC)
-  - Recipe fetch
-
 - Home Screen (WIP Nov 30)
   - Recipe display (done 5 DEC)
     - Touchable Photo ----->> to Recipe Screen (done 5 DEC)
@@ -121,6 +115,12 @@
     - Settings functionality
 
 ## Work Done (DATE)
+
+- Recipe Search Screen (wip 6 DEC ----> DONE 7 DEC)
+  - Recipe Photos (done 6 DEC)
+  - Username/Photo (done 6 DEC)
+  - Extra info and fading (done 6 DEC)
+  - Recipe fetch (done 7 DEC)
 
 - Add Content Screen (wip 30 oct ---> done 29 NOV)  
   - Content Index Screen (wip 1 nov ->>> done 28 NOV)

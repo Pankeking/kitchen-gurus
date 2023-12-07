@@ -19,7 +19,7 @@ export default function SearchLayout() {
       <Stack.Screen
         options={{
         headerShown: true,
-        headerTitle: recipe,
+        headerTitle: "What?",
         headerTitleStyle: {fontFamily: "PlaypenBold", fontSize: 22}
         }}
         name="[recipe]" 
