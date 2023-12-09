@@ -81,22 +81,17 @@
 
 ## Current working tree - files (DATE)
 
-- Home Screen (WIP Nov 30)
-  - Recipe display (done 5 DEC)
-    - Touchable Photo ----->> to Recipe Screen (done 5 DEC)
-    - Main Photo (done 1 DEC)
-    - Creator username (done 1 DEC)
-    - Recipe Name (done 4 DEC)
-    - Likable (done 4 DEC)
-  - Stories Display
-    - Profile Circle (done 1 DEC)
-    - Profile Name (done 4 DEC)
-    - Touchable Profile-Photo ----->> to Profile Screen (WIP 2 DEC)
-
 - Profile Screen (WIP OCT 23)
   - Personal Network (Followers, Likes, Recipes)
     - Network Components Container / View
   - Personal Recipes fetch-->display (done 5 DEC)
+
+  - User Search (WIP 9 DEC)
+    - Fetch userData (done 9 DEC)
+    - RenderImages and recipes (done 9 DEC)
+    - Render BioText (WIP 9 dec)
+    - Render Username (wip 9 dec)
+    - Navigation (wip 9 dec)
   
 - Settings Screen (WIP OCT 24)
   - Alignment
@@ -115,6 +110,18 @@
     - Settings functionality
 
 ## Work Done (DATE)
+
+- Home Screen (WIP Nov 30)
+  - Recipe display (done 5 DEC)
+    - Touchable Photo ----->> to Recipe Screen (done 5 DEC)
+    - Main Photo (done 1 DEC)
+    - Creator username (done 1 DEC)
+    - Recipe Name (done 4 DEC)
+    - Likable (done 4 DEC)
+  - Stories Display
+    - Profile Circle (done 1 DEC)
+    - Profile Name (done 4 DEC)
+    - Touchable Profile-Photo ----->> to Profile Screen (done 9 DEC)
 
 - Recipe Search Screen (wip 6 DEC ----> DONE 7 DEC)
   - Recipe Photos (done 6 DEC)
