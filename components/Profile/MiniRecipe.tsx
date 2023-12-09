@@ -28,7 +28,7 @@ export default function MiniRecipe(props: {
     <>
     <View style={styles.container}>
       <View style={[styles.info, {width: halfSize - 10, backgroundColor: `${bgColor}cc`}]}>
-        <TouchableOpacity onPress={() => router.push(`/(content)/(view)/${props.name}?recipeID=${props.id}`)}>
+        <TouchableOpacity onPress={props.onPress}>
           <Text style={styles.title}>{title}</Text>
         </TouchableOpacity>
         <View style={styles.icon}>

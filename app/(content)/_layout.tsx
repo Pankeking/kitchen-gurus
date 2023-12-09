@@ -8,7 +8,11 @@ export default function ContentLayout() {
           headerBackVisible: true,
           headerShown: false,
         }}/>
-        <Stack.Screen name="(view)" options={{
+        <Stack.Screen name="(recipe)" options={{
+          headerBackVisible: true,
+          headerShown: false,
+        }}/>
+        <Stack.Screen name="(user)" options={{
           headerBackVisible: true,
           headerShown: false,
         }}/>

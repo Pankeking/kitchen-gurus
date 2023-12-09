@@ -108,7 +108,7 @@ export default function ProfileScreen() {
         {backgroundPic &&
           <Image source={{uri:backgroundPic}} style={styles.bgImage}/>
         } 
-        <View style={styles.profileBackgroundButtonContainer}>
+        <View>
           <TouchableOpacity 
             onPress={PickBackgroundImageAsync} 
             style={[styles.profileBackgroundButton, {borderColor: themeColors.background, backgroundColor: themeColors.background}]}
@@ -194,7 +194,6 @@ export default function ProfileScreen() {
           <FlatList 
             numColumns={2}
             showsVerticalScrollIndicator={false}
-            columnWrapperStyle={{}}
             data={miniRecipe}
             renderItem={({ item, index}) => (
               <>
@@ -203,7 +202,7 @@ export default function ProfileScreen() {
                 id={item.recipeID}
                 vegan={item.vegan}
                 photo={item.mainPhoto} 
-                onPress={() => console.log(item.recipeID)}
+                onPress={() => router.push(`/(content)/(recipe)/${item.recipeName}?recipeID=${item.recipeID}`)}
               />
               </>
             )}
@@ -229,11 +228,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // borderColor: "black",borderWidth: 1,
   },
-  
-  
-
   // TITLE
   titleContainer: {
     flexDirection: "row",
@@ -241,7 +236,6 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginHorizontal: 10,
     marginVertical: "5%",
-    // borderColor: "red",borderWidth: 1,
   },
   titleText: {
     fontSize: 28,
@@ -257,27 +251,15 @@ const styles = StyleSheet.create({
 
   // BACKGROUND IMAGE STYLE
   bgMainImgContainer: {
-    // flex: 1,
     height: "25%",
-    // justifyContent: "center",
-    // alignItems: "center",
-    // backgroundColor: "transparent",
-    // borderColor: "blue",borderWidth: 1,
   },
   bgImage: {
     backgroundColor: "transparent",
     width: "99%",
     borderRadius: 3,
     height: "100%",
-    // borderColor: "blue",borderWidth: 1,
   },
-  profileBackgroundButtonContainer: {
-    // justifyContent: "center",
-    // alignItems: "center",
-    // height: "15%",
-    // width: 100,
-    // borderColor: "blue",borderWidth: 1,
-  },
+ 
   profileBackgroundButton: {
     position: "absolute",
     borderRadius: 999,
@@ -291,29 +273,24 @@ const styles = StyleSheet.create({
     flex: 1,
     top: "-10%",
     backgroundColor: "transparent",
-    // borderColor: "blue",borderWidth: 1,
   },
   // PROFILE PICTURE (CARD)
   profilePicContainer: {
     backgroundColor: "transparent",
     alignItems: "center",
-    // borderColor: "red",borderWidth: 1,
   },
   profilePicButtonContainer: {
     zIndex: 999,
     justifyContent: "center",
     alignItems: "center",
-    // borderColor: "blue",borderWidth: 3,
   },
   profilePicButton: {
     position: "absolute",
     borderRadius: 999,
     borderWidth: 5,
-    // borderColor: "black",borderWidth: 1,
     bottom: 10,
     left: "5%",
   },
-  
 
   // NETWORK
   networkContainer: {
@@ -325,7 +302,6 @@ const styles = StyleSheet.create({
     height: "10%",
   },
   netInfoContainer: {
-    // borderColor: "black",borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -337,27 +313,20 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: "PlaypenExtraBold",
     marginHorizontal: 5,
-    // borderColor: "black",borderWidth: 1,
   },
 
-  
-  
   // BUTTON
   buttonContainer: {
     height: 50,
     marginLeft: "10%",
     width: "100%",
   },
-
   // ITEMS
   itemsContainer: {
     flex: 1,
     height: "10%",
     paddingTop: 7,
-    // alignItems: "center",
-    // justifyContent: "center",
   },
-  
   separator: {
     width: '100%',
     height: 20,

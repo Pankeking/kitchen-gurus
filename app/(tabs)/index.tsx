@@ -149,7 +149,7 @@ export default function HomeScreen() {
         data={Users}
         renderItem={({ item, index}) => (
           <View style={styles.stories}>
-            <TouchableOpacity onPress={() => console.log(item.uid)}>
+            <TouchableOpacity onPress={() => router.push(`/(content)/(user)/${item.username}?uid=${item.uid}`)}>
               <StoryProfile picture={item.pic} />
             </TouchableOpacity>
             <Text style={{paddingTop: 3, fontFamily:"PlaypenSemiBold"}} >{item.username}</Text>
@@ -172,11 +172,11 @@ export default function HomeScreen() {
                 {loaded && (
                   <>
                   <View style={styles.card}>
-                    <TouchableOpacity onPress={() => console.log(item.uid)}>
+                    <TouchableOpacity onPress={() => router.push(`/(content)/(user)/${item.username}?uid=${item.uid}`)}>
                       <StoryProfile small picture={item.profilePic} />
                     </TouchableOpacity>
                     <View style={{paddingHorizontal: 7}}>
-                      <TouchableOpacity onPress={() => router.push(`/(content)/(view)/${item.recipeName}?recipeID=${item.recipeID}`)}>
+                      <TouchableOpacity onPress={() => router.push(`/(content)/(recipe)/${item.recipeName}?recipeID=${item.recipeID}`)}>
                         <Text style={styles.recipe}>{item.recipeName}</Text>
                       </TouchableOpacity>
                       <Text style={styles.user}>{item.username}</Text>

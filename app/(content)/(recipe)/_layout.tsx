@@ -24,8 +24,6 @@ export default function SearchLayout() {
         }}
         name="[recipe]" 
       />
-
-      {/* <Stack.Screen name="[user]"/> */}
     </Stack>
   )
 }

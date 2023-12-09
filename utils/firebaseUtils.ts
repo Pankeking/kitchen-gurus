@@ -221,6 +221,12 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
 }
 
 
+///////
+///////
+/////// userFunction router.push(`/(content)/(user)/${item.username}?uid=${item.uid}`)
+///////
+
+
 // HELPERS RECIPE
 // HELPERS RECIPE
 // HELPERS RECIPE
@@ -447,4 +453,22 @@ export const fetchRecipeById = async (queryId: string) => {
     console.error(e)
     return null
   }
+}
+
+export const fetchUserById = async (queryId: string) => {
+  const docRef = doc(FBstore, "users", queryId);
+  const docSnap = await getDoc(docRef);
+  const userRecipes = await queryUserRecipes(queryId);
+  if (!docSnap.exists()) {
+    return null;
+  }
+  return {
+    username: docSnap.data().username, 
+    userID: docSnap.data().userID, 
+    profilePic: docSnap.data().profilePicture, 
+    backPic: docSnap.data().profileBackground, 
+    bioText: docSnap.data().bio, 
+    userRecipes: userRecipes
+  }
+
 }
