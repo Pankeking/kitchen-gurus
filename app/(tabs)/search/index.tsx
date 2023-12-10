@@ -1,5 +1,5 @@
 import { Input } from "@rneui/themed";
-import { Text, View } from "../../components/themedCustom";
+import { Text, View } from "../../../components/themedCustom";
 import { StyleSheet } from "react-native";
 
 export default function SearchScreen() {

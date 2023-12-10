@@ -56,6 +56,8 @@ export default function TabLayout() {
       <Tabs.Screen 
         name="search"
         options={{
+          href: "/search",
+          headerShown: false,
           title: 'Search',
           tabBarLabel: 'Search',
           tabBarIcon: ({ focused }) => <TabBarIcon 
@@ -95,6 +97,8 @@ export default function TabLayout() {
                                               color={themeColors.primary} />,
         }}
       />
+      
+
       
     </Tabs>
   );

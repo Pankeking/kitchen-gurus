@@ -202,7 +202,7 @@ export default function ProfileScreen() {
                 id={item.recipeID}
                 vegan={item.vegan}
                 photo={item.mainPhoto} 
-                onPress={() => router.push(`/(content)/(recipe)/${item.recipeName}?recipeID=${item.recipeID}`)}
+                onPress={() => router.push(`/(tabs)/search/recipe/${item.recipeName}?recipeID=${item.recipeID}`)}
               />
               </>
             )}

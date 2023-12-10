@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 
 import reduxStore from "../redux/store";
-import { ThemeProvider, useTheme, useThemeMode, withTheme } from '@rneui/themed';
+import { ThemeProvider, useTheme } from '@rneui/themed';
 import theme from "../constants/theme"
 import { StatusBar } from 'react-native';
 

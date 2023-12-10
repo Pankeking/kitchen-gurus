@@ -8,14 +8,7 @@ export default function ContentLayout() {
           headerBackVisible: true,
           headerShown: false,
         }}/>
-        <Stack.Screen name="(recipe)" options={{
-          headerBackVisible: true,
-          headerShown: false,
-        }}/>
-        <Stack.Screen name="(user)" options={{
-          headerBackVisible: true,
-          headerShown: false,
-        }}/>
+       
         <Stack.Screen name="edit"/>
         <Stack.Screen name="share"/>
       </Stack>

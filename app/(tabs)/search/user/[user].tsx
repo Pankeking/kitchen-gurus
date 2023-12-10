@@ -1,17 +1,16 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
 import { FlatList, TouchableOpacity, useWindowDimensions } from "react-native";
-import { Text, View } from "../../../components/themedCustom";
+import { Text, View } from "../../../../components/themedCustom";
 import { StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { Image, useTheme } from "@rneui/themed";
-import { fetchUserById } from "../../../utils/firebaseUtils";
-import MiniRecipe from "../../../components/Profile/MiniRecipe";
-import { LinearGradient } from "expo-linear-gradient";
-import StoryProfile from "../../../components/Home/StoryProfiles";
+import { fetchUserById } from "../../../../utils/firebaseUtils";
+import MiniRecipe from "../../../../components/Profile/MiniRecipe";
+import StoryProfile from "../../../../components/Home/StoryProfiles";
 
 export default function User() {
 
-  const { user, uid } = useLocalSearchParams<{user: string, uid: string}>();
+  const { user, uid } = useLocalSearchParams<{user:string, uid: string}>();
 
   const windowWidth = useWindowDimensions().width;
   const height = windowWidth * 0.7;
@@ -82,7 +81,7 @@ export default function User() {
       }
     }
     Start();
-  },[]);
+  },[uid]);
 
   const handleBackRoute = () => {
     if (router.canGoBack()) {
@@ -126,22 +125,30 @@ export default function User() {
           </View>
         </View>
         <View style={styles.itemsContainer}>
-          <FlatList 
-            data={userData?.userRecipes}
-            showsVerticalScrollIndicator={false}
-            numColumns={2}
-            renderItem={({ item, index}) => (
-              <>
-              <MiniRecipe 
-                name={item.recipeName}
-                id={item.recipeID}
-                photo={item.mainPhoto}
-                vegan={item.vegan}
-                onPress={() => router.push(`/(content)/(recipe)/${item.recipeName}?recipeID=${item.recipeID}`)}
-              />
-              </>
-            )}
-          />
+          {userData && userData.userRecipes.length > 0 ? (
+            <FlatList 
+              data={userData?.userRecipes}
+              showsVerticalScrollIndicator={false}
+              numColumns={2}
+              renderItem={({ item, index}) => (
+                <>
+                <MiniRecipe 
+                  name={item.recipeName}
+                  id={item.recipeID}
+                  photo={item.mainPhoto}
+                  vegan={item.vegan}
+                  onPress={() => router.push(`/(tabs)/search/recipe/${item.recipeName}?recipeID=${item.recipeID}`)}
+                />
+                </>
+              )}
+            />
+          ) : (
+            <View style={styles.nullContainer}>
+              <Text style={styles.nullText  }>{userData?.username}</Text>
+              <Text style={styles.nullText  }>has not uploaded any recipes yet</Text>
+            </View>
+          )
+          }
           
         </View>
         
@@ -154,6 +161,15 @@ export default function User() {
 }
 
 const styles = StyleSheet.create({
+  nullContainer:{
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  nullText: {
+    fontSize: 20,
+    fontFamily: "SpaceMono",
+  },
   container: {
     flex: 1,
     zIndex: 2,

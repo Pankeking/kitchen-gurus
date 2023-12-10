@@ -1,5 +1,5 @@
 import { Stack, router, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
-import { ToggleMode } from "../../../components/themedCustom";
+import { ToggleMode } from "../../../../components/themedCustom";
 import { useTheme } from "@rneui/themed";
 
 export default function SearchLayout() {
@@ -19,7 +19,7 @@ export default function SearchLayout() {
     >
       <Stack.Screen
         options={{
-        headerShown: true,
+        headerShown: false,
         headerTitle: "What?",
         headerTitleStyle: {fontFamily: "PlaypenBold", fontSize: 22}
         }}

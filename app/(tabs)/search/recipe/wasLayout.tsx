@@ -1,6 +1,7 @@
 import { Stack, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
-import { ToggleMode } from "../../../components/themedCustom";
+
 import { useTheme } from "@rneui/themed";
+import { ToggleMode } from "../../../../components/themedCustom";
 
 export default function SearchLayout() {
   const { recipe } = useGlobalSearchParams<{recipe: string}>();
@@ -9,7 +10,7 @@ export default function SearchLayout() {
     <Stack
       screenOptions={{
         headerBackVisible: false,
-        headerShown: false,
+        headerShown: true,
         headerStyle: {backgroundColor: themeColors.surface},
         headerTitleStyle: {fontSize: 14, fontFamily: "PlaypenMedium"},
         headerTintColor: themeColors.lightText,

@@ -37,15 +37,18 @@ export default function HomeScreen() {
     recipeID: "",
     likes: 0,
     username: "",
-    profilePic: "",
-    photo: [""],
+    // randomUri
+    profilePic: "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.lionleaf.com%2Fwp-content%2Fuploads%2F2014%2F11%2F1415275_22821821.jpg&f=1&nofb=1&ipt=4b75db3b6c030a650ba0e7ca45fb05518b9726e49576df08fefbd0d6eead98cc&ipo=images",
+    photo: ["https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.lionleaf.com%2Fwp-content%2Fuploads%2F2014%2F11%2F1415275_22821821.jpg&f=1&nofb=1&ipt=4b75db3b6c030a650ba0e7ca45fb05518b9726e49576df08fefbd0d6eead98cc&ipo=images"],
+    // randomUri
     liked: false
   }])
 
   const [Users, setUsers] = useState([{
     uid: "",
     username: "",
-    pic: ""
+    // randomUri
+    pic: "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.lionleaf.com%2Fwp-content%2Fuploads%2F2014%2F11%2F1415275_22821821.jpg&f=1&nofb=1&ipt=4b75db3b6c030a650ba0e7ca45fb05518b9726e49576df08fefbd0d6eead98cc&ipo=images"
   }])
 
 
@@ -61,26 +64,15 @@ export default function HomeScreen() {
         setUsers(users)
         const recipes = await fetchAllRecipes(currentUser);
         setRecipes(recipes);
-        setLoaded(true);
       } catch (e) {
         console.error(e)
       }
     }
     Start();
-  },[])
-
-  
-
-  const appSignOut = async () => {
-    try {
-      await signOut(FBauth);
-      dispatch(setUser(null));
-      return { user: null};
-    } catch (e) {
-      console.error(e);
-      return { error: e };
-    }
-  }
+    setLoaded(true);
+    console.log("asdasdasdasasdas")
+    console.log(Recipes)
+  },[loaded])
 
   const RenderImg = (item: {item: string}) => {
     return (
@@ -89,21 +81,9 @@ export default function HomeScreen() {
           source={{uri: item.item}} 
           resizeMode='cover'
         />
-  )}
+    )}
 
-  const goToRecipe = (recipeID: string) => {
-    console.log(`Transponded to ${recipeID}`)
-  }
 
-  const handleSignOut = async () => {
-      const resp = await appSignOut();
-      router.replace('/(auth)')
-    if (!resp?.error) {
-      router.replace('/(auth)')
-    } else {
-      console.error(resp.error)
-    }
-  }
 
   const handleLike = async (recipeID:string) => {
     const user = FBauth?.currentUser;
@@ -125,7 +105,6 @@ export default function HomeScreen() {
         return recipe;
       })
     });
-    console.log(likeResp)
   }
 
   const HeartIcon = (props: {
@@ -149,7 +128,7 @@ export default function HomeScreen() {
         data={Users}
         renderItem={({ item, index}) => (
           <View style={styles.stories}>
-            <TouchableOpacity onPress={() => router.push(`/(content)/(user)/${item.username}?uid=${item.uid}`)}>
+            <TouchableOpacity onPress={() => router.push(`/(tabs)/search/user/${item.username}?uid=${item.uid}`)}>
               <StoryProfile picture={item.pic} />
             </TouchableOpacity>
             <Text style={{paddingTop: 3, fontFamily:"PlaypenSemiBold"}} >{item.username}</Text>
@@ -161,37 +140,44 @@ export default function HomeScreen() {
       
       <View style={{
         height: "80%",
+        backgroundColor: "gray"
         }}
       > 
-        {loaded ? (
           <FlatList 
             data={Recipes}
-            keyExtractor={(item, index) => index.toString()}
+            removeClippedSubviews={false}
+            showsVerticalScrollIndicator={false}
+            initialNumToRender={10}
+            maxToRenderPerBatch={5}
             renderItem={({ item, index }) => (
               <View>
-                {loaded && (
                   <>
                   <View style={styles.card}>
-                    <TouchableOpacity onPress={() => router.push(`/(content)/(user)/${item.username}?uid=${item.uid}`)}>
+                    <TouchableOpacity onPress={() => router.push(`/(tabs)/search/user/${item.username}?uid=${item.uid}`)}>
                       <StoryProfile small picture={item.profilePic} />
                     </TouchableOpacity>
                     <View style={{paddingHorizontal: 7}}>
-                      <TouchableOpacity onPress={() => router.push(`/(content)/(recipe)/${item.recipeName}?recipeID=${item.recipeID}`)}>
+                      <TouchableOpacity onPress={() => router.push(`/(tabs)/search/recipe/${item.recipeName}?recipeID=${item.recipeID}`)}>
                         <Text style={styles.recipe}>{item.recipeName}</Text>
                       </TouchableOpacity>
                       <Text style={styles.user}>{item.username}</Text>
                     </View>
                   </View>
-                  <FlatList 
-                    keyExtractor={(item, index) => index.toString()}
-                    data={item.photo}
-                    renderItem={({ item, index}) => (
-                      <RenderImg item={item} />
-                    )}
-                    pagingEnabled 
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                  />
+                  <View style={styles.recipePhotoContainer}>
+                    {loaded && (
+                      <FlatList 
+                        keyExtractor={(item, index) => index.toString()}
+                        data={item.photo}
+                        renderItem={({ item, index}) => (
+                          <RenderImg item={item} />
+                        )}
+                        pagingEnabled 
+                        horizontal
+                      />
+                    )
+                    }
+                  </View>
+
                   <View style={styles.icons}>
                     <TouchableOpacity style={styles.iconButton} onPress={() => handleLike(item.recipeID)}>
                       <HeartIcon liked={item.liked} />
@@ -211,15 +197,10 @@ export default function HomeScreen() {
                   </View>
                   <Text style={styles.likes}>{item.likes} likes</Text>
                   </>
-                )
-                }
               </View>
             )}
           />
-        ) : (
-          <ActivityIndicator size='large' />
-        )
-        }
+       
       </View>
     </View>
   );
@@ -246,6 +227,9 @@ const styles = StyleSheet.create({
   recipe: {
     fontFamily: "PlaypenBold",
     fontSize: 18
+  },
+  recipePhotoContainer: {
+    width: "100%"
   },
   user: {
     fontFamily: "PlaypenRegular",

@@ -1,15 +1,15 @@
-import { router, useLocalSearchParams } from "expo-router";
-import { CustomIcon, Text, View } from "../../../components/themedCustom";
+import { router, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
+import { CustomIcon, Text, View } from "../../../../components/themedCustom";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from "react-native";
 import { Image, useTheme } from "@rneui/themed";
-import { fetchRecipeById, likeRecipe, recipeLikedBy } from "../../../utils/firebaseUtils";
-import StoryProfile from "../../../components/Home/StoryProfiles";
-import { FBauth } from "../../../firebase-config";
+import { fetchRecipeById, likeRecipe, recipeLikedBy } from "../../../../utils/firebaseUtils";
+import StoryProfile from "../../../../components/Home/StoryProfiles";
+import { FBauth } from "../../../../firebase-config";
 import { LinearGradient } from "expo-linear-gradient";
-import Ingredients from "../../../components/AddContent/Ingredients";
-import SmallButton from "../../../components/SmallButton";
-import RenderChips from "../../../components/AddContent/RenderChips";
+import Ingredients from "../../../../components/AddContent/Ingredients";
+import SmallButton from "../../../../components/SmallButton";
+import RenderChips from "../../../../components/AddContent/RenderChips";
 
 export default function Recipe() {
 
@@ -93,7 +93,7 @@ export default function Recipe() {
       }
     }
     Start();
-  },[]);
+  },[recipeID]);
 
   const handleBackRoute = () => {
     if (router.canGoBack()) {
@@ -146,7 +146,7 @@ export default function Recipe() {
       <View style={styles.container}>
         <View style={[styles.picContainer, {width:windowWidth, height: height, borderBottomColor: themeColors.secondary}]}>
           <FlatList 
-            data={[FullRecipe?.photo[0], FullRecipe?.photo[0]]}
+            data={FullRecipe?.photo}
             pagingEnabled
             horizontal
             renderItem={({ item, index}) => (
@@ -181,12 +181,12 @@ export default function Recipe() {
           
           <View style={styles.profilePic}>
             <TouchableOpacity 
-              onPress={() => router.push(`/(content)/(user)/${FullRecipe?.username}?uid=${FullRecipe?.userID}`)}
+              onPress={() => router.push(`/(tabs)/search/user/${FullRecipe?.username}?uid=${FullRecipe?.userID}`)}
               style={styles.userNameButton}
             >
               <Text style={[styles.userName, {color: themeColors.lightText}]}> {FullRecipe?.username}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push(`/(content)/(user)/${FullRecipe?.username}?uid=${FullRecipe?.userID}`)}>
+            <TouchableOpacity onPress={() => router.push(`/(tabs)/search/user/${FullRecipe?.username}?uid=${FullRecipe?.userID}`)}>
               <StoryProfile picture={FullRecipe?.profilePicture ?? ""} />
             </TouchableOpacity>
           </View>
@@ -280,10 +280,6 @@ export default function Recipe() {
               }
               } 
             />
-
-        <TouchableOpacity style={{margin: 40}} onPress={() => handleBackRoute()}>
-          <Text>BACK</Text>
-        </TouchableOpacity>
         </View>
       </View>
     )
