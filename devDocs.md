@@ -86,13 +86,6 @@
     - Network Components Container / View
   - Personal Recipes fetch-->display (done 5 DEC)
 
-  - User Search (WIP 9 DEC)
-    - Fetch userData (done 9 DEC)
-    - RenderImages and recipes (done 9 DEC)
-    - Render BioText (WIP 9 dec)
-    - Render Username (wip 9 dec)
-    - Navigation (wip 9 dec)
-  
 - Settings Screen (WIP OCT 24)
   - Alignment
     - Inner options containers
@@ -128,6 +121,13 @@
   - Username/Photo (done 6 DEC)
   - Extra info and fading (done 6 DEC)
   - Recipe fetch (done 7 DEC)
+
+- User Search (wip 9 dec ---> done 10 dec)
+  - Fetch userData (done 9 dec ---> done 10 dec)
+  - RenderImages and recipes (done 9 dec ---> done 10 dec)
+  - Render BioText (wip 9 dec ---> done 10 dec)
+  - Render Username (wip 9 dec ---> done 10 dec)
+  - Navigation (wip 9 dec ---> done 10 dec)
 
 - Add Content Screen (wip 30 oct ---> done 29 NOV)  
   - Content Index Screen (wip 1 nov ->>> done 28 NOV)
