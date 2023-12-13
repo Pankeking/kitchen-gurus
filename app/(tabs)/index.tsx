@@ -1,15 +1,12 @@
-import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 
 import { router } from 'expo-router';
 
-import { useDispatch } from 'react-redux';
-import { setUser } from '../../redux/slices/authSlice';
 
-import { signOut } from 'firebase/auth';
 import { FBauth} from '../../firebase-config';
 
 import { View, Text, CustomIcon } from '../../components/themedCustom';
-import { useEffect,useState } from 'react';
+import { useEffect,useRef,useState } from 'react';
 import { Image, useTheme } from '@rneui/themed';
 import StoryProfile from '../../components/Home/StoryProfiles';
 import { fetchFriends, fetchAllRecipes, likeRecipe } from '../../utils/firebaseUtils';
@@ -17,7 +14,8 @@ import { fetchFriends, fetchAllRecipes, likeRecipe } from '../../utils/firebaseU
 
 export default function HomeScreen() {
 
-  const dispatch = useDispatch();
+    const counter = useRef(0);
+
   const ICON_MEDIUM = 26;
   const ICON_BIG = 32;
   const themeColors = useTheme().theme.colors;
@@ -62,17 +60,19 @@ export default function HomeScreen() {
         }
         const users = await fetchFriends(currentUser);
         setUsers(users)
-        const recipes = await fetchAllRecipes(currentUser);
-        setRecipes(recipes);
+        let fetchedRecipes = await fetchAllRecipes(currentUser);
+        setRecipes((current) => {
+          return fetchedRecipes;
+        });
+        
       } catch (e) {
         console.error(e)
       }
     }
     Start();
     setLoaded(true);
-    console.log("asdasdasdasasdas")
-    console.log(Recipes)
-  },[loaded])
+      
+  },[])
 
   const RenderImg = (item: {item: string}) => {
     return (
@@ -126,6 +126,8 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <FlatList 
         data={Users}
+        horizontal
+        showsHorizontalScrollIndicator={false}
         renderItem={({ item, index}) => (
           <View style={styles.stories}>
             <TouchableOpacity onPress={() => router.push(`/(tabs)/search/user/${item.username}?uid=${item.uid}`)}>
@@ -134,8 +136,6 @@ export default function HomeScreen() {
             <Text style={{paddingTop: 3, fontFamily:"PlaypenSemiBold"}} >{item.username}</Text>
           </View>
         )}
-        horizontal
-        showsHorizontalScrollIndicator={false}
       />
       
       <View style={{
@@ -145,6 +145,8 @@ export default function HomeScreen() {
       > 
           <FlatList 
             data={Recipes}
+            // extraData={Recipes}
+            keyExtractor={(Recipes) => Recipes.recipeID}
             removeClippedSubviews={false}
             showsVerticalScrollIndicator={false}
             initialNumToRender={10}

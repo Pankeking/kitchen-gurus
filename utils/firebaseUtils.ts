@@ -263,6 +263,7 @@ export const fetchAllRecipes = async (currentUser:string) => {
         photo: [""],
         liked: false,
       }]
+      const copiedRecipes = [...Recipes];
       recipesQuerySnap.forEach(async (docu) => {
         const uid = docu.data().userID;
         const recipeName = docu.data().name;
@@ -279,7 +280,7 @@ export const fetchAllRecipes = async (currentUser:string) => {
         // DEV <<<
         const likedBy = await recipeLikedBy(currentUser, recipeID);
         
-        const recipes = {
+        let recipes = {
           uid:uid,
           recipeName: recipeName,
           recipeID: recipeID,
@@ -289,7 +290,8 @@ export const fetchAllRecipes = async (currentUser:string) => {
           photo: mainPhoto,
           liked: likedBy
         }
-        Recipes.push(recipes)
+        copiedRecipes.push(recipes)
+        console.log("Firebase length: ", Recipes.length);
       })
       Recipes.shift()
       return Recipes;
