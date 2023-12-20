@@ -10,11 +10,14 @@ import { useEffect,useRef,useState } from 'react';
 import { Image, useTheme } from '@rneui/themed';
 import StoryProfile from '../../components/Home/StoryProfiles';
 import { fetchFriends, fetchAllRecipes, likeRecipe } from '../../utils/firebaseUtils';
+import { useSelector } from 'react-redux';
 
 
 export default function HomeScreen() {
 
     const counter = useRef(0);
+  const readyProfilePic = useSelector((state:any) => state.auth.user.profilePhoto);
+  const [profilePic, setProfilePic] = useState(() => readyProfilePic);
 
   const ICON_MEDIUM = 26;
   const ICON_BIG = 32;
@@ -64,14 +67,12 @@ export default function HomeScreen() {
         setRecipes((current) => {
           return fetchedRecipes;
         });
-        
       } catch (e) {
         console.error(e)
       }
     }
     Start();
     setLoaded(true);
-      
   },[])
 
   const RenderImg = (item: {item: string}) => {
@@ -124,28 +125,34 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <FlatList 
-        data={Users}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item, index}) => (
-          <View style={styles.stories}>
-            <TouchableOpacity onPress={() => router.push(`/(tabs)/search/user/${item.username}?uid=${item.uid}`)}>
-              <StoryProfile picture={item.pic} />
-            </TouchableOpacity>
-            <Text style={{paddingTop: 3, fontFamily:"PlaypenSemiBold"}} >{item.username}</Text>
-          </View>
-        )}
-      />
+      <View style={{flexDirection: "row"}}>
+        <View style={{paddingHorizontal: 9}}>
+          <StoryProfile big picture={profilePic != '' ? profilePic : readyProfilePic} />
+        </View>
+        <FlatList 
+          data={Users}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index}) => (
+            <View style={styles.stories}>
+              <TouchableOpacity onPress={() => router.push(`/(tabs)/search/user/${item.username}?uid=${item.uid}`)}>
+                <StoryProfile picture={item.pic} />
+              </TouchableOpacity>
+              <Text style={{paddingTop: 3, fontFamily:"PlaypenSemiBold"}} >{item.username}</Text>
+            </View>
+          )}
+        />
+      </View>
       
       <View style={{
-        height: "80%",
-        backgroundColor: "gray"
+        height: "85%",
         }}
       > 
+        {loaded && (
+
           <FlatList 
             data={Recipes}
-            // extraData={Recipes}
+            extraData={Recipes}
             keyExtractor={(Recipes) => Recipes.recipeID}
             removeClippedSubviews={false}
             showsVerticalScrollIndicator={false}
@@ -166,18 +173,15 @@ export default function HomeScreen() {
                     </View>
                   </View>
                   <View style={styles.recipePhotoContainer}>
-                    {loaded && (
-                      <FlatList 
-                        keyExtractor={(item, index) => index.toString()}
-                        data={item.photo}
-                        renderItem={({ item, index}) => (
-                          <RenderImg item={item} />
-                        )}
-                        pagingEnabled 
-                        horizontal
-                      />
-                    )
-                    }
+                    <FlatList 
+                      keyExtractor={(item, index) => index.toString()}
+                      data={item.photo}
+                      renderItem={({ item, index}) => (
+                        <RenderImg item={item} />
+                      )}
+                      pagingEnabled 
+                      horizontal
+                    />
                   </View>
 
                   <View style={styles.icons}>
@@ -202,6 +206,7 @@ export default function HomeScreen() {
               </View>
             )}
           />
+        )}
        
       </View>
     </View>

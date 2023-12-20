@@ -8,8 +8,8 @@ export default function StoryProfile(props: {
   small?: boolean;
   big?: boolean;
 }) {
-  const dimension = props.small ? 50 : props.big ? 130 : 90;
-  const radius = props.small ? 25 : props.big ? 65 : 45;
+  const dimension = props.small ? 50 : props.big ? 110 : 90;
+  const radius = props.small ? 25 : props.big ? 55 : 45;
   const linear = {width: dimension, height: dimension, borderRadius: radius}
   const outline = {width: dimension-4, height: dimension-4, borderRadius: radius-2}
   const pic = {width: dimension-8, height: dimension-8, borderRadius: radius-5}
