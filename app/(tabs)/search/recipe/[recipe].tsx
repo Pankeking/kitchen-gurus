@@ -10,6 +10,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import Ingredients from "../../../../components/AddContent/Ingredients";
 import SmallButton from "../../../../components/SmallButton";
 import RenderChips from "../../../../components/AddContent/RenderChips";
+import { useDispatch } from "react-redux";
+import { reloadify } from "../../../../redux/slices/authSlice";
 
 export default function Recipe() {
 
@@ -21,6 +23,8 @@ export default function Recipe() {
   const ICON_BIG = 50;
   const ICON_MEDIUM = 30;
   const ICON_SMALL = 20;
+
+  const dispatch = useDispatch();
 
   const [loaded, setLoaded] = useState(false);
 
@@ -119,6 +123,7 @@ export default function Recipe() {
     }
     setLikedStatus(likeResp === 1 ? true : false);
     setTotalLikes(current => current + (likeResp === 1 ? 1 : -1))
+    dispatch(reloadify());
   }
 
   const HeartIcon = (props: {

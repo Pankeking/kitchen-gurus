@@ -6,18 +6,22 @@ import { router } from 'expo-router';
 import { FBauth} from '../../firebase-config';
 
 import { View, Text, CustomIcon } from '../../components/themedCustom';
-import { useEffect,useRef,useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, useTheme } from '@rneui/themed';
 import StoryProfile from '../../components/Home/StoryProfiles';
 import { fetchFriends, fetchAllRecipes, likeRecipe } from '../../utils/firebaseUtils';
 import { useSelector } from 'react-redux';
+import { reloadify } from '../../redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 
 export default function HomeScreen() {
 
-    const counter = useRef(0);
   const readyProfilePic = useSelector((state:any) => state.auth.user.profilePhoto);
   const [profilePic, setProfilePic] = useState(() => readyProfilePic);
+  const reload = useSelector((state:any) => state.auth.reload);
+
+  const dispatch = useDispatch();
 
   const ICON_MEDIUM = 26;
   const ICON_BIG = 32;
@@ -73,7 +77,7 @@ export default function HomeScreen() {
     }
     Start();
     setLoaded(true);
-  },[])
+  },[reload])
 
   const RenderImg = (item: {item: string}) => {
     return (
@@ -83,8 +87,6 @@ export default function HomeScreen() {
           resizeMode='cover'
         />
     )}
-
-
 
   const handleLike = async (recipeID:string) => {
     const user = FBauth?.currentUser;
@@ -106,6 +108,7 @@ export default function HomeScreen() {
         return recipe;
       })
     });
+    dispatch(reloadify());
   }
 
   const HeartIcon = (props: {
@@ -127,7 +130,9 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <View style={{flexDirection: "row"}}>
         <View style={{paddingHorizontal: 9}}>
-          <StoryProfile big picture={profilePic != '' ? profilePic : readyProfilePic} />
+          <TouchableOpacity onPress={() => router.push('/profile')}>
+            <StoryProfile big picture={profilePic != '' ? profilePic : readyProfilePic} />
+          </TouchableOpacity>
         </View>
         <FlatList 
           data={Users}
@@ -137,6 +142,7 @@ export default function HomeScreen() {
             <View style={styles.stories}>
               <TouchableOpacity onPress={() => router.push(`/(tabs)/search/user/${item.username}?uid=${item.uid}`)}>
                 <StoryProfile picture={item.pic} />
+                <Text>{item.uid}</Text>
               </TouchableOpacity>
               <Text style={{paddingTop: 3, fontFamily:"PlaypenSemiBold"}} >{item.username}</Text>
             </View>

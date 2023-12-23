@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, increment, setDoc, updateDoc, writeBatch } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, increment, query, setDoc, updateDoc, writeBatch } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { Ingredient, Photo, Recipe, dietOptions } from "../redux/slices/contentSlice";
 
@@ -311,7 +311,6 @@ export const recipeLikedBy = async (uid: string, recipeID: string) => {
 }
 
 // HELPER FETCHING FRIENDS <<< HOME
-
 export const fetchFriends = async (uid: string) => {
   try {
       const userFollowingSnap = await getDocs(collection(FBstore, "users", uid, "following"))
@@ -324,12 +323,15 @@ export const fetchFriends = async (uid: string) => {
         const uid = docu.data().userID;
         const username = docu.data().username;
         const pic = docu.data().picture;
+        const followStatus = docu.data().followed;
         const user = {
           uid: uid,
           username: username,
           pic: pic,
         }
-        users.push(user)
+        if (followStatus) {
+          users.push(user)
+        }
       })
       users = users.slice(1)
       return users;
@@ -460,5 +462,41 @@ export const fetchUserById = async (queryId: string) => {
     bioText: docSnap.data().bio, 
     userRecipes: userRecipes
   }
+}
 
+// HELPER FOLLOWER STATUS ID
+export const followedById = async (uid: string, queryId: string) => {
+  const followedByRef = doc(FBstore, "users", uid, "following", queryId);
+  const followSnap = await getDoc(followedByRef);
+  if (!followSnap.exists()) {
+    return 0;
+  }
+  return followSnap.data().followed === true ? 1 : 0;
+}
+
+// FOLLOW ID
+export const followUserById = async (uid: string, queryId: string) => {
+  try {
+    const pictureSnap = await fetchUserById(uid);
+    const docRef = doc(FBstore, "users", uid, "following", queryId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) {
+      const userData = {
+        followed: true,
+        uid: queryId,
+        picture: pictureSnap?.profilePic
+      }
+      await setDoc(docRef, userData);
+      return 1;
+    } else {
+      const followStatus:boolean = docSnap.data().followed;
+      await setDoc(docRef, {
+        followed: !followStatus
+      }, {merge: true})
+      return !followStatus ? 1 : 0;
+    }
+  } catch (e) {
+    console.error("Can't acess firestore API");
+    return -1;
+  }
 }

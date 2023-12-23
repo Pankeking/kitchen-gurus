@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ImageURISource } from 'react-native';
 
 
 interface FirebaseUser {
@@ -13,12 +12,14 @@ export interface AuthState {
     user: FirebaseUser | null;
     isLoggedIn: boolean;
     initialized: boolean;
+    reload: boolean;
 }
 
   const initialState: AuthState = {
     user: null,
     isLoggedIn: false,
     initialized: false,
+    reload: false
   };
 
 const authSlice = createSlice({
@@ -39,6 +40,9 @@ const authSlice = createSlice({
         state.user.profilePhoto = "";
         state.user.backgroundPhoto = "";
       }
+    },
+    reloadify: (state) => {
+      state.reload = !state.reload;
     }
   },
 });
@@ -49,13 +53,6 @@ export const selectUser = (state:AuthState) => state.user;
 export const selectUserId = (state:AuthState) => state.user?.uid;
 
 
-export const { setUser, setInitialized, nullifyUser } = authSlice.actions;
-
-
-// const unsub = onAuthStateChanged(FBauth, (user) => {
-//   console.log("On auth state changed", user);
-//   dispatch(setUser(user));
-//   dispatch(setInitialized(true));
-// });
+export const { setUser, setInitialized, nullifyUser, reloadify } = authSlice.actions;
 
 export default authSlice;

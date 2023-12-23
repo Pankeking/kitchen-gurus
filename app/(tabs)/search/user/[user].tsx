@@ -1,20 +1,24 @@
-import { router, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
-import { FlatList, TouchableOpacity, useWindowDimensions } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
+import { FlatList, useWindowDimensions } from "react-native";
 import { Text, View } from "../../../../components/themedCustom";
 import { StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
-import { Image, useTheme } from "@rneui/themed";
-import { fetchUserById } from "../../../../utils/firebaseUtils";
+import { Image } from "@rneui/themed";
+import { fetchUserById, followUserById, followedById } from "../../../../utils/firebaseUtils";
 import MiniRecipe from "../../../../components/Profile/MiniRecipe";
 import StoryProfile from "../../../../components/Home/StoryProfiles";
+import WideButton from "../../../../components/WideButton";
+import { FBauth } from "../../../../firebase-config";
+import { reloadify } from "../../../../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
 
 export default function User() {
 
   const { user, uid } = useLocalSearchParams<{user:string, uid: string}>();
+  const dispatch = useDispatch();
 
   const windowWidth = useWindowDimensions().width;
   const height = windowWidth * 0.7;
-  const themeColors = useTheme().theme.colors;
   
   type UserDataType = {
     username: string;
@@ -32,35 +36,37 @@ export default function User() {
 
   const [userData, setUserData] = useState<UserDataType>();
   const [loaded, setLoaded] = useState(false);
+  const [followed, setFollowed] = useState(false);
 
-  const ICON_BIG = 50;
-  const ICON_MEDIUM = 30;
-  const ICON_SMALL = 20;
-
-
-  const FakefetchUserById = (uid: string) => {
-    const returndata = {
-      username: "defaultUser", 
-      userID: "user14raID", 
-      profilePic: ">>>profilePic<<<", 
-      backPic: ">>>backPic<<<", 
-      bioText: "bioText with a lot of words", 
-      userRecipes: {
-        recipeName: "cake and chocolate",
-        recipeID: ">>recipeID<<",
-        mainPhoto: ">>>mainPhoto<<<",
-        vegan: true,
-      } 
+  const handleFollow = async (queryId: string) => {
+    const user = FBauth.currentUser;
+    const username = user?.displayName;
+    const userId = user?.uid;
+    if (!user || !username || !userId) {
+      console.error("Please login first");
+      router.replace('/(auth)')
+      return;
     }
-    return returndata;
+    const followStatus = await followUserById(userId, queryId);
+    if (followStatus === -1) {
+      alert("Connection to database failed");
+      return;
+    } 
+    setFollowed(followStatus === 1 ? true : false);
+    dispatch(reloadify());
+    return;
   }
 
   useEffect(() => {
     const Start = async () => {
       try {
         const resp = await fetchUserById(uid);
-        if (!resp || resp === null || !uid) {
-          alert("User Not found");
+        if (!uid) {
+          alert("uid is")
+          return;
+        }
+        if (!resp || resp === null) {
+          alert("User Not found XD!");
           handleBackRoute();
           return;
         }
@@ -73,6 +79,13 @@ export default function User() {
           userRecipes: resp.userRecipes 
         };
         setUserData(respData)
+        const userId = FBauth.currentUser?.uid;
+        if (!userId) {
+          alert("Please login First");
+          return
+        }
+        const followResp = await followedById(userId, uid);
+        setFollowed(followResp === 1 ? true : false);
         setLoaded(true);
       } catch (e) {
         console.error(e);
@@ -97,33 +110,30 @@ export default function User() {
       {loaded && (
         <>
         <View style={styles.picContainer}>
-          <Image source={{uri: userData?.backPic}} resizeMode="cover" style={[styles.backPic,{width: windowWidth, height: height}]} />
+          <Image 
+            source={{uri: userData?.backPic}} 
+            resizeMode="cover" 
+            style={[styles.backPic,{width: windowWidth, height: height}]} 
+          />
           <View style={[styles.profilePicContainer]}>
             <StoryProfile picture={userData?.profilePic ?? ""} big />
           </View>
-          
         </View>
-        <View style={styles.info}>
-          
-          <View style={styles.bio}>
-            <Text style={styles.bioText}> 
-              asadsdasdasdasdasdasdassasa{userData?.bioText}asdasdasdadassas asdasdasasdasdasdasdasdasdasd
-              {userData?.bioText}
-              {userData?.bioText}
-              {userData?.bioText}
-              {userData?.bioText}
-              {userData?.bioText}
-              {userData?.bioText}
-              {userData?.bioText}
-            </Text>
-          </View>
-          <View style={styles.userName}>
-            <TouchableOpacity onPress={() => router.replace('/(tabs)')}>
 
-              <Text style={styles.userNameText}>{userData?.username}</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.bio}>
+          <Text style={styles.bioText}> 
+            {userData?.bioText}
+          </Text>
         </View>
+        
+        <View style={styles.wideBtn}>
+          <WideButton 
+            onPress={() => handleFollow(uid)}
+            title={`${!followed ? "Follow" : "Unfollow"} Chef`}
+            iconName={"chef-hat"}
+          />
+        </View>
+
         <View style={styles.itemsContainer}>
           {userData && userData.userRecipes.length > 0 ? (
             <FlatList 
@@ -207,23 +217,18 @@ const styles = StyleSheet.create({
     height: "10%",
     paddingTop: 7,
   },
-  info: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    height: "18%",
-  },
   bio: {
+    height: "18%",
     width: "35%",
+    marginHorizontal: 11,
+    justifyContent: "center",
+    alignItems: "center"
   },
   bioText: {
-    fontFamily: "PlaypenRegular",
-    fontSize: 14,
+    fontFamily: "Handlee",
+    fontSize: 16,
   },
-  userName: {
-    width: "35%",
-  },
-  userNameText: {
-    fontFamily: "PlaypenBold",
-    fontSize: 24,
+  wideBtn: {
+    alignItems: "center"
   }
 })
