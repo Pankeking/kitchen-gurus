@@ -81,6 +81,8 @@
 
 ## Current working tree - files (DATE)
 
+- Follow Functions (WIP 23 DEC)
+
 - Profile Screen (WIP OCT 23)
   - Personal Network (Followers, Likes, Recipes)
     - Network Components Container / View
