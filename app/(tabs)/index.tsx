@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 
 import { router } from 'expo-router';
 
@@ -37,7 +37,7 @@ export default function HomeScreen() {
   }
 
   const [Recipes, setRecipes] = useState([{
-    uid: "",
+    uid: "dummy",
     recipeName: "",
     recipeID: "",
     likes: 0,
@@ -161,53 +161,61 @@ export default function HomeScreen() {
             keyExtractor={(Recipes) => Recipes.recipeID}
             removeClippedSubviews={false}
             showsVerticalScrollIndicator={false}
-            initialNumToRender={10}
-            maxToRenderPerBatch={5}
+            initialNumToRender={5}
+            maxToRenderPerBatch={3}
             renderItem={({ item, index }) => (
               <View>
-                  <>
-                  <View style={styles.card}>
-                    <TouchableOpacity onPress={() => router.push(`/(tabs)/search/user/${item.username}?uid=${item.uid}`)}>
-                      <StoryProfile small picture={item.profilePic} />
-                    </TouchableOpacity>
-                    <View style={{paddingHorizontal: 7}}>
-                      <TouchableOpacity onPress={() => router.push(`/(tabs)/search/recipe/${item.recipeName}?recipeID=${item.recipeID}`)}>
-                        <Text style={styles.recipe}>{item.recipeName}</Text>
-                      </TouchableOpacity>
-                      <Text style={styles.user}>{item.username}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.recipePhotoContainer}>
-                    <FlatList 
-                      keyExtractor={(item, index) => index.toString()}
-                      data={item.photo}
-                      renderItem={({ item, index}) => (
-                        <RenderImg item={item} />
-                      )}
-                      pagingEnabled 
-                      horizontal
-                    />
-                  </View>
+                  {item.uid == "dummy" ? (
+                    <ActivityIndicator size={"large"}>
 
-                  <View style={styles.icons}>
-                    <TouchableOpacity style={styles.iconButton} onPress={() => handleLike(item.recipeID)}>
-                      <HeartIcon liked={item.liked} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconButton} onPress={() => alert("Comment")}>
-                      <CustomIcon 
-                        name="comment-outline"
-                        size={ICON_MEDIUM - 2}
+                    </ActivityIndicator>
+                  ) : (
+                    
+                    <>
+                    <View style={styles.card}>
+                      <TouchableOpacity onPress={() => router.push(`/(tabs)/search/user/${item.username}?uid=${item.uid}`)}>
+                        <StoryProfile small picture={item.profilePic} />
+                      </TouchableOpacity>
+                      <View style={{paddingHorizontal: 7}}>
+                        <TouchableOpacity onPress={() => router.push(`/(tabs)/search/recipe/${item.recipeName}?recipeID=${item.recipeID}`)}>
+                          <Text style={styles.recipe}>{item.recipeName}</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.user}>{item.username}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.recipePhotoContainer}>
+                      <FlatList 
+                        keyExtractor={(item, index) => index.toString()}
+                        data={item.photo}
+                        renderItem={({ item, index}) => (
+                          <RenderImg item={item} />
+                        )}
+                        pagingEnabled 
+                        horizontal
                       />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconButton} onPress={() => alert("Share")}>
-                      <CustomIcon 
-                        name="share-all-outline"
-                        size={ICON_MEDIUM}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  <Text style={styles.likes}>{item.likes} likes</Text>
-                  </>
+                    </View>
+  
+                    <View style={styles.icons}>
+                      <TouchableOpacity style={styles.iconButton} onPress={() => handleLike(item.recipeID)}>
+                        <HeartIcon liked={item.liked} />
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.iconButton} onPress={() => alert("Comment")}>
+                        <CustomIcon 
+                          name="comment-outline"
+                          size={ICON_MEDIUM - 2}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.iconButton} onPress={() => alert("Share")}>
+                        <CustomIcon 
+                          name="share-all-outline"
+                          size={ICON_MEDIUM}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    <Text style={styles.likes}>{item.likes} likes</Text>
+                    </>
+                  )
+                  }
               </View>
             )}
           />
