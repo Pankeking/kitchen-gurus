@@ -320,7 +320,7 @@ export const fetchFriends = async (uid: string) => {
         pic: "",
       }]
       userFollowingSnap.forEach(async (docu) => {
-        const uid = docu.data().userID;
+        const uid = docu.data().uid;
         const username = docu.data().username;
         const pic = docu.data().picture;
         const followStatus = docu.data().followed;
@@ -456,7 +456,7 @@ export const fetchUserById = async (queryId: string) => {
   }
   return {
     username: docSnap.data().username, 
-    userID: docSnap.data().userID, 
+    uid: docSnap.data().uid, 
     profilePic: docSnap.data().profilePicture, 
     backPic: docSnap.data().profileBackground, 
     bioText: docSnap.data().bio, 
@@ -477,14 +477,15 @@ export const followedById = async (uid: string, queryId: string) => {
 // FOLLOW ID
 export const followUserById = async (uid: string, queryId: string) => {
   try {
-    const pictureSnap = await fetchUserById(uid);
+    const querySnap = await fetchUserById(queryId);
     const docRef = doc(FBstore, "users", uid, "following", queryId);
     const docSnap = await getDoc(docRef);
     if (!docSnap.exists()) {
       const userData = {
         followed: true,
         uid: queryId,
-        picture: pictureSnap?.profilePic
+        picture: querySnap?.profilePic,
+        username: querySnap?.username
       }
       await setDoc(docRef, userData);
       return 1;
@@ -496,7 +497,7 @@ export const followUserById = async (uid: string, queryId: string) => {
       return !followStatus ? 1 : 0;
     }
   } catch (e) {
-    console.error("Can't acess firestore API");
+    console.error("Can't access firestore API");
     return -1;
   }
 }

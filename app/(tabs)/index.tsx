@@ -142,7 +142,6 @@ export default function HomeScreen() {
             <View style={styles.stories}>
               <TouchableOpacity onPress={() => router.push(`/(tabs)/search/user/${item.username}?uid=${item.uid}`)}>
                 <StoryProfile picture={item.pic} />
-                <Text>{item.uid}</Text>
               </TouchableOpacity>
               <Text style={{paddingTop: 3, fontFamily:"PlaypenSemiBold"}} >{item.username}</Text>
             </View>
