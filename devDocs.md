@@ -70,14 +70,14 @@
 ## TODO
 
 - Delete user functionality
-- [IMPORTANT] Password security regEx
+- **IMPORTANT** Password security regEx
 - Email Confirmation
 - Email Link
 - Email template
 - On boarding tunnel
 - Delete Image, Limit 10 Photos -> Content-Add Photo Screen/
-- [IMPORTANT] Re-work Login/Register Screens -> [Example Template](https://reactnativeexample.com/react-native-starter-kit-with-firebase-auth-and-facebook-login/)
-- [IMPORTANT] Re-vamp Recipe creation to add Username and ProfilePhoto during creation, not adding while fetching
+- **IMPORTANT** Re-work Login/Register Screens -> [Example Template](https://reactnativeexample.com/react-native-starter-kit-with-firebase-auth-and-facebook-login/)
+- **IMPORTANT** Re-vamp Recipe creation to add Username and ProfilePhoto during creation, not adding while fetching
 
 ## Current working tree - files (DATE)
 
