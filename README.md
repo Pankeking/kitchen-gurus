@@ -1,1 +1,2 @@
-ok
+SIGN IN / SIGN UP interface
+AFTER PHOTO PIPE ---> SAVE / AGAIN / CANCEL
