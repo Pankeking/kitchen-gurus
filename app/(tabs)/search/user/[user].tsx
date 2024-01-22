@@ -22,7 +22,7 @@ export default function User() {
   
   type UserDataType = {
     username: string;
-    userID: string;
+    uid: string;
     profilePic: string;
     backPic: string;
     bioText: string;
@@ -72,7 +72,7 @@ export default function User() {
         }
         const respData:any =  { 
           username: resp.username, 
-          userID: resp.userID, 
+          uid: resp.uid, 
           profilePic: resp.profilePic, 
           backPic: resp.backPic, 
           bioText: resp.bioText, 
