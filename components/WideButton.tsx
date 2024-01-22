@@ -10,9 +10,6 @@ export default function WideButton(props: {
 }) {
   
   const themeColors = useTheme().theme.colors;
-  
-  // const iconName = props.iconName;
-  // const title = props.title;
   const { iconName, title } = props;
   const onPress = () => props.onPress();
   
