@@ -184,7 +184,7 @@ export default function ProfileScreen() {
         <View style={styles.buttonContainer}>
           <WideButton 
             title="New Dish"
-            iconName="bowl-mix"
+            iconName="chef-hat"
             onPress={() => router.push('/(content)/(add)/')}
           />
         </View>

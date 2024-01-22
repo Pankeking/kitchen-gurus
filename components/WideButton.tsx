@@ -1,6 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient"
-import { StyleSheet } from "react-native"
-import { CustomIcon, View } from "./themedCustom"
+import { StyleSheet, TouchableOpacity } from "react-native"
+import { CustomIcon, Text, View } from "./themedCustom"
 import { Button, useTheme } from "@rneui/themed"
 
 export default function WideButton(props: { 
@@ -19,7 +19,7 @@ export default function WideButton(props: {
           colors={ [themeColors.primary, themeColors.accent] }
           style={styles.gradient}
         >
-          <Button 
+          {/* <Button 
             buttonStyle={styles.button}
             icon={<CustomIcon
               name={iconName}
@@ -30,7 +30,20 @@ export default function WideButton(props: {
             size="lg"
             title={title}
             onPress={onPress}
-          />
+          /> */}
+          <TouchableOpacity 
+            style={styles.button}
+            onPress={onPress}
+          >
+          <Text style={[styles.text, {color: themeColors.searchBg}]}>
+            {title}
+          </Text>
+          <CustomIcon 
+            name={iconName}
+            size={iconSize}
+            style={{color: themeColors.searchBg}}
+            />
+        </TouchableOpacity>
         </LinearGradient>
       </View>
     </>
@@ -44,15 +57,21 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   button: {
+    flex: 1,
     backgroundColor: "transparent",
-    wdith: "100%",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+    
   },
   gradient: {
+
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     borderRadius: 12,
     overflow: "hidden",
     
+  },
+  text: {
+    fontSize: 18
   }
 })
