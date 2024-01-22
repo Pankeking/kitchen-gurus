@@ -8,11 +8,10 @@ export default function WideButton(props: {
   title: string;
   onPress: () => void;
 }) {
-  
+  const iconSize = 22;
   const themeColors = useTheme().theme.colors;
   const { iconName, title } = props;
   const onPress = () => props.onPress();
-  
   return (
     <>
       <View style={styles.container}>
@@ -24,7 +23,7 @@ export default function WideButton(props: {
             buttonStyle={styles.button}
             icon={<CustomIcon
               name={iconName}
-              size={22}
+              size={iconSize}
               style={{ color: themeColors.background }}
               />}
             iconPosition="right"

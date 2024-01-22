@@ -14,6 +14,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FBauth, FBstore } from "../../firebase-config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import WideButton from "../../components/WideButton";
+import BlankButton from "../../components/BlankButton";
 
 
 export default function LoginScreen() {
@@ -106,7 +107,11 @@ export default function LoginScreen() {
             iconName="form-select"
             onPress={() => router.push('/register')}
           />
-
+          <BlankButton
+            title="Create new Account"
+            iconName="form-select"
+            onPress={() => null}
+          />
         </View>
 
         <View style={styles.smallSpacer} />
