@@ -19,18 +19,6 @@ export default function WideButton(props: {
           colors={ [themeColors.primary, themeColors.accent] }
           style={styles.gradient}
         >
-          {/* <Button 
-            buttonStyle={styles.button}
-            icon={<CustomIcon
-              name={iconName}
-              size={iconSize}
-              style={{ color: themeColors.background }}
-              />}
-            iconPosition="right"
-            size="lg"
-            title={title}
-            onPress={onPress}
-          /> */}
           <TouchableOpacity 
             style={styles.button}
             onPress={onPress}
