@@ -69,32 +69,8 @@ export default function LoginScreen() {
   return (
     <>
       <View style={styles.container}>
-        {/* {userState && <Text>{userState.uid}</Text>} */}
         <ToggleMode />
-        {/* <AppleAuthentication.AppleAuthenticationButton
-          buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-          buttonStyle={mode.mode === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.WHITE : AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-          cornerRadius={5}
-          // style={styles.appleButton}
-          onPress={async () => {
-            try {
-              const credential = await AppleAuthentication.signInAsync({
-                requestedScopes: [
-                  AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-                  AppleAuthentication.AppleAuthenticationScope.EMAIL,
-                ],
-              });
-              // signed in
-              router.replace('/(tabs)')
-            } catch (e : any) {
-              if (e.code === 'ERR_REQUEST_CANCELED') {
-                // handle that the user canceled the sign-in flow
-              } else {
-                // handle other errors
-              }
-            }
-          }}
-        /> */}
+        
         <View style={styles.separator} />
 
         <View style={styles.formContainer}>
