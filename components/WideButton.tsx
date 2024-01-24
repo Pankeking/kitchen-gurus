@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     
   },
   gradient: {
-
     flex: 1,
     borderRadius: 12,
     overflow: "hidden",

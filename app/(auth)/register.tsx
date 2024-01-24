@@ -59,7 +59,7 @@ export default function RegisterScreen() {
     <>
     <View style={styles.container}>
       
-      <ToggleMode />
+      
       <View style={styles.separator}></View>
       <View style={styles.innerContainer}>
 
@@ -110,7 +110,7 @@ export default function RegisterScreen() {
           onPress={handleRegister}
         />
 
-        <View style={styles.separator}></View>
+        <View style={styles.smallSpacer} />
 
         <BlankButton 
           title="Already Registered?"
@@ -120,8 +120,8 @@ export default function RegisterScreen() {
         
       </View>
 
-      <View style={styles.smallSpacer} />
       <View style={styles.separator}></View>
+      <ToggleMode />
     </View>
     </>
   )
