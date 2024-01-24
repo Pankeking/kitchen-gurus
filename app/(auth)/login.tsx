@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 
 import { router } from "expo-router";
 
-import { Image, Input, useTheme } from "@rneui/themed";
+import { Image, Input } from "@rneui/themed";
 import { View, ToggleMode, Text }  from "../../components/themedCustom";
 
 import { useDispatch } from "react-redux";
