@@ -60,44 +60,47 @@ export default function RegisterScreen() {
     <View style={styles.container}>
       
       <Text style={styles.title}>Register</Text>
+      <View style={styles.separator}>
+          <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
+          <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
+          <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
+        </View>
       <View style={styles.separator}></View>
       <View style={styles.innerContainer}>
 
-        <View style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={styles.inputContainer}
             placeholder="Email"
             onChangeText={setEmail}
             autoCapitalize="none"
             spellCheck={false}
           />
-        </View>
-        <View style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={styles.inputContainer}
             placeholder="Username"
             onChangeText={setDisplayName}
             spellCheck={false}
           />
-        </View>
-
-        <View style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={styles.inputContainer}
             placeholder="Password"
             onChangeText={setPassword}
             secureTextEntry
           />
-        </View>
-
-        <View style={styles.innerDeepContainer}>
           <Input
             style={styles.input}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={styles.inputContainer}
             placeholder="Confirm Password"
             onChangeText={setConfirmPassword}
             secureTextEntry
           />
-        </View>
 
         {matchMessage && 
           <View style={styles.innerDeepContainer}>
@@ -105,7 +108,7 @@ export default function RegisterScreen() {
           </View>
         }
         <WideButton 
-          title="Register"
+          title="Create New Account"
           iconName="key"
           onPress={handleRegister}
         />
@@ -139,10 +142,19 @@ const styles = StyleSheet.create({
     fontFamily: "PlaypenRegular",
   },
   input: {
-    marginVertical: 3,
-    fontSize: 22,
+    backgroundColor: "white",
     borderRadius: 12,
-  },    
+    fontSize: 22,
+    marginVertical: 2,
+    padding: 7
+    
+  },
+  inputStyle: {
+    height: 50
+  },
+  inputContainer: {
+    borderBottomWidth: 0,
+  },
   innerContainer: {
     alignItems: "center",
     justifyContent: "center",
@@ -168,8 +180,20 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 0,
-    marginVertical: "10%",
-    width: "80%",
+    marginVertical: "5%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  lineStyle: {
+    borderWidth: 1,
+    width: "20%",
+    opacity: 0.3
+  },
+  dotStyle: {
+    borderWidth: 5,
+    borderRadius: 5,
+    marginHorizontal: 5
   },
   
 })

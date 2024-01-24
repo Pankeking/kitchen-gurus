@@ -68,34 +68,36 @@ export default function LoginScreen() {
   return (
     <>
       <View style={styles.container}>
-        <Image source={require("../../assets/images/kitchenguru.png")} />
         <View style={styles.titleContainer}>
+          <Image source={require("../../assets/images/kitchenguru.png")} />
           <Text style={styles.titleMsg}>Login</Text>
-        <View style={styles.separator} />
-          <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
+        </View>
+        <View style={styles.separator}>
+          <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
+          <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
+          <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
         </View>
         <View style={styles.formContainer}>
-          <View style={styles.form}>
-            <Input
-              autoCapitalize="none"
-              keyboardType="email-address"
-              placeholder="Email"
-              style={styles.input}
-              inputContainerStyle={styles.inputContainer}
-              onChangeText={setEmail}
-              spellCheck={false}
-            />
-            <Input
-              placeholder="Password"
-              secureTextEntry
-              style={styles.input}
-              inputContainerStyle={styles.inputContainer}
-              onChangeText={setPassword}
-            />
-          </View>
-          <View style={styles.form}>
-          </View>
-        
+          <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
+          <Input
+            autoCapitalize="none"
+            keyboardType="email-address"
+            placeholder="Email"
+            style={styles.input}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={styles.inputContainer}
+            onChangeText={setEmail}
+            spellCheck={false}
+          />
+          <Input
+            placeholder="Password"
+            secureTextEntry
+            style={styles.input}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={styles.inputContainer}
+            onChangeText={setPassword}
+          />
+        </View>
           <WideButton 
             title="Sign In"
             iconName="login"
@@ -109,10 +111,9 @@ export default function LoginScreen() {
             iconName="form-select"
             onPress={() => router.push('/register')}
           />
-        </View>
+        
+        
 
-        <View style={styles.smallSpacer} />
-        <View style={styles.separator}></View>
         <ToggleMode />
       </View>
     </>
@@ -131,12 +132,13 @@ const styles = StyleSheet.create({
   titleContainer: {
     width: "75%"
   },
+  
   title: {
     fontSize: 24,
     textAlign: "left",
     fontFamily: "PlaypenBold",
+    margin: 11
   },
-  titleIcon: {},
   titleMsg: {
     fontSize: 54,
     textAlign: "center",
@@ -146,34 +148,46 @@ const styles = StyleSheet.create({
   // FORMS  
   // FORMS  
   formContainer: {
-    alignItems: "center",
+    // alignItems:"stretch",
     justifyContent: "center",
-    height: "40%",
-    width: "90%",
-  },
-  form: {
-    width: "90%",
+    height: "30%",
+    width: "85%",
     marginVertical: 11,
   },
   input: {
     backgroundColor: "white",
     borderRadius: 12,
     fontSize: 22,
-    marginVertical: 3,
+    marginVertical: 2,
     padding: 7
     
   },
+  inputStyle: {
+    height: 50
+  },
   inputContainer: {
     borderBottomWidth: 0,
-    
   },
   
   //SPACERS
   //SPACERS
   separator: {
     height: 0,
-    marginVertical: "10%",
-    width: '80%',
+    marginVertical: "5%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  lineStyle: {
+    borderWidth: 1,
+    width: "20%",
+    opacity: 0.3
+
+  },
+  dotStyle: {
+    borderWidth: 5,
+    borderRadius: 5,
+    marginHorizontal: 5
   },
   smallSpacer: {
     height: 0,
