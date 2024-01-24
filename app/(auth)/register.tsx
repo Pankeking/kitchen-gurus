@@ -59,7 +59,7 @@ export default function RegisterScreen() {
     <>
     <View style={styles.container}>
       
-      
+      <Text style={styles.title}>Register</Text>
       <View style={styles.separator}></View>
       <View style={styles.innerContainer}>
 
@@ -132,6 +132,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  title: {
+    fontSize: 54,
+    textAlign: "center",
+    fontFamily: "PlaypenRegular",
   },
   input: {
     marginVertical: 3,

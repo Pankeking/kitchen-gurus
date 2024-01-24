@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 
 import { router } from "expo-router";
 
-import { Image, Input } from "@rneui/themed";
+import { Image, Input, useTheme } from "@rneui/themed";
 import { View, ToggleMode, Text }  from "../../components/themedCustom";
 
 import { useDispatch } from "react-redux";
@@ -19,6 +19,7 @@ export default function LoginScreen() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const themeColors = useTheme().theme.colors;
 
   // SIGN IN LOGIC
   const appSignIn = async (email: string, password: string) => {
@@ -69,11 +70,11 @@ export default function LoginScreen() {
       <View style={styles.container}>
         <Image source={require("../../assets/images/kitchenguru.png")} />
         
-        <View style={styles.separator} />
         <View style={styles.titleContainer}>
-          <Text style={styles.titleIcon}>Icon</Text>
+          {/* <Text style={styles.titleIcon}>Icon</Text> */}
           <Text style={styles.titleMsg}>Login</Text>
-          <Text style={styles.title}>Welcome</Text>
+        <View style={styles.separator} />
+          <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
         </View>
         <View style={styles.formContainer}>
           <View style={styles.form}>
@@ -135,12 +136,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     textAlign: "left",
-    fontFamily: "PlaypenMedium",
+    fontFamily: "PlaypenBold",
   },
   titleIcon: {},
   titleMsg: {
-    fontSize: 36,
-    textAlign: "center"
+    fontSize: 54,
+    textAlign: "center",
+    fontFamily: "PlaypenRegular",
   },
   
 
