@@ -101,7 +101,7 @@ export default function LoginScreen() {
 
     
         <WideButton 
-          title="Sign In"
+          title="Enter Account"
           iconName="login"
           onPress={handleSignIn}
         />

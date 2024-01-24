@@ -59,7 +59,7 @@ export default function RegisterScreen() {
     <>
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
+        <Text style={[styles.title, {color: themeColors.primary}]}>Join Us!</Text>
         <View style={styles.separator}>
           <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
           <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
@@ -157,7 +157,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     fontSize: 22,
     padding: 7
-    
   },
   inputStyle: {
     height: 50
@@ -180,7 +179,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
   },
-
   buttonContainer: {
     width: "100%", 
     justifyContent: "center", 

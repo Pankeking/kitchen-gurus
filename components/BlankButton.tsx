@@ -13,10 +13,7 @@ export default function BlankButton(props: {
   
   return (
     <>
-      <View style={[styles.container, 
-          {width: props.big ? "80%" : "70%", backgroundColor: themeColors.lightText, borderColor: themeColors.surface}
-        ]
-      }>
+      <View style={[styles.container, {backgroundColor: themeColors.lightText, borderColor: themeColors.surface}]}>
         <TouchableOpacity style={styles.button}
           onPress={onPress}
         >
@@ -41,7 +38,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: "center",
     borderRadius: 12,
-    // borderWidth: 2
+    width: "80%"
   },
   button: {
     alignItems: "center",
