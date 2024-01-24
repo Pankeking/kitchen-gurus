@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { router } from "expo-router";
 
-import { View, ToggleMode, Text} from "../../components/themedCustom";
+import { View, Text} from "../../components/themedCustom";
 import { Input, useTheme } from "@rneui/themed";
 
 import { appSignUp, registerUserDB } from "../../utils/firebaseUtils";
