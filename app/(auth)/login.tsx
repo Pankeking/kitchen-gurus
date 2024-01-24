@@ -81,17 +81,19 @@ export default function LoginScreen() {
               keyboardType="email-address"
               placeholder="Email"
               style={styles.input}
+              inputContainerStyle={styles.inputContainer}
               onChangeText={setEmail}
               spellCheck={false}
             />
-          </View>
-          <View style={styles.form}>
             <Input
               placeholder="Password"
               secureTextEntry
               style={styles.input}
+              inputContainerStyle={styles.inputContainer}
               onChangeText={setPassword}
             />
+          </View>
+          <View style={styles.form}>
           </View>
         
           <WideButton 
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   titleContainer: {
-    width: "70%"
+    width: "75%"
   },
   title: {
     fontSize: 24,
@@ -150,13 +152,21 @@ const styles = StyleSheet.create({
     width: "90%",
   },
   form: {
-    width: "80%",
-    marginVertical: 8,
+    width: "90%",
+    marginVertical: 11,
   },
   input: {
-    marginVertical: 3,
+    backgroundColor: "white",
+    borderRadius: 12,
     fontSize: 22,
-  },    
+    marginVertical: 3,
+    padding: 7
+    
+  },
+  inputContainer: {
+    borderBottomWidth: 0,
+    
+  },
   
   //SPACERS
   //SPACERS

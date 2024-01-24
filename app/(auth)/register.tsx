@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
   input: {
     marginVertical: 3,
     fontSize: 22,
+    borderRadius: 12,
   },    
   innerContainer: {
     alignItems: "center",
