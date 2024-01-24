@@ -145,10 +145,9 @@ const styles = StyleSheet.create({
   // FORMS  
   // FORMS  
   formContainer: {
-    // alignItems:"stretch",
     justifyContent: "center",
     height: "30%",
-    width: "80%",
+    width: "85%",
     marginVertical: 11,
   },
   input: {

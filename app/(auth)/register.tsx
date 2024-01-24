@@ -58,13 +58,14 @@ export default function RegisterScreen() {
   return (
     <>
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
-      <View style={styles.separator}>
-        <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
-        <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
-        <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Register</Text>
+        <View style={styles.separator}>
+          <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
+          <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
+          <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
+        </View>
       </View>
-      {/* <View style={styles.separator}></View> */}
 
       <View style={styles.formContainer}>
         <Input
@@ -108,19 +109,19 @@ export default function RegisterScreen() {
         }
         
       </View>
-      <WideButton 
-        title="Create New Account"
-        iconName="key"
-        onPress={handleRegister}
-      />
-
-      <View style={styles.smallSpacer} />
-
-      <BlankButton 
-        title="Already Registered?"
-        iconName="login"
-        onPress={() => router.push('/login')}
-      />
+      <View style={styles.buttonContainer}>
+        <WideButton 
+          title="Create New Account"
+          iconName="key"
+          onPress={handleRegister}
+        />
+        <View style={styles.smallSpacer} />
+        <BlankButton 
+          title="Already Registered?"
+          iconName="login"
+          onPress={() => router.push('/login')}
+        />
+      </View>
 
       
     </View>
@@ -134,6 +135,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  titleContainer: {
+    marginBottom: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },  
   title: {
     fontSize: 54,
     textAlign: "center",
@@ -153,10 +159,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   formContainer: {
-    alignItems: "center",
     justifyContent: "center",
     height: "30%",
-    width: "80%",
+    width: "85%",
+    marginVertical: 11
   },
   matchContainer: {
     width: "80%",
@@ -168,6 +174,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 
+  buttonContainer: {
+    width: "100%", 
+    justifyContent: "center", 
+    alignItems: "center",
+    marginTop: "5%",
+  },
   // SPACERS
   // SPACERS
   smallSpacer: {
@@ -177,9 +189,10 @@ const styles = StyleSheet.create({
   separator: {
     height: 0,
     marginVertical: "5%",
+    width: "100%",
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center"
+    // justifyContent: "center",
+    alignItems: "center",
   },
   lineStyle: {
     borderWidth: 1,
