@@ -104,7 +104,7 @@ export default function LoginScreen() {
 
           
           <BlankButton
-            title="Create new Account"
+            title="New Account?"
             iconName="form-select"
             onPress={() => router.push('/register')}
           />

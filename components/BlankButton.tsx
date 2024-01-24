@@ -5,23 +5,30 @@ import { LinearGradient } from "expo-linear-gradient";
 export default function BlankButton(props: {
   iconName: React.ComponentProps<typeof CustomIcon>['name'];
   title: string;
+  big?: boolean;
   onPress: () => void;
 }) {
   const themeColors = useTheme().theme.colors;
   const { iconName, title } = props;
   const iconSize = 22;
+  
   const onPress = () => props.onPress();
   return (
     <>
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={[styles.text, {color: themeColors.searchBg}]}>
+      <View style={[styles.container, 
+          {width: props.big ? "80%" : "65%", backgroundColor: themeColors.lightText}
+        ]
+      }>
+        <TouchableOpacity style={styles.button}
+          onPress={props.onPress}
+        >
+          <Text style={[styles.text, {color: themeColors.darkText}]}>
             {title}
           </Text>
           <CustomIcon 
             name={iconName}
             size={iconSize}
-            style={{color: themeColors.searchBg}}
+            style={{color: themeColors.darkText}}
             />
         </TouchableOpacity>
         
