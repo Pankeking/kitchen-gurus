@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { StyleSheet } from "react-native"
 
 import { router } from "expo-router";
 
 import { Image, Input, useTheme } from "@rneui/themed";
-import { View, Text }  from "../../components/themedCustom";
+import { View, Text, ToggleMode }  from "../../components/themedCustom";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
@@ -13,15 +13,15 @@ import { FBauth, FBstore } from "../../firebase-config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import WideButton from "../../components/WideButton";
 import BlankButton from "../../components/BlankButton";
+import { useAssets } from "expo-asset";
 
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
 
-  const [brandUri, setBrandUri] = useState('');
-  const [imgLoaded, setImgLoaded] = useState(false);
   const themeColors = useTheme().theme.colors;
 
   // SIGN IN LOGIC
@@ -67,25 +67,22 @@ export default function LoginScreen() {
       console.error(resp.error)
     }
   }
-  useEffect(() => {
-    (async () => {
-      const brandImgData = await fetch('../assets/images/splash.png');
-      const brandUri = brandImgData.url;
-      setBrandUri(brandUri);
-      setImgLoaded(true);
-    })();
 
-  }, [])
   return (
     <>
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          {imgLoaded && 
-            <Image source={{ uri: brandUri}} 
-              style={{height: 100, width: 100}}
+          <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
+          {
+            <Image source={require('../../assets/images/brandTransparent.png')} 
+              style={{width: 150, height: 150,
+                top: 10, justifyContent: "center", 
+                zIndex: 1, backgroundColor: "transparent"
+              }}
+              
             />
           }
-          <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
+          
           <View style={styles.separator}>
             <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
             <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
@@ -137,7 +134,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   titleContainer: {
-    width: "75%"
+    width: "75%",
+    alignItems: "center"
   },
   
   title: {

@@ -156,10 +156,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 12,
     fontSize: 22,
-    padding: 7
+    marginVertical: 1,
   },
   inputStyle: {
-    height: 50
+    height: 50,
+    padding: 7,
+    fontFamily: "PlaypenRegular",
+
   },
   inputContainer: {
     borderBottomWidth: 0,

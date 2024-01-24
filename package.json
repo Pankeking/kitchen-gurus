@@ -26,6 +26,7 @@
     "@types/react-redux": "^7.1.28",
     "expo": "~49.0.13",
     "expo-apple-authentication": "~6.1.0",
+    "expo-asset": "~8.10.1",
     "expo-auth-session": "~5.0.2",
     "expo-camera": "~13.4.4",
     "expo-crypto": "~12.4.1",
