@@ -64,63 +64,63 @@ export default function RegisterScreen() {
         <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
         <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
       </View>
-      <View style={styles.separator}></View>
+      {/* <View style={styles.separator}></View> */}
 
-      <View style={styles.innerContainer}>
-          <Input
-            style={styles.input}
-            inputStyle={styles.inputStyle}
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Email"
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            spellCheck={false}
-          />
-          <Input
-            style={styles.input}
-            inputStyle={styles.inputStyle}
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Username"
-            onChangeText={setDisplayName}
-            spellCheck={false}
-          />
-          <Input
-            style={styles.input}
-            inputStyle={styles.inputStyle}
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Password"
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <Input
-            style={styles.input}
-            inputStyle={styles.inputStyle}
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Confirm Password"
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-          />
+      <View style={styles.formContainer}>
+        <Input
+          style={styles.input}
+          inputStyle={styles.inputStyle}
+          inputContainerStyle={styles.inputContainer}
+          placeholder="Email"
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          spellCheck={false}
+        />
+        <Input
+          style={styles.input}
+          inputStyle={styles.inputStyle}
+          inputContainerStyle={styles.inputContainer}
+          placeholder="Username"
+          onChangeText={setDisplayName}
+          spellCheck={false}
+        />
+        <Input
+          style={styles.input}
+          inputStyle={styles.inputStyle}
+          inputContainerStyle={styles.inputContainer}
+          placeholder="Password"
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <Input
+          style={styles.input}
+          inputStyle={styles.inputStyle}
+          inputContainerStyle={styles.inputContainer}
+          placeholder="Confirm Password"
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+        />
 
         {matchMessage && 
-          <View style={styles.innerDeepContainer}>
+          <View style={styles.matchContainer}>
             <Text style={[styles.matchMessage, {color: themeColors.secondary}]}>{matchMessage}</Text>
           </View>
         }
-        <WideButton 
-          title="Create New Account"
-          iconName="key"
-          onPress={handleRegister}
-        />
-
-        <View style={styles.smallSpacer} />
-
-        <BlankButton 
-          title="Already Registered?"
-          iconName="login"
-          onPress={() => router.push('/login')}
-        />
         
       </View>
+      <WideButton 
+        title="Create New Account"
+        iconName="key"
+        onPress={handleRegister}
+      />
+
+      <View style={styles.smallSpacer} />
+
+      <BlankButton 
+        title="Already Registered?"
+        iconName="login"
+        onPress={() => router.push('/login')}
+      />
 
       
     </View>
@@ -152,13 +152,13 @@ const styles = StyleSheet.create({
   inputContainer: {
     borderBottomWidth: 0,
   },
-  innerContainer: {
+  formContainer: {
     alignItems: "center",
     justifyContent: "center",
-    height: "40%",
-    width: "90%",
+    height: "30%",
+    width: "80%",
   },
-  innerDeepContainer: {
+  matchContainer: {
     width: "80%",
     marginVertical: 8,
   },

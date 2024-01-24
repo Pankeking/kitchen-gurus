@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     // alignItems:"stretch",
     justifyContent: "center",
     height: "30%",
-    width: "85%",
+    width: "80%",
     marginVertical: 11,
   },
   input: {
