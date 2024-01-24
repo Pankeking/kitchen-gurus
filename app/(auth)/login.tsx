@@ -102,15 +102,11 @@ export default function LoginScreen() {
 
           <View style={styles.separator}></View>
 
-          <WideButton 
-            title="Create new Account"
-            iconName="form-select"
-            onPress={() => router.push('/register')}
-          />
+          
           <BlankButton
             title="Create new Account"
             iconName="form-select"
-            onPress={() => null}
+            onPress={() => router.push('/register')}
           />
         </View>
 

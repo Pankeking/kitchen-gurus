@@ -23,14 +23,14 @@ export default function WideButton(props: {
             style={styles.button}
             onPress={onPress}
           >
-          <Text style={[styles.text, {color: themeColors.searchBg}]}>
-            {title}
-          </Text>
-          <CustomIcon 
-            name={iconName}
-            size={iconSize}
-            style={{color: themeColors.searchBg}}
-            />
+            <Text style={[styles.text, {color: themeColors.darkText}]}>
+              {title}
+            </Text>
+            <CustomIcon 
+              name={iconName}
+              size={iconSize}
+              style={{color: themeColors.darkText}}
+              />
         </TouchableOpacity>
         </LinearGradient>
       </View>
