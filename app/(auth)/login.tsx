@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import { router } from "expo-router";
 
 import { Image, Input, useTheme } from "@rneui/themed";
-import { View, Text, ToggleMode }  from "../../components/themedCustom";
+import { View, Text }  from "../../components/themedCustom";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
@@ -13,7 +13,6 @@ import { FBauth, FBstore } from "../../firebase-config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import WideButton from "../../components/WideButton";
 import BlankButton from "../../components/BlankButton";
-import { useAssets } from "expo-asset";
 
 
 export default function LoginScreen() {
