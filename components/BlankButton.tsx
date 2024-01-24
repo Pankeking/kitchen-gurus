@@ -8,10 +8,9 @@ export default function BlankButton(props: {
   onPress: () => void;
 }) {
   const themeColors = useTheme().theme.colors;
-  const { iconName, title } = props;
+  const { iconName, title, onPress } = props;
   const iconSize = 22;
   
-  const onPress = () => props.onPress();
   return (
     <>
       <View style={[styles.container, 
@@ -19,7 +18,7 @@ export default function BlankButton(props: {
         ]
       }>
         <TouchableOpacity style={styles.button}
-          onPress={props.onPress}
+          onPress={onPress}
         >
           <Text style={[styles.text, {color: themeColors.darkText}]}>
             {title}
