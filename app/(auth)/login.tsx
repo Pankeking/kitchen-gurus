@@ -71,11 +71,11 @@ export default function LoginScreen() {
         <View style={styles.titleContainer}>
           <Image source={require("../../assets/images/kitchenguru.png")} />
           <Text style={styles.titleMsg}>Login</Text>
-        </View>
-        <View style={styles.separator}>
-          <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
-          <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
-          <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
+          <View style={styles.separator}>
+            <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
+            <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
+            <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
+          </View>
         </View>
         <View style={styles.formContainer}>
           <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
@@ -98,23 +98,20 @@ export default function LoginScreen() {
             onChangeText={setPassword}
           />
         </View>
-          <WideButton 
-            title="Sign In"
-            iconName="login"
-            onPress={handleSignIn}
-          />
 
-          <View style={styles.smallSpacer}></View>
-          
-          <BlankButton
-            title="New Account?"
-            iconName="form-select"
-            onPress={() => router.push('/register')}
-          />
+    
+        <WideButton 
+          title="Sign In"
+          iconName="login"
+          onPress={handleSignIn}
+        />
+        <View style={styles.smallSpacer}></View>
+        <BlankButton
+          title="New Account?"
+          iconName="form-select"
+          onPress={() => router.push('/register')}
+        />
         
-        
-
-        <ToggleMode />
       </View>
     </>
   )
@@ -191,7 +188,6 @@ const styles = StyleSheet.create({
   },
   smallSpacer: {
     height: 0,
-    marginVertical: 7,
-    width: "80%"
+    marginVertical: 11,
   },
 })

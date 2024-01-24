@@ -58,16 +58,15 @@ export default function RegisterScreen() {
   return (
     <>
     <View style={styles.container}>
-      
       <Text style={styles.title}>Register</Text>
       <View style={styles.separator}>
-          <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
-          <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
-          <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
-        </View>
+        <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
+        <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
+        <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
+      </View>
       <View style={styles.separator}></View>
-      <View style={styles.innerContainer}>
 
+      <View style={styles.innerContainer}>
           <Input
             style={styles.input}
             inputStyle={styles.inputStyle}
@@ -123,8 +122,7 @@ export default function RegisterScreen() {
         
       </View>
 
-      <View style={styles.separator}></View>
-      <ToggleMode />
+      
     </View>
     </>
   )
@@ -145,7 +143,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 12,
     fontSize: 22,
-    marginVertical: 2,
     padding: 7
     
   },
@@ -175,8 +172,7 @@ const styles = StyleSheet.create({
   // SPACERS
   smallSpacer: {
     height: 0,
-    marginVertical: 7,
-    width: "80%"
+    marginVertical: 11,
   },
   separator: {
     height: 0,
