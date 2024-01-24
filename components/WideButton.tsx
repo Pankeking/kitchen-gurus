@@ -40,7 +40,7 @@ export default function WideButton(props: {
 
 const styles = StyleSheet.create({
   container: {
-    width: "80%",
+    width: "70%",
     height: 50,
     backgroundColor: "transparent",
   },

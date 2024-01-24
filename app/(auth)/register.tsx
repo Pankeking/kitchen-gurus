@@ -9,6 +9,7 @@ import { appSignUp, registerUserDB } from "../../utils/firebaseUtils";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
 import WideButton from "../../components/WideButton";
+import BlankButton from "../../components/BlankButton";
 
 
 export default function RegisterScreen() {
@@ -111,8 +112,8 @@ export default function RegisterScreen() {
 
         <View style={styles.separator}></View>
 
-        <WideButton 
-          title="Have an Account? Sign In"
+        <BlankButton 
+          title="Already Registered?"
           iconName="login"
           onPress={() => router.push('/login')}
         />
