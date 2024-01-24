@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   titleContainer: {
-    // justifyContent: "center",
     width: "70%"
   },
   title: {
@@ -145,8 +144,6 @@ const styles = StyleSheet.create({
     fontFamily: "PlaypenRegular",
   },
   
-
-
   // FORMS  
   // FORMS  
   formContainer: {
