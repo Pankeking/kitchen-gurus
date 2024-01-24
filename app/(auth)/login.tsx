@@ -4,9 +4,7 @@ import { StyleSheet } from "react-native"
 import { router } from "expo-router";
 
 import { Image, Input, useTheme } from "@rneui/themed";
-import { View, CustomIcon, ToggleMode, Text }  from "../../components/themedCustom";
-
-// import * as AppleAuthentication from "expo-apple-authentication";
+import { View, ToggleMode, Text }  from "../../components/themedCustom";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
@@ -19,7 +17,6 @@ import BlankButton from "../../components/BlankButton";
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
-  const themeColors = useTheme().theme.colors;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
