@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native"
 
 import { router } from "expo-router";
 
-import { Button, Input, useTheme } from "@rneui/themed";
-import { View, CustomIcon, ToggleMode }  from "../../components/themedCustom";
+import { Image, Input, useTheme } from "@rneui/themed";
+import { View, CustomIcon, ToggleMode, Text }  from "../../components/themedCustom";
 
 // import * as AppleAuthentication from "expo-apple-authentication";
 
@@ -70,10 +70,14 @@ export default function LoginScreen() {
   return (
     <>
       <View style={styles.container}>
-        <ToggleMode />
+        <Image source={require("../../assets/images/kitchenguru.png")} />
         
         <View style={styles.separator} />
-
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleIcon}>Icon</Text>
+          <Text style={styles.titleMsg}>Login</Text>
+          <Text style={styles.title}>Welcome</Text>
+        </View>
         <View style={styles.formContainer}>
           <View style={styles.form}>
             <Input
@@ -100,7 +104,7 @@ export default function LoginScreen() {
             onPress={handleSignIn}
           />
 
-          <View style={styles.separator}></View>
+          <View style={styles.smallSpacer}></View>
 
           
           <BlankButton
@@ -112,6 +116,7 @@ export default function LoginScreen() {
 
         <View style={styles.smallSpacer} />
         <View style={styles.separator}></View>
+        <ToggleMode />
       </View>
     </>
   )
@@ -126,6 +131,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  titleContainer: {
+    // justifyContent: "center",
+    width: "70%"
+  },
+  title: {
+    fontSize: 24,
+    textAlign: "left",
+    fontFamily: "PlaypenMedium",
+  },
+  titleIcon: {},
+  titleMsg: {
+    fontSize: 36,
+    textAlign: "center"
+  },
+  
+
 
   // FORMS  
   // FORMS  
