@@ -70,7 +70,7 @@ export default function LoginScreen() {
       <View style={styles.container}>
         <View style={styles.titleContainer}>
           <Image source={require("../../assets/images/kitchenguru.png")} />
-          <Text style={styles.titleMsg}>Login</Text>
+          <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
           <View style={styles.separator}>
             <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
             <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
@@ -78,7 +78,7 @@ export default function LoginScreen() {
           </View>
         </View>
         <View style={styles.formContainer}>
-          <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
+          <Text style={styles.subtitle}>Login</Text>
           <Input
             autoCapitalize="none"
             keyboardType="email-address"
@@ -131,15 +131,15 @@ const styles = StyleSheet.create({
   },
   
   title: {
-    fontSize: 24,
-    textAlign: "left",
-    fontFamily: "PlaypenBold",
-    margin: 11
-  },
-  titleMsg: {
-    fontSize: 54,
+    fontSize: 50,
     textAlign: "center",
+    fontFamily: "PlaypenBold",
+  },
+  subtitle: {
+    fontSize:30,
+    textAlign: "left",
     fontFamily: "PlaypenRegular",
+    margin: 11
   },
   
   // FORMS  

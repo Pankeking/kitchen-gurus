@@ -59,7 +59,7 @@ export default function RegisterScreen() {
     <>
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Register</Text>
+        <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
         <View style={styles.separator}>
           <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
           <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
@@ -68,6 +68,7 @@ export default function RegisterScreen() {
       </View>
 
       <View style={styles.formContainer}>
+        <Text style={styles.subtitle}>Register</Text>
         <Input
           style={styles.input}
           inputStyle={styles.inputStyle}
@@ -141,9 +142,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },  
   title: {
-    fontSize: 54,
+    fontSize: 50,
     textAlign: "center",
+    fontFamily: "PlaypenBold",
+  },
+  subtitle: {
+    fontSize:30,
+    textAlign: "left",
     fontFamily: "PlaypenRegular",
+    margin: 11
   },
   input: {
     backgroundColor: "white",
@@ -178,7 +185,7 @@ const styles = StyleSheet.create({
     width: "100%", 
     justifyContent: "center", 
     alignItems: "center",
-    marginTop: "5%",
+    marginTop: "20%",
   },
   // SPACERS
   // SPACERS
