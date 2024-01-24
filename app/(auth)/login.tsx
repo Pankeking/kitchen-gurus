@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native"
 
 import { router } from "expo-router";
@@ -19,6 +19,9 @@ export default function LoginScreen() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const [brandUri, setBrandUri] = useState('');
+  const [imgLoaded, setImgLoaded] = useState(false);
   const themeColors = useTheme().theme.colors;
 
   // SIGN IN LOGIC
@@ -64,12 +67,24 @@ export default function LoginScreen() {
       console.error(resp.error)
     }
   }
+  useEffect(() => {
+    (async () => {
+      const brandImgData = await fetch('../assets/images/splash.png');
+      const brandUri = brandImgData.url;
+      setBrandUri(brandUri);
+      setImgLoaded(true);
+    })();
 
+  }, [])
   return (
     <>
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          {/* <Image source={require("../../assets/images/kitchenguru.png")} /> */}
+          {imgLoaded && 
+            <Image source={{ uri: brandUri}} 
+              style={{height: 100, width: 100}}
+            />
+          }
           <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
           <View style={styles.separator}>
             <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
@@ -134,7 +149,8 @@ const styles = StyleSheet.create({
     fontSize:30,
     textAlign: "left",
     fontFamily: "PlaypenRegular",
-    margin: 11
+    marginBottom: 22,
+    marginLeft: 5,
   },
   
   // FORMS  
@@ -155,12 +171,11 @@ const styles = StyleSheet.create({
     height: 50,
     padding: 7,
     fontFamily: "PlaypenRegular",
-
   },
   inputContainer: {
     borderBottomWidth: 0,
+    margin: -7
   },
-  
   //SPACERS
   //SPACERS
   separator: {
@@ -174,7 +189,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: "20%",
     opacity: 0.3
-
   },
   dotStyle: {
     borderWidth: 5,

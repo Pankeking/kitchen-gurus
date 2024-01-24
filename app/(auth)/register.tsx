@@ -146,10 +146,11 @@ const styles = StyleSheet.create({
     fontFamily: "PlaypenBold",
   },
   subtitle: {
-    fontSize:30,
+    fontSize: 30,
     textAlign: "left",
     fontFamily: "PlaypenRegular",
-    margin: 11
+    marginBottom: 22,
+    marginLeft: 5
   },
   input: {
     backgroundColor: "white",
@@ -162,6 +163,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     borderBottomWidth: 0,
+    margin: -7,
   },
   formContainer: {
     justifyContent: "center",
@@ -170,13 +172,14 @@ const styles = StyleSheet.create({
     marginVertical: 11
   },
   matchContainer: {
-    width: "80%",
-    marginVertical: 8,
+    width: "85%",
+    marginBottom: 11,
+    marginHorizontal: "5%",
   },
   matchMessage: {
-    alignSelf: "center",
     color: "white",
     fontSize: 18,
+    textAlign: "left"
   },
   buttonContainer: {
     width: "100%", 
