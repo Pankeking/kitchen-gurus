@@ -78,10 +78,8 @@ export default function LoginScreen() {
                 top: 10, justifyContent: "center", 
                 zIndex: 1, backgroundColor: "transparent"
               }}
-              
             />
           }
-          
           <View style={styles.separator}>
             <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
             <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
