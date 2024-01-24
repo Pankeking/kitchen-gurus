@@ -57,30 +57,7 @@ export default function RegisterScreen() {
   return (
     <>
     <View style={styles.container}>
-      {/* <AppleAuthentication.AppleAuthenticationButton
-            buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_UP}
-            buttonStyle={colorScheme === "light" ? AppleAuthentication.AppleAuthenticationButtonStyle.BLACK : AppleAuthentication.AppleAuthenticationButtonStyle.WHITE}
-            cornerRadius={5}
-            style={styles.button}
-            onPress={async () => {
-              try {
-                const credential = await AppleAuthentication.signInAsync({
-                  requestedScopes: [
-                    AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-                    AppleAuthentication.AppleAuthenticationScope.EMAIL,
-                  ],
-                });
-                
-                // signed in
-              } catch (e : any) {
-                if (e.code === 'ERR_REQUEST_CANCELED') {
-                  // handle that the user canceled the sign-in flow
-                } else {
-                  // handle other errors
-                }
-              }
-            }}
-          /> */}
+      
       <ToggleMode />
       <View style={styles.separator}></View>
       <View style={styles.innerContainer}>
