@@ -69,9 +69,7 @@ export default function LoginScreen() {
     <>
       <View style={styles.container}>
         <Image source={require("../../assets/images/kitchenguru.png")} />
-        
         <View style={styles.titleContainer}>
-          {/* <Text style={styles.titleIcon}>Icon</Text> */}
           <Text style={styles.titleMsg}>Login</Text>
         <View style={styles.separator} />
           <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
@@ -103,7 +101,6 @@ export default function LoginScreen() {
           />
 
           <View style={styles.smallSpacer}></View>
-
           
           <BlankButton
             title="New Account?"
@@ -157,7 +154,6 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   input: {
-    // height: 40,
     marginVertical: 3,
     fontSize: 22,
   },    
