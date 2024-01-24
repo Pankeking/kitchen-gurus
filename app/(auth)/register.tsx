@@ -123,7 +123,6 @@ export default function RegisterScreen() {
           onPress={() => router.push('/login')}
         />
       </View>
-
       
     </View>
     </>

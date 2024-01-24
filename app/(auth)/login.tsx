@@ -69,7 +69,7 @@ export default function LoginScreen() {
     <>
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          <Image source={require("../../assets/images/kitchenguru.png")} />
+          {/* <Image source={require("../../assets/images/kitchenguru.png")} /> */}
           <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
           <View style={styles.separator}>
             <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
@@ -98,7 +98,6 @@ export default function LoginScreen() {
           />
         </View>
 
-    
         <WideButton 
           title="Enter Account"
           iconName="login"
@@ -114,10 +113,7 @@ export default function LoginScreen() {
       </View>
     </>
   )
-
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
