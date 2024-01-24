@@ -74,7 +74,7 @@ export default function LoginScreen() {
           <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
           {
             <Image source={require('../../assets/images/brandTransparent.png')} 
-              style={{width: 150, height: 150,
+              style={{width: 100, height: 100,
                 top: 10, justifyContent: "center", 
                 zIndex: 1, backgroundColor: "transparent"
               }}

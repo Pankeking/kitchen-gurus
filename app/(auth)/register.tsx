@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { router } from "expo-router";
 
 import { View, Text} from "../../components/themedCustom";
-import { Input, useTheme } from "@rneui/themed";
+import { Image, Input, useTheme } from "@rneui/themed";
 
 import { appSignUp, registerUserDB } from "../../utils/firebaseUtils";
 import { useDispatch } from "react-redux";
@@ -60,6 +60,12 @@ export default function RegisterScreen() {
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={[styles.title, {color: themeColors.primary}]}>Join Us!</Text>
+        <Image source={require('../../assets/images/brandTransparent.png')} 
+              style={{width: 100, height: 100,
+                top: 10, justifyContent: "center", 
+                zIndex: 1, backgroundColor: "transparent"
+              }}
+            />
         <View style={styles.separator}>
           <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
           <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
