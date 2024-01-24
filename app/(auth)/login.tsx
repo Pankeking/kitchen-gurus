@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import { router } from "expo-router";
 
 import { Image, Input, useTheme } from "@rneui/themed";
-import { View, ToggleMode, Text }  from "../../components/themedCustom";
+import { View, Text }  from "../../components/themedCustom";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
@@ -80,13 +80,12 @@ export default function LoginScreen() {
         <View style={styles.formContainer}>
           <Text style={styles.subtitle}>Login</Text>
           <Input
-            autoCapitalize="none"
-            keyboardType="email-address"
-            placeholder="Email"
             style={styles.input}
             inputStyle={styles.inputStyle}
             inputContainerStyle={styles.inputContainer}
+            placeholder="Email"
             onChangeText={setEmail}
+            autoCapitalize="none"
             spellCheck={false}
           />
           <Input
@@ -155,11 +154,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     fontSize: 22,
     marginVertical: 2,
-    padding: 7
-    
   },
   inputStyle: {
-    height: 50
+    height: 50,
+    padding: 7,
+    fontFamily: "PlaypenRegular",
+
   },
   inputContainer: {
     borderBottomWidth: 0,
