@@ -11,8 +11,10 @@ import { setUser } from "../../redux/slices/authSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FBauth, FBstore } from "../../firebase-config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+
 import WideButton from "../../components/WideButton";
 import BlankButton from "../../components/BlankButton";
+
 
 
 export default function LoginScreen() {
