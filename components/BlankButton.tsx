@@ -26,8 +26,6 @@ export default function BlankButton(props: {
             style={{color: themeColors.darkText}}
             />
         </TouchableOpacity>
-        
-          
       </View>
     </>
   )
