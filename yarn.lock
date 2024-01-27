@@ -4537,6 +4537,13 @@ expo-file-system@~15.4.0, expo-file-system@~15.4.4:
   dependencies:
     uuid "^3.4.0"
 
+expo-file-system@~15.4.5:
+  version "15.4.5"
+  resolved "https://registry.yarnpkg.com/expo-file-system/-/expo-file-system-15.4.5.tgz#3ef68583027ff0e2fb9eca7a22b3caff6cfc550d"
+  integrity sha512-xy61KaTaDgXhT/dllwYDHm3ch026EyO8j4eC6wSVr/yE12MMMxAC09yGwy4f7kkOs6ztGVQF5j7ldRzNLN4l0Q==
+  dependencies:
+    uuid "^3.4.0"
+
 expo-font@~11.4.0:
   version "11.4.0"
   resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-11.4.0.tgz#e2d31c0bb76ba3c37c2d84703a49aeafc3afef28"
@@ -7679,11 +7686,6 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-react-native-fast-image@^8.6.3:
-  version "8.6.3"
-  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.6.3.tgz#6edc3f9190092a909d636d93eecbcc54a8822255"
-  integrity sha512-Sdw4ESidXCXOmQ9EcYguNY2swyoWmx53kym2zRsvi+VeFCHEdkO+WG1DK+6W81juot40bbfLNhkc63QnWtesNg==
-
 react-native-gesture-handler@~2.12.0:
   version "2.12.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.12.1.tgz#f11a99fb95169810c6886fad5efa01a17fd81660"
@@ -7694,6 +7696,11 @@ react-native-gesture-handler@~2.12.0:
     invariant "^2.2.4"
     lodash "^4.17.21"
     prop-types "^15.7.2"
+
+react-native-image-modal@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-image-modal/-/react-native-image-modal-2.0.4.tgz#c3cbfad43d0dd33a2f106b1f5688d96c4900b82c"
+  integrity sha512-BTHOUAznjAHStrxg2D3k6R/3YPXMos2w6jZv5LdOR6xY2vHVHgMnSbjeszq882brbge51ZjS06FCi8sM6WNwxg==
 
 react-native-ratings@^8.1.0:
   version "8.1.0"

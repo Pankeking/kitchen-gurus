@@ -33,7 +33,6 @@ export default function RegisterScreen() {
       setMatchMessage('')
     }
   },[password, confirmPassword])
-
   
 
   const handleRegister = async () => {
@@ -51,8 +50,6 @@ export default function RegisterScreen() {
         console.error(resp.error)
       }
     }
-  
-
 
 
   return (
@@ -220,5 +217,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: 5
   },
-  
 })

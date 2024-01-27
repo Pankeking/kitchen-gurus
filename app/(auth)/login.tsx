@@ -15,7 +15,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import WideButton from "../../components/WideButton";
 import BlankButton from "../../components/BlankButton";
 
-
+// import ExpoFastImage from 'expo-fast-image';
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
@@ -74,14 +74,16 @@ export default function LoginScreen() {
       <View style={styles.container}>
         <View style={styles.titleContainer}>
           <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
-          {
-            <Image source={require('../../assets/images/brandTransparent.png')} 
+            <Image source={{
+                uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.2MuoKY7Uxna98iFkUb9sSwHaEk%26pid%3DApi&f=1&ipt=c437f0387a16b6952898ba40a5fbdeddca912bea587860c0e3d54765b287ad7a&ipo=images',
+                // headers: { Authorization: 'AuthToken' },
+              }} 
+              // resizeMode={FastImage.resizeMode.contain}
               style={{width: 100, height: 100,
                 top: 10, justifyContent: "center", 
                 zIndex: 1, backgroundColor: "transparent"
               }}
             />
-          }
           <View style={styles.separator}>
             <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>
             <View style={[styles.dotStyle, {borderColor: themeColors.lightText}]} />
