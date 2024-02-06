@@ -1,16 +1,21 @@
-import { router, useLocalSearchParams } from "expo-router";
-import { FlatList, useWindowDimensions } from "react-native";
-import { Text, View } from "../../../../components/themedCustom";
-import { StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
-import { Image } from "@rneui/themed";
+import { FlatList, useWindowDimensions } from "react-native";
+import { StyleSheet } from "react-native";
+
+import { Image } from "expo-image";
+import { router, useLocalSearchParams } from "expo-router";
+
+import { Text, View } from "../../../../components/themedCustom";
+
 import { fetchUserById, followUserById, followedById } from "../../../../utils/firebaseUtils";
+import { FBauth } from "../../../../firebase-config";
+
 import MiniRecipe from "../../../../components/Profile/MiniRecipe";
 import StoryProfile from "../../../../components/Home/StoryProfiles";
 import WideButton from "../../../../components/WideButton";
-import { FBauth } from "../../../../firebase-config";
-import { reloadify } from "../../../../redux/slices/authSlice";
+
 import { useDispatch } from "react-redux";
+import { reloadify } from "../../../../redux/slices/authSlice";
 
 export default function User() {
 
@@ -105,15 +110,21 @@ export default function User() {
     return
   }
 
+  const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
+
   return (
     <View style={styles.container}>
       {loaded && (
         <>
         <View style={styles.picContainer}>
           <Image 
-            source={{uri: userData?.backPic}} 
-            resizeMode="cover" 
+            source={userData?.backPic}
+            contentFit="cover" 
             style={[styles.backPic,{width: windowWidth, height: height}]} 
+            transition={200}
+            placeholder={blurhash}
           />
           <View style={[styles.profilePicContainer]}>
             <StoryProfile picture={userData?.profilePic ?? ""} big />
@@ -203,6 +214,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     bottom: "-20%",
     right: "33%",
+    zIndex: 2,
   },
   profilePic: {
     width: 140,
