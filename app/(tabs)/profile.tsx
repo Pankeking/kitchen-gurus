@@ -5,16 +5,18 @@ import { CustomIcon, Text, View } from '../../components/themedCustom';
 import { useTheme } from '@rneui/themed';
 
 import { Image } from 'expo-image'; 
+import { router } from 'expo-router';
 import { launchImageLibraryAsync } from 'expo-image-picker';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import ProfilePicViewer from '../../components/Profile/ProfilePicViewer';
 import ProfileCard from '../../components/Profile/ProfileCard';
 
 import { FBauth} from '../../firebase-config';
-import { LinearGradient } from 'expo-linear-gradient';
 import { queryUserRecipes, updateProfileBackground, updateProfilePicture } from '../../utils/firebaseUtils';
-import { router } from 'expo-router';
+
 import { useSelector } from 'react-redux';
+
 import WideButton from '../../components/WideButton';
 import MiniRecipe from '../../components/Profile/MiniRecipe';
 

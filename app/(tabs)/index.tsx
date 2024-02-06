@@ -1,18 +1,20 @@
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 
-import { router } from 'expo-router';
-
-
-import { FBauth} from '../../firebase-config';
+import { useTheme } from '@rneui/themed';
 
 import { View, Text, CustomIcon } from '../../components/themedCustom';
-import { useEffect, useState } from 'react';
-import { Image, useTheme } from '@rneui/themed';
 import StoryProfile from '../../components/Home/StoryProfiles';
+
+import { FBauth} from '../../firebase-config';
 import { fetchFriends, fetchAllRecipes, likeRecipe } from '../../utils/firebaseUtils';
+
+import { router } from 'expo-router';
+import { Image } from 'expo-image';
+
 import { useSelector } from 'react-redux';
-import { reloadify } from '../../redux/slices/authSlice';
 import { useDispatch } from 'react-redux';
+import { reloadify } from '../../redux/slices/authSlice';
 
 
 export default function HomeScreen() {

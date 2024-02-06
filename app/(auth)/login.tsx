@@ -9,14 +9,13 @@ import { View, Text }  from "../../components/themedCustom";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
+
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FBauth, FBstore } from "../../firebase-config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 import WideButton from "../../components/WideButton";
 import BlankButton from "../../components/BlankButton";
-
-// import ExpoFastImage from 'expo-fast-image';
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
