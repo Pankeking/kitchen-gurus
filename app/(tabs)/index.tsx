@@ -193,6 +193,8 @@ export default function HomeScreen() {
                         )}
                         pagingEnabled 
                         horizontal
+                        initialNumToRender={2}
+                        maxToRenderPerBatch={2}
                       />
                     </View>
   
