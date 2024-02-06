@@ -25,7 +25,7 @@ export default function StoryProfile(props: {
     >
       <View style={[styles.outLine, outline, {borderColor: themeColors.surface}]}>
         <Image 
-          source={{uri: props.picture}}
+          source={props.picture}
           style={pic}
         />
       </View>

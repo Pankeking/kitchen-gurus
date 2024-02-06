@@ -86,7 +86,7 @@ export default function HomeScreen() {
         <Image 
           style={[containerDimensions, {aspectRatio: 1}]} 
           source={{uri: item.item}} 
-          resizeMode='cover'
+          contentFit='cover'
         />
     )}
 
@@ -163,13 +163,12 @@ export default function HomeScreen() {
             keyExtractor={(Recipes) => Recipes.recipeID}
             removeClippedSubviews={false}
             showsVerticalScrollIndicator={false}
-            initialNumToRender={5}
+            initialNumToRender={2}
             maxToRenderPerBatch={3}
             renderItem={({ item, index }) => (
               <View>
                   {item.uid == "dummy" ? (
                     <ActivityIndicator size={"large"}>
-
                     </ActivityIndicator>
                   ) : (
                     

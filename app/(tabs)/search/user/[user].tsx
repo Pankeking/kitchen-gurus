@@ -163,20 +163,16 @@ export default function User() {
                 </>
               )}
             />
-          ) : (
-            <View style={styles.nullContainer}>
-              <Text style={styles.nullText  }>{userData?.username}</Text>
-              <Text style={styles.nullText  }>has not uploaded any recipes yet</Text>
-            </View>
-          )
+            ) : (
+              <View style={styles.nullContainer}>
+                <Text style={styles.nullText  }>{userData?.username}</Text>
+                <Text style={styles.nullText  }>has not uploaded any recipes yet</Text>
+              </View>
+            )
           }
-          
         </View>
-        
-        
         </>
-      )
-      }
+      )}
     </View>
   )
 }
