@@ -2,8 +2,9 @@ import { useState } from "react";
 import { StyleSheet } from "react-native"
 
 import { router } from "expo-router";
+import { Image } from 'expo-image';
 
-import { Image, Input, useTheme } from "@rneui/themed";
+import { Input, useTheme } from "@rneui/themed";
 import { View, Text }  from "../../components/themedCustom";
 
 import { useDispatch } from "react-redux";
@@ -24,6 +25,10 @@ export default function LoginScreen() {
   
 
   const themeColors = useTheme().theme.colors;
+
+  // const blurhash =
+  // '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
 
   // SIGN IN LOGIC
   const appSignIn = async (email: string, password: string) => {
@@ -74,15 +79,15 @@ export default function LoginScreen() {
       <View style={styles.container}>
         <View style={styles.titleContainer}>
           <Text style={[styles.title, {color: themeColors.primary}]}>Welcome</Text>
-            <Image source={{
-                uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.2MuoKY7Uxna98iFkUb9sSwHaEk%26pid%3DApi&f=1&ipt=c437f0387a16b6952898ba40a5fbdeddca912bea587860c0e3d54765b287ad7a&ipo=images',
-                // headers: { Authorization: 'AuthToken' },
-              }} 
-              // resizeMode={FastImage.resizeMode.contain}
+            <Image 
+              source={require('../../assets/images/brandTransparent.png')} 
               style={{width: 100, height: 100,
                 top: 10, justifyContent: "center", 
                 zIndex: 1, backgroundColor: "transparent"
               }}
+              // placeholder={blurhash}
+              contentFit="cover"
+              transition={1000}
             />
           <View style={styles.separator}>
             <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>

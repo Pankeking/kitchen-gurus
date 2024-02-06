@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { router } from "expo-router";
+import { Image } from 'expo-image';
 
 import { View, Text} from "../../components/themedCustom";
-import { Image, Input, useTheme } from "@rneui/themed";
+import { Input, useTheme } from "@rneui/themed";
+
 
 import { appSignUp, registerUserDB } from "../../utils/firebaseUtils";
 import { useDispatch } from "react-redux";
