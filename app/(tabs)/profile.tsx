@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { CustomIcon, Text, View } from '../../components/themedCustom';
 import { useTheme } from '@rneui/themed';
 
+import { Image } from 'expo-image'; 
 import { launchImageLibraryAsync } from 'expo-image-picker';
 
 import ProfilePicViewer from '../../components/Profile/ProfilePicViewer';
