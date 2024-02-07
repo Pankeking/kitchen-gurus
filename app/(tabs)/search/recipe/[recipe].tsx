@@ -1,26 +1,31 @@
-import { router, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
-import { CustomIcon, Text, View } from "../../../../components/themedCustom";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, useWindowDimensions } from "react-native";
-import { Image, useTheme } from "@rneui/themed";
-import { fetchRecipeById, likeRecipe, recipeLikedBy } from "../../../../utils/firebaseUtils";
-import StoryProfile from "../../../../components/Home/StoryProfiles";
-import { FBauth } from "../../../../firebase-config";
+
+import { router, useLocalSearchParams } from "expo-router";
+import { Image } from 'expo-image';
 import { LinearGradient } from "expo-linear-gradient";
-import Ingredients from "../../../../components/AddContent/Ingredients";
-import SmallButton from "../../../../components/SmallButton";
-import RenderChips from "../../../../components/AddContent/RenderChips";
+
+import { useTheme } from "@rneui/themed";
+import { CustomIcon, Text, View } from "../../../../components/themedCustom";
+
+
+import { fetchRecipeById, likeRecipe, recipeLikedBy } from "../../../../utils/firebaseUtils";
+import { FBauth } from "../../../../firebase-config";
+
 import { useDispatch } from "react-redux";
 import { reloadify } from "../../../../redux/slices/authSlice";
+
+import RenderChips from "../../../../components/AddContent/RenderChips";
+import StoryProfile from "../../../../components/Home/StoryProfiles";
+import Ingredients from "../../../../components/AddContent/Ingredients";
+import SmallButton from "../../../../components/SmallButton";
 
 export default function Recipe() {
 
   const  {recipe, recipeID } =  useLocalSearchParams<{recipe: string, recipeID: string}>();
   const windowWidth = Math.round(useWindowDimensions().width);
   const height = windowWidth * 0.7;
-  const squareDimensions = {width:windowWidth, height: windowWidth};
   
-  const ICON_BIG = 50;
   const ICON_MEDIUM = 30;
   const ICON_SMALL = 20;
 
@@ -140,12 +145,6 @@ export default function Recipe() {
     )
   }
 
-  const renderTab = ({ item }: any) => {
-    switch (selectedData) {
-      
-    }
-  }
-
   if (loaded) {
     return (
       <View style={styles.container}>
@@ -161,7 +160,7 @@ export default function Recipe() {
                 colors={[`${themeColors.darkText}00`, `${themeColors.darkText}bb`, `${themeColors.darkText}99`]}
                 style={styles.linearGradient}
               />
-              <Image style={{width:windowWidth, height: height}} resizeMode="cover" source={{uri: item}}/>
+              <Image style={{width:windowWidth, height: height}} contentFit="cover" source={item}/>
               </>
             )}
           />
@@ -245,7 +244,6 @@ export default function Recipe() {
                     )
                 }
                 if (selectedData === 1) {
-                  console.log(item)
                   return (
                       <FlatList 
                         data={FullRecipe?.instructions}

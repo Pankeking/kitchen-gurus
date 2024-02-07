@@ -1,7 +1,10 @@
-import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet } from "react-native";
+
+import { LinearGradient } from "expo-linear-gradient";
+import { Image } from 'expo-image';
+
 import { View } from "../themedCustom";
-import { Image, useTheme } from "@rneui/themed";
+import { useTheme } from "@rneui/themed";
 
 export default function StoryProfile(props: {
   picture: string;
@@ -22,7 +25,7 @@ export default function StoryProfile(props: {
     >
       <View style={[styles.outLine, outline, {borderColor: themeColors.surface}]}>
         <Image 
-          source={{uri: props.picture}}
+          source={props.picture}
           style={pic}
         />
       </View>

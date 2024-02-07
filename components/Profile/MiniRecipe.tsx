@@ -1,8 +1,8 @@
 import { StyleSheet, TouchableOpacity, useWindowDimensions } from "react-native"
 import { CustomIcon, Text, View } from "../themedCustom";
-import { Image, useTheme } from "@rneui/themed";
+import { useTheme } from "@rneui/themed";
 import { useState } from "react";
-import { router } from "expo-router";
+import { Image } from 'expo-image';
 
 export default function MiniRecipe(props: {
   name: string;

@@ -9,14 +9,13 @@ import { View, Text }  from "../../components/themedCustom";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/authSlice";
+
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FBauth, FBstore } from "../../firebase-config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 import WideButton from "../../components/WideButton";
 import BlankButton from "../../components/BlankButton";
-
-// import ExpoFastImage from 'expo-fast-image';
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
@@ -87,7 +86,7 @@ export default function LoginScreen() {
               }}
               // placeholder={blurhash}
               contentFit="cover"
-              transition={1000}
+              // transition={1000}
             />
           <View style={styles.separator}>
             <View style={[styles.lineStyle, {borderColor: themeColors.lightText}]}></View>

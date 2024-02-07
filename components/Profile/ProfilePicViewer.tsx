@@ -1,7 +1,10 @@
-import { Image, useTheme } from '@rneui/themed'
 import React from 'react'
 import { StyleSheet } from 'react-native';
+
+import { useTheme } from '@rneui/themed'
 import { Text, View } from '../themedCustom';
+
+import { Image } from 'expo-image';
 
 
 

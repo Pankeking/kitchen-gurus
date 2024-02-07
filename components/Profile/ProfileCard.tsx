@@ -1,8 +1,11 @@
-import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { Text, View } from "../themedCustom";
-import { FBauth, FBstore } from "../../firebase-config";
 import { useState } from "react";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+
+import { FBauth, FBstore } from "../../firebase-config";
 import { doc, updateDoc } from "firebase/firestore";
+
+import { Text, View } from "../themedCustom";
+
 import { useSelector } from "react-redux";
 import { selectUserId } from "../../redux/slices/authSlice";
 
