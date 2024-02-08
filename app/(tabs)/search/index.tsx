@@ -1,5 +1,5 @@
 import { Input } from "@rneui/themed";
-import { CustomIcon, View } from "../../../components/themedCustom";
+import { CustomIcon, Text, View } from "../../../components/themedCustom";
 import { StyleSheet } from "react-native";
 import SmallButton from "../../../components/SmallButton";
 
@@ -19,8 +19,11 @@ export default function SearchScreen() {
   const drop_icon = <SmallButton size={40} title="" onPress={handleCancel} iconName={"close"}/>
   return (
       <View style={styles.container}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Search</Text>
+        </View>
         <Input 
-          placeholder="Search" 
+          placeholder="Search for users or recipes" 
           containerStyle={styles.inputContainer}
           inputContainerStyle={{borderBottomWidth: 0}}
           inputStyle={styles.input}
@@ -39,6 +42,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  titleContainer: {
+    marginBottom: 12
+  },
+  title: {
+    fontSize: 40,
+  },
   inputContainer: {
     alignItems: "center",
     justifyContent: "center",
@@ -47,6 +56,7 @@ const styles = StyleSheet.create({
     width: "90%" 
   },
   input: {
+    fontFamily: "PlaypenBold",
     top: 12,
     left: 6
   },
