@@ -14,7 +14,6 @@ export default function SearchLayout() {
           headerStyle: {backgroundColor: themeColors.surface},
           headerTitleStyle: {fontSize: 14, fontFamily: "PlaypenMedium"},
           headerTintColor: themeColors.lightText,
-          headerRight: () => <ToggleMode />
         }}
       >
         <Stack.Screen name="index" />

@@ -1,7 +1,7 @@
 import { useTheme } from '@rneui/themed';
 import { Link, Stack } from 'expo-router';
 import { Pressable } from 'react-native';
-import { CustomIcon, ToggleMode } from '../../../components/themedCustom';
+import { CustomIcon } from '../../../components/themedCustom';
 import { useSelector } from 'react-redux';
 
 export default function AddLayout() {
@@ -29,7 +29,6 @@ export default function AddLayout() {
                   )}
               </Pressable>
             </Link>
-            <ToggleMode />
             </>
           ),
           headerLeft: () => (
