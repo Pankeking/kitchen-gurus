@@ -1,16 +1,15 @@
 import { StyleSheet } from 'react-native';
 
 import { router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
 
 import { useDispatch } from 'react-redux';
-import { nullifyUser, setUser } from '../../redux/slices/authSlice';
+import { nullifyUser } from '../../redux/slices/authSlice';
 
 import { signOut } from 'firebase/auth';
 import { FBauth } from '../../firebase-config';
 
-import { Button, useTheme } from '@rneui/themed';
-import { CustomIcon, ToggleMode, View, Text } from '../../components/themedCustom';
+import { useTheme } from '@rneui/themed';
+import { ToggleMode, View, Text } from '../../components/themedCustom';
 import WideButton from '../../components/WideButton';
 
 export default function SettingsScreen() {
@@ -76,12 +75,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  bottom: {
-    width: "90%",
-    top: "20%",
-    alignItems: "center",
+  separator: {
+    marginVertical: 30,
+    height: 1,
   },
-
   optionContainer: {
     alignItems: "center",
     justifyContent: "center",
@@ -90,9 +87,9 @@ const styles = StyleSheet.create({
     padding: "5%",
     borderRadius: 25,
   },
-  
-  separator: {
-    marginVertical: 30,
-    height: 1,
+  bottom: {
+    width: "90%",
+    top: "20%",
+    alignItems: "center",
   },
 });
