@@ -1,6 +1,8 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { Text, View } from "../themedCustom";
+import { View } from "../themedCustom";
+
+import SmallButton from "../SmallButton";
 
 import { Image } from 'expo-image';
 import { router } from "expo-router";
@@ -13,29 +15,58 @@ export default function PhotoEditor(props: {
   newImage: CameraCapturedPicture;
 }) {
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const ICON_SIZE = 40;
+  const confirm_status = 0;
+  const retry_status = 1;
+  const cancel_status = 2;
 
-  const handleFinishEdit = (confirmed: boolean) => {
-    if (confirmed) dispatch(addPhoto(props.newImage));
+  const handleFinish = (status: number) => {
+    if (status === 2) {
+      router.replace('/addPhotoName')
+      return;
+    }
+    if (status === 1) {
+      router.replace('/CameraScreen');
+      return;
+    }
+    dispatch(addPhoto(props.newImage));
     router.replace('/addPhotoName')
   }
 
+
   return (
     <View style={styles.container}>
+
       <View style={styles.imageContainer}>
         <Image 
           style={styles.image}
           source={props.newImage}
         />
       </View>
-      <TouchableOpacity
-        onPress={() => handleFinishEdit(true)}
-      >
-        <Text style={styles.link}>
-          Finish Editing
-        </Text>
-      </TouchableOpacity>
-      <Text> Photo Editor </Text>
+      <View style={styles.topButtons} >
+        <SmallButton 
+          onPress={() => handleFinish(confirm_status)}
+          title="Confirm"
+          iconName={"checkbox-marked-circle"}
+          size={ICON_SIZE}
+          Color="green"
+        />
+        <SmallButton 
+          onPress={() => handleFinish(retry_status)}
+          title="Try Again"
+          iconName={"restore"}
+          size={ICON_SIZE}
+          Color="blue"
+        />
+        <SmallButton 
+          onPress={() => handleFinish(cancel_status)}
+          title="Cancel"
+          iconName={"close-circle"}
+          size={ICON_SIZE}
+          Color="red"
+        />
+      </View>
     </View>
   )
 }
@@ -47,6 +78,13 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  topButtons: {
+    width: "80%",
+    justifyContent:"space-around",
+    flexDirection: "row",
+    alignItems: "center",
+    // borderColor: "blue", borderWidth: 3
   },
   link: {
     fontSize: 30,
