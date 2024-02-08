@@ -103,8 +103,6 @@ export default function ProfileScreen() {
     alert("You did not select any image");
   }
 
-
-
   return (
     <View style={styles.container}>
       <View style={styles.bgMainImgContainer}>
@@ -124,7 +122,6 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
       </View>
-
 
       <View style={styles.cardContainer}>
         <View style={styles.profilePicContainer}>
@@ -148,7 +145,6 @@ export default function ProfileScreen() {
         <ProfileCard />
       </View>
 
-
     <View style={[styles.separator, {backgroundColor: "transparent"}]}>
       <LinearGradient
         colors={[
@@ -162,7 +158,6 @@ export default function ProfileScreen() {
           alignItems: 'center'
         }}
       >
-
       </LinearGradient>
     </View>
 
@@ -182,7 +177,6 @@ export default function ProfileScreen() {
           <Text style={styles.networkText}>2</Text>
         </View>
       </View>
-
 
         <View style={styles.buttonContainer}>
           <WideButton 
@@ -210,16 +204,12 @@ export default function ProfileScreen() {
               </>
             )}
           />
-
         ) : (
           <View style={{justifyContent: "center", alignItems: "center", flex: 1}}>
           <ActivityIndicator size={'large'}/>
           </View>
-            
         )
-
         }
-       
       </View>
     </View>
   );

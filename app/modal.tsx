@@ -14,18 +14,7 @@ import { CustomIcon, View, Text } from '../components/themedCustom';
 export default function ModalScreen() {
 
   const dispatch = useDispatch();
-  // const userState = useSelector((state: any) => state.auth.user);
-
-  // useEffect(() => {
-  //   async function AuthInOut() {
-  //     if (userState == null) {
-  //       router.replace('/(auth)')
-  //     }
-  //     console.log("auth in logic")
-  //   AuthInOut();
-  //   }
-  // }, [userState])
-
+  
   const handleSignOut = async () => {
     try {
       await FBsignOut(FBauth)
