@@ -1,10 +1,13 @@
-import { Image, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+
 import { Text, View } from "../themedCustom";
+
+import { Image } from 'expo-image';
 import { router } from "expo-router";
 import { CameraCapturedPicture } from "expo-camera";
-import { useDispatch } from "react-redux";
+
 import { addPhoto } from "../../redux/slices/contentSlice";
-import { Action, manipulateAsync } from "expo-image-manipulator";
+import { useDispatch } from "react-redux";
 
 export default function PhotoEditor(props: {
   newImage: CameraCapturedPicture;
@@ -17,50 +20,13 @@ export default function PhotoEditor(props: {
     router.replace('/addPhotoName')
   }
 
-  const autoCrop = async (newPhoto: CameraCapturedPicture) => {
-    try {
-      let actions :Action[] = []
-      if (newPhoto.width > newPhoto.height) {
-        actions.push( {crop: {
-          originX: newPhoto.width / 4,
-          originY: 0,
-          width: newPhoto.width / 2,
-          height: newPhoto.height
-        }} )
-      } else {
-        actions.push( 
-          {crop: {
-            originX: 0,
-            originY: newPhoto.height / 4,
-            width: newPhoto.width,
-            height: newPhoto.height / 2
-          }} )
-        
-      }
-      actions.push(
-        {resize: {
-          width: 300,
-          height: 300
-        }}
-      )
-      const cropedResult = await manipulateAsync(
-        newPhoto.uri,
-        actions
-      )
-    } catch (e) {
-      console.error("error: ", e);
-    }
-  }
-
   return (
     <View style={styles.container}>
-      
       <View style={styles.imageContainer} >
         <Image 
           style={styles.image}
           source={props.newImage}
         />
-
       </View>
       <TouchableOpacity
         onPress={handleFinishEdit}

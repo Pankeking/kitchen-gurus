@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { addPhoto } from "../../../redux/slices/contentSlice";
 import * as ImagePicker from 'expo-image-picker';
 import { useSelector } from "react-redux";
-import { Image } from "react-native";
+import { Image } from "expo-image";
 import { useTheme } from "@rneui/themed";
 import { useRef, useState } from "react";
 import SmallButton from "../../../components/SmallButton";
@@ -68,7 +68,7 @@ export default function addPhotoNameScreen() {
           <View style={[styles.imageContainer, containerDimensions]}>
             <Image 
               source={item}
-              resizeMode="contain"
+              contentFit="contain"
               style={[styles.image, containerDimensions, {aspectRatio: 1}]}
             />
           </View>
