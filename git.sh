@@ -12,5 +12,6 @@ git status
 echo "<<<------->>>"
 echo "Enter commit message"
 echo "<<<------->>>"
-read message
+message=$@
 git commit -m "$message"
+
