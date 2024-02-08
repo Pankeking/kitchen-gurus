@@ -14,8 +14,10 @@ import { CustomIcon, ToggleMode, View, Text } from '../../components/themedCusto
 import WideButton from '../../components/WideButton';
 
 export default function SettingsScreen() {
+
   const themeColors = useTheme().theme.colors;
   const dispatch = useDispatch();
+  
 
   const appSignOut = async () => {
     try {
@@ -41,8 +43,22 @@ export default function SettingsScreen() {
     <View style={styles.container}>
       <View style={styles.separator} />
       <View style={[styles.optionContainer, {backgroundColor: themeColors.surface}]}>
-        
-        <ToggleMode />
+        <ToggleMode iconSize={100} />
+        <Text style={{fontSize: 20, textAlign: "justify", fontFamily: "PlaypenMedium"}}>
+          This is a sample text, it can be
+          <Text style={{fontSize: 12}}> Small </Text> 
+          or
+          <Text style={{fontSize: 32}}> Big </Text>
+          also 
+          <Text style={{fontFamily: "PlaypenBold"}}> Bold </Text>
+          or
+          <Text style={{fontFamily: "PlaypenThin"}}> Thin, </Text>
+          there is an
+          <Text style={{fontFamily: "Handlee"}}> Alternative </Text>
+          text too!
+          Make sure to use the theme that best suits you!
+        </Text>
+        <Text></Text>
       </View>
       <View style={styles.bottom}>
         <WideButton
@@ -62,21 +78,21 @@ const styles = StyleSheet.create({
   },
   bottom: {
     width: "90%",
-    top: "35%",
+    top: "20%",
     alignItems: "center",
   },
 
   optionContainer: {
     alignItems: "center",
     justifyContent: "center",
-    height: "40%",
-    width: "70%",    
+    height: "50%",
+    width: "80%",
+    padding: "5%",
     borderRadius: 25,
   },
   
   separator: {
     marginVertical: 30,
     height: 1,
-    width: '80%',
   },
 });

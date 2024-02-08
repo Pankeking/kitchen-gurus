@@ -73,19 +73,18 @@ export function ToggleMode(props: any) {
       <CustomIcon 
         name={mode === 'dark' ? "moon-waxing-crescent": "white-balance-sunny"} 
         size={iconSize ? iconSize : 24}
-        style={{color: themeColors.primary, backgroundColor: themeColors.background}}
+        style={{color: themeColors.primary, backgroundColor: "transparent"}}
       />
     )
   }
   return (
     <Button 
       onPress={() => setMode(mode === 'dark' ? 'light' : 'dark')} 
-      buttonStyle={{backgroundColor: themeColors.background}}
+      buttonStyle={{backgroundColor: "transparent"}}
       icon={<IconNode />}
       raised={false}
       iconRight
       titleStyle={{color: themeColors.lightText, fontWeight: "bold"}}
-      title={mode === 'dark' ? "Dark" : "Light"}
     />
   ) 
 }
