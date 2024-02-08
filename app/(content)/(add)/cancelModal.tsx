@@ -3,9 +3,11 @@ import { Text, View } from "../../../components/themedCustom"
 import { router } from "expo-router"
 import { useDispatch } from "react-redux"
 import { nullifyRecipe } from "../../../redux/slices/contentSlice";
+import { useTheme } from "@rneui/themed";
 
 export default function cancelModal() {
 
+  const themeColors = useTheme().theme.colors;
   const dispatch = useDispatch();
   const handleCancel = () => {
     dispatch(nullifyRecipe());
@@ -13,58 +15,57 @@ export default function cancelModal() {
   }
   return (
     <>
-    <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Are You Sure You Want to Cancel?</Text>
-          <Text style={styles.modalMessage}>Canceling now will discard any unsaved changes. Are you certain you want to proceed?</Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => router.back()}>
-              <Text style={styles.buttonText}>No, Go Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.confirmButton} onPress={handleCancel}>
-              <Text style={styles.buttonText}>Yes, Cancel</Text>
-            </TouchableOpacity>
-          </View>
+    <View style={styles.container}>
+      <View style={[styles.modal, {backgroundColor: themeColors.surface}]}>
+        <Text style={styles.title}>Discard This Recipe?</Text>
+        <Text style={styles.message}>Canceling now will discard any unsaved changes. Are you certain you want to proceed?</Text>
+        <View style={[styles.buttonContainer, {backgroundColor: themeColors.surface}]}>
+          <TouchableOpacity style={styles.confirmButton} onPress={handleCancel}>
+            <Text style={styles.buttonText}>Yes, Cancel</Text>
+          </TouchableOpacity>
+          <View style={{marginHorizontal: 25}}></View>
+          <TouchableOpacity style={styles.cancelButton} onPress={() => router.back()}>
+            <Text style={styles.buttonText}>No, Go Back</Text>
+          </TouchableOpacity>
         </View>
       </View>
+    </View>
     </>
   )
 }
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalContent: {
-    backgroundColor: '#fff',
+  modal: {
+    width: "80%",
+    height: "30%",
+    textAlign: 'justify',
     borderRadius: 8,
-    padding: 20,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    textAlign: 'center',
-    maxWidth: 400,
+    padding: 30,
+    margin: 20,
   },
-  modalTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
+  title: {
+    fontSize: 26,
+    textAlign: "center",
+    
+    fontFamily: "PlaypenSemiBold",
+    marginBottom: 5,
   },
-  modalMessage: {
+  message: {
+    textAlign: "justify",
     fontSize: 16,
+    fontFamily: "PlaypenRegular",
     marginBottom: 20,
   },
-  // Optional Icon Styles
-  // icon: {
-  //   fontSize: 48,
-  //   color: '#ff9900',
-  // },
+
   buttonContainer: {
     flexDirection: 'row',
+    marginTop: 10,
     justifyContent: 'space-between',
   },
   cancelButton: {
