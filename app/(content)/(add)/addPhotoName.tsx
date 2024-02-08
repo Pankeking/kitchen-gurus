@@ -1,16 +1,18 @@
-import { router } from "expo-router";
-import { CustomIcon, Text, View } from "../../../components/themedCustom";
+import { useRef } from "react";
 import { FlatList, StyleSheet, useWindowDimensions } from "react-native";
-import { useDispatch } from "react-redux";
-import { addPhoto } from "../../../redux/slices/contentSlice";
-import * as ImagePicker from 'expo-image-picker';
-import { useSelector } from "react-redux";
+
 import { Image } from "expo-image";
+import { router } from "expo-router";
+import * as ImagePicker from 'expo-image-picker';
+
 import { useTheme } from "@rneui/themed";
-import { useRef, useState } from "react";
 import SmallButton from "../../../components/SmallButton";
 import WideButton from "../../../components/WideButton";
+import { CustomIcon, View } from "../../../components/themedCustom";
 
+import { addPhoto } from "../../../redux/slices/contentSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function addPhotoNameScreen() {
 
@@ -18,7 +20,6 @@ export default function addPhotoNameScreen() {
   const themeColors = useTheme().theme.colors;
   
   const flatListRef = useRef<FlatList>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const deviceWidth = useWindowDimensions().width;
   const resizedWidth = deviceWidth * 0.9;
@@ -48,15 +49,6 @@ export default function addPhotoNameScreen() {
       console.error("Error selecting photo: ", e);
     }
   }
-
-  const handleEndReached = () => {
-    // When reaching the end, cycle back to the first item
-    const nextIndex = (currentIndex + 1) % photoList.length;
-    setCurrentIndex(nextIndex);
-    if (flatListRef.current) {
-      flatListRef.current.scrollToIndex({ index: nextIndex });
-    }
-  };
 
   const backToMenu = () => {
       router.push('/(content)/(add)')

@@ -15,21 +15,21 @@ export default function PhotoEditor(props: {
 
   const dispatch = useDispatch()
 
-  const handleFinishEdit = () => {
-    dispatch(addPhoto(props.newImage));
+  const handleFinishEdit = (confirmed: boolean) => {
+    if (confirmed) dispatch(addPhoto(props.newImage));
     router.replace('/addPhotoName')
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer} >
+      <View style={styles.imageContainer}>
         <Image 
           style={styles.image}
           source={props.newImage}
         />
       </View>
       <TouchableOpacity
-        onPress={handleFinishEdit}
+        onPress={() => handleFinishEdit(true)}
       >
         <Text style={styles.link}>
           Finish Editing
@@ -47,21 +47,22 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 4, borderColor: "black",
   },
   link: {
     fontSize: 30,
-    color: "blue",
+    color: "black",
   },
   imageContainer: {
     // flex: 1,
-    borderWidth: 4, borderColor: "green",
+    // borderWidth: 4, borderColor: "green",
+    justifyContent: "center",
+    alignItems: "center",
     width: "100%",
     height: "80%",
   },
   image: {
     // flex: 1,
-    borderWidth: 4, borderColor: "orange",
+    // borderWidth: 4, borderColor: "orange",
     width: "100%",
     height: "60%",
     resizeMode:"contain",

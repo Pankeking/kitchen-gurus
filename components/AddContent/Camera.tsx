@@ -19,7 +19,6 @@ export default function CameraComp(props: {
   const [type, setType] = useState(CameraType.back);
   const [isReady, setReady] = useState(false);
 
-
   useEffect(() => {
     (async () => {
       const status = await requestPermission();
@@ -58,7 +57,6 @@ export default function CameraComp(props: {
       alert("Camera error please try again");
     }
   }
-
 
   return (
     <View style={styles.container}>
