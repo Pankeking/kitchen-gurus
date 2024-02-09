@@ -1,5 +1,7 @@
-import { Image, Text } from "react-native"
 import React from 'react';
+import { Text } from "react-native"
+
+import { Image } from 'expo-image';
 
 export default function ProfileBackGroundViewer({ newImage } : any) {
 
