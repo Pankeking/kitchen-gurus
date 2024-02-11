@@ -1,35 +1,45 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 
 import { Input } from "@rneui/themed";
 
-import { Text, View } from "../../../components/themedCustom";
+import { View } from "../../../components/themedCustom";
 import SmallButton from "../../../components/SmallButton";
 
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
+
+import { hotFixer, searchQuery } from "../../../utils/firebaseUtils";
 
 export default function SearchScreen() {
 
   const [query, setQuery] = useState('');
+  const [foundQuery, setFoundQuery] = useState([]);
+
+  const inputRef:any = useRef(null);
 
   const top = useSharedValue(0);
 
   const handleToggle = (up: boolean) => {
     if (up && query.length > 0) {
       top.value = withSpring(-220);
-      return
+      return;
     }
     top.value = withSpring(0);
   }
 
-  const handleSearch = () => {
-    handleToggle(true)
+  const handleSearch = async () => {
+    handleToggle(true);
+    // searchQuery(query);
+    hotFixer();
     return;
   }
 
 
   const handleCancel = () => {
     handleToggle(false)
+    if (inputRef.current) {
+      inputRef.current.clear();
+    }
     return;
   }
 
@@ -38,12 +48,11 @@ export default function SearchScreen() {
   const drop_icon = <SmallButton size={40} title="" onPress={handleCancel} iconName={"close"}/>
   return (
       <View style={styles.container}>
-        {/* <Animated.View style={{transform: [{translateY}]}}> */}
         <Animated.View style={{top}}>
           <View style={styles.titleContainer}>
-            {/* <Text style={styles.title}>Search</Text> */}
           </View>
           <Input 
+            ref={inputRef}
             placeholder="Search for users or recipes" 
             containerStyle={styles.inputContainer}
             inputContainerStyle={{borderBottomWidth: 0}}
@@ -56,8 +65,6 @@ export default function SearchScreen() {
             onChangeText={setQuery}
           />
         </Animated.View>
-        {/* <Button onPress={() => handleToggle(true)} title={"UP!"} />
-        <Button onPress={() => handleToggle(false)} title={"DOWN!"} /> */}
       </View>
   )
 }

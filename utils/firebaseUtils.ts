@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, increment, query, setDoc, updateDoc, writeBatch } from "firebase/firestore";
+import { addDoc, and, arrayUnion, collection, doc, getDoc, getDocs, increment, or, query, setDoc, updateDoc, where, writeBatch } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { Ingredient, Photo, Recipe, dietOptions } from "../redux/slices/contentSlice";
 
@@ -179,10 +179,11 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
     likes: 0,
     userID: uid,
     username: username,
-    profilePicture: userProfilePicture
+    profilePicture: userProfilePicture,
+    keywords: generateKeywords(recipe.name)
   }, {merge: true})
   
-  const photosArray:Photo[] = recipe.photo;
+ 
   // Add to user -> userRecipes collection (firebase de-normalization)
   const userRecipesCollection = collection(FBstore, "users", uid, "userRecipes");
   const userRecipesDoc = doc(userRecipesCollection, recipeID);
@@ -194,6 +195,7 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
   await setDoc(userRecipesDoc, userRecipeData)
   
   // Upload every picture to FB storage
+  const photosArray:Photo[] = recipe.photo;
   for (let i = 0; i < photosArray.length; i++) {
     const storageRef = ref(FBstorage, `recipes/${recipeID}/photo-${i}.jpg`);
     const response = await fetch(photosArray[i].uri)
@@ -219,13 +221,6 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
   return recipeID;
 }
 
-
-///////
-///////
-/////// userFunction router.push(`/(content)/(user)/${item.username}?uid=${item.uid}`)
-///////
-
-
 // HELPERS RECIPE
 // HELPERS RECIPE
 // HELPERS RECIPE
@@ -246,6 +241,39 @@ const cleanRecipe = (recipe:Recipe) => {
   }
   return filteredRecipe;
 }
+
+// FIREBASE DOES NOT HAVE SUBSTRING MATCHING
+const createKeywords = (name: string) => {
+  const arrName:string[] = [];
+  let currName = '';
+  name.split('').forEach((letter) => {
+    currName += letter.toLowerCase();
+    arrName.push(currName);
+  })
+  return arrName;
+};
+// https://medium.com/@ken11zer01/firebase-firestore-text-search-and-pagination-91a0df8131ef
+const generateKeywords = (name: string) => {
+  let result = [''];
+  const namesArr = name.split(' ');
+  for (let i = 0; i < namesArr.length; i++) {
+    let currName = '';
+    result.push(...createKeywords(namesArr[i]))
+    for (let j = 0; j < namesArr.length; j++) {
+      currName += namesArr[j] + ' ';
+      result.push(...createKeywords(currName));
+      if (j === i) continue;
+      result.push(...createKeywords(namesArr[j]+ " " + namesArr[i]))
+    }
+  }
+
+  return [
+    ...new Set([
+      '',
+      ...result
+    ])
+  ];
+};
 
 // HELPER FETCHING RECIPES <<< HOME
 // HELPER FETCHING RECIPES <<< HOME
@@ -500,4 +528,38 @@ export const followUserById = async (uid: string, queryId: string) => {
     console.error("Can't access firestore API");
     return -1;
   }
+}
+
+export const hotFixer = async () => {
+  try {
+    const recipesRef = collection(FBstore, "recipes");
+    const recipeSnap = await getDocs(recipesRef)
+    recipeSnap.forEach(async (doc) => {
+      const id = doc.data().recipeID;
+      console.log(id);
+    })
+  } catch (e) {
+    return;
+  }
+}
+
+///// SEARCH QUERY /////
+///// SEARCH QUERY /////
+///// SEARCH QUERY /////
+///// SEARCH QUERY /////
+export const searchQuery = async (queryString: string) => {
+  try {
+    const recipesRef = collection(FBstore, "recipes");
+    const recipesQuery = query(recipesRef, 
+      where("keywords", "array-contains", queryString),
+    );
+    const querySnap = await getDocs(recipesQuery);
+    // console.log(querySnap)
+    querySnap.forEach((doc) => {
+      
+    })
+  } catch (e) {
+    return null;
+  }
+  return null;
 }

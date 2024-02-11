@@ -21,13 +21,8 @@ export default function LoginScreen() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
 
   const themeColors = useTheme().theme.colors;
-
-  // const blurhash =
-  // '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
-
 
   // SIGN IN LOGIC
   const appSignIn = async (email: string, password: string) => {
