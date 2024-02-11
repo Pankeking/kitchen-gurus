@@ -8,7 +8,7 @@ import SmallButton from "../../../components/SmallButton";
 
 import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
 
-import { hotFixer, searchQuery } from "../../../utils/firebaseUtils";
+import { searchQuery } from "../../../utils/firebaseUtils";
 
 export default function SearchScreen() {
 
@@ -29,7 +29,8 @@ export default function SearchScreen() {
 
   const handleSearch = async () => {
     handleToggle(true);
-    searchQuery(query);
+    const resp = await searchQuery(query);
+    console.log(resp);
     return;
   }
 
@@ -62,6 +63,7 @@ export default function SearchScreen() {
             rightIconContainerStyle={styles.topFix}
             maxLength={25}
             onChangeText={setQuery}
+            onChange={handleSearch}
           />
         </Animated.View>
       </View>

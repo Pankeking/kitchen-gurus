@@ -1,4 +1,4 @@
-export default function IngredientChip(props: {
+export default function QueryChip(props: {
   name?: string;
   type?: string;
   measureType?: string;

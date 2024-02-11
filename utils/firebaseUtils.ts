@@ -530,6 +530,7 @@ export const followUserById = async (uid: string, queryId: string) => {
   }
 }
 
+/*
 export const hotFixer = async () => {
   try {
     const recipesRef = collection(FBstore, "recipes");
@@ -555,6 +556,8 @@ export const hotFixer = async () => {
     return;
   }
 }
+
+*/
     
 ///// SEARCH QUERY /////
 ///// SEARCH QUERY /////
@@ -567,13 +570,22 @@ export const searchQuery = async (queryString: string) => {
       where("keywords", "array-contains", queryString.toLowerCase()),
       limit(5),
     );
+    let recipes = [{}];
     const querySnap = await getDocs(recipesQuery);
-    // console.log(querySnap)
     querySnap.forEach((doc) => {
-      console.log(doc.data().name)
+      const data = doc.data();
+      const recipe = {
+        recipeID: data.recipeID,
+        name: data.name,
+        photo: data.photo[0],
+        userID: data.userID,
+        username: data.username,
+        profilePicture: data.profilePicture
+      }
+      recipes.push(recipe)
     })
+    return recipes;
   } catch (e) {
     return null;
   }
-  return null;
 }
