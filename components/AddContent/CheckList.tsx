@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems:"center",
     borderRadius: 12,
-    // borderColor: "black", borderWidth: 1,
     shadowOffset: {width: 2, height: 3},
     shadowRadius: 5,
     shadowOpacity: 0.4,

@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     justifyContent:"space-around",
     flexDirection: "row",
     alignItems: "center",
-    // borderColor: "blue", borderWidth: 3
   },
   link: {
     fontSize: 30,
@@ -93,7 +92,6 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     // flex: 1,
-    // borderWidth: 4, borderColor: "green",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
@@ -101,7 +99,6 @@ const styles = StyleSheet.create({
   },
   image: {
     // flex: 1,
-    // borderWidth: 4, borderColor: "orange",
     width: "100%",
     height: "60%",
     backgroundColor: "black",

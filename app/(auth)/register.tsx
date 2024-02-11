@@ -169,7 +169,6 @@ const styles = StyleSheet.create({
     height: 50,
     padding: 7,
     fontFamily: "PlaypenRegular",
-
   },
   inputContainer: {
     borderBottomWidth: 0,
@@ -208,7 +207,6 @@ const styles = StyleSheet.create({
     marginVertical: "5%",
     width: "100%",
     flexDirection: "row",
-    // justifyContent: "center",
     alignItems: "center",
   },
   lineStyle: {

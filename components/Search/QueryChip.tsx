@@ -64,20 +64,17 @@ const styles = StyleSheet.create({
   textContainer: {
     // alignItems: "center",
     justifyContent: "space-evenly",
-    // borderColor: "green", borderWidth: 2,
     width: "60%"
   },
   username: {
     textAlign: "left",
     fontFamily: "PlaypenRegular",
     fontSize: 14,
-    // borderColor: "blue", borderWidth: 2,
   },
   name: {
     textAlign: "right",
     fontFamily: "PlaypenExtraBold",
     fontSize: 16,
-    // borderColor: "blue", borderWidth: 2,
   },
   recipePhoto: {},
   image: {

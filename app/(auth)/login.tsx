@@ -137,7 +137,6 @@ const styles = StyleSheet.create({
     width: "75%",
     alignItems: "center"
   },
-  
   title: {
     fontSize: 50,
     textAlign: "center",
@@ -150,7 +149,6 @@ const styles = StyleSheet.create({
     marginBottom: 22,
     marginLeft: 5,
   },
-  
   // FORMS  
   // FORMS  
   formContainer: {

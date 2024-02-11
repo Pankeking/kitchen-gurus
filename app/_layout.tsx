@@ -1,13 +1,16 @@
+import { useEffect } from 'react';
+import { StatusBar } from 'react-native';
+
+import { ThemeProvider, useTheme } from '@rneui/themed';
+import theme from "../constants/theme"
+
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
-import { useEffect } from 'react';
-import { Provider } from 'react-redux';
 
+import { Provider } from 'react-redux';
 import reduxStore from "../redux/store";
-import { ThemeProvider, useTheme } from '@rneui/themed';
-import theme from "../constants/theme"
-import { StatusBar } from 'react-native';
+
 
 export {
   // Catch any errors thrown by the Layout component.

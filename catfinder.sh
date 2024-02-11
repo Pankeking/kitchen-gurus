@@ -4,7 +4,7 @@ files+=$(find app/ | grep .tsx)
 
 for file in $files
 do
-  found=$(cat $file | grep shadow) # query = resizeMode
+  found=$(cat $file | grep borderC) # query = resizeMode
   if [[ -z $found ]]
   then
     true # skip

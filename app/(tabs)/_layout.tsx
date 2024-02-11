@@ -1,7 +1,5 @@
-import { Pressable } from 'react-native';
 
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
+import { Tabs } from 'expo-router';
 
 import { useTheme } from '@rneui/themed';
 import { CustomIcon } from '../../components/themedCustom';
@@ -36,20 +34,6 @@ export default function TabLayout() {
           title: 'Home',
           tabBarLabel: "Home",
           tabBarIcon: ({ focused }) => <TabBarIcon name={focused ? "home-variant" : "home-variant-outline"} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={themeColors.primary}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
         }}
       />
       <Tabs.Screen 
@@ -67,8 +51,6 @@ export default function TabLayout() {
         name="buttonToAdd"
         options={{
           title: 'Add',
-        
-          // <CustomIcon size={28} style={{ marginBottom: -3, color: themeColors.lightText }} />
           tabBarIcon: () => <CustomIcon
                                   size={35}
                                   style={{backgroundColor: themeColors.surface}} 

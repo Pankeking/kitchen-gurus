@@ -113,12 +113,9 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowColor: "white",
     shadowOpacity: 0.4,
-    
-    // borderColor: "green", borderWidth: 5,
   },
   side: {
     flexDirection: "row",
-    // borderColor: "blue", borderWidth: 5,
   },
   left: {
     width: "65%",
@@ -138,7 +135,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "PlaypenSemiBold",
     fontSize: 18,
-    // borderColor: "red", borderWidth: 5,
   },
   info: {
     paddingHorizontal: "5%",

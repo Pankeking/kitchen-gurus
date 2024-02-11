@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     backgroundColor: "transparent",
-    // borderColor: "blue", borderWidth: 2,
   },
   titleContainer: {
     justifyContent: "center",
@@ -95,18 +94,15 @@ const styles = StyleSheet.create({
     fontFamily: "PlaypenBold",
   },
   bioScrollContainer: {
-    // borderColor: "green", borderWidth: 2,
   },
   bioContainer: {
     minHeight: "140%",
     paddingHorizontal: "15%",
     alignItems: "center",
-    // borderColor: "orange", borderWidth: 2,
   },
   bioText: {
     lineHeight: 20,
     fontFamily: "PlaypenMedium"
-    // borderColor: "green", borderWidth: 2,
   },
   readMoreText: {
     marginBottom: 10,

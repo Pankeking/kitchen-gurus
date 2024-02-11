@@ -301,7 +301,6 @@ const styles = StyleSheet.create({
     marginBottom: "7%",
     justifyContent: "flex-start",
     alignItems: "center",
-    
     borderBottomWidth: 1,
     zIndex: 1
   },
@@ -358,7 +357,6 @@ const styles = StyleSheet.create({
     right: "5%"
   },
   linearGradient: {
-    // flex: 1,
     position: 'absolute',
     zIndex: 2,
     width: '100%',
@@ -368,7 +366,6 @@ const styles = StyleSheet.create({
   lowContainer: {
     flex: 1,
     paddingHorizontal: "4%",
-    // borderColor: "green", borderWidth: 4,
   },
   selectedContainer: {
     marginVertical: 10,

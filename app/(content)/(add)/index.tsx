@@ -185,27 +185,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputContainer: {
-    // flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     height: 140,
     width: "100%",
     marginVertical: 30,
-    // borderColor:"green",borderWidth:1,
   },
   input: {
-    // height: 20,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
     padding: 4,
-    // borderColor: "blue", borderWidth: 1,
   },
   linksContainer: {
     width: "100%",
     paddingHorizontal: "1%",
-    // borderColor: "black", borderWidth: 1,
-
   },
   linkBigContainer: {
     marginVertical: 5,
@@ -213,16 +207,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems:"center",
-    // borderColor: "blue", borderWidth: 2,
   },
   leftLinkContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
-  linkText: {
-
-  },
-  
   separator: {
     width: "100%",
     marginVertical: 30,
@@ -232,5 +221,4 @@ const styles = StyleSheet.create({
     height: 1,
     opacity: 0.1,
   },
-  null: {},
 })
