@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
-import { addDoc, and, arrayUnion, collection, doc, getDoc, getDocs, increment, or, query, setDoc, updateDoc, where, writeBatch } from "firebase/firestore";
+import { addDoc, and, arrayUnion, collection, doc, getDoc, getDocs, increment, limit, or, orderBy, query, setDoc, updateDoc, where, writeBatch } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { Ingredient, Photo, Recipe, dietOptions } from "../redux/slices/contentSlice";
 
@@ -534,15 +534,28 @@ export const hotFixer = async () => {
   try {
     const recipesRef = collection(FBstore, "recipes");
     const recipeSnap = await getDocs(recipesRef)
-    recipeSnap.forEach(async (doc) => {
-      const id = doc.data().recipeID;
-      console.log(id);
+    recipeSnap.forEach(async (ele) => {
+      const id = ele.data().recipeID;
+      const updateRef = doc(recipesRef, id)
+      await setDoc(updateRef, {
+        keywords: generateKeywords(ele.data().name)
+      }, {merge: true})
+    })
+
+    const usersRef = collection(FBstore, "users");
+    const usersSnap = await getDocs(usersRef)
+    usersSnap.forEach(async (ele) => {
+      const id = ele.data().userID;
+      const updateRef = doc(usersRef, id)
+      await setDoc(updateRef, {
+        keywords: generateKeywords(ele.data().username)
+      }, {merge: true})
     })
   } catch (e) {
     return;
   }
 }
-
+    
 ///// SEARCH QUERY /////
 ///// SEARCH QUERY /////
 ///// SEARCH QUERY /////
@@ -551,12 +564,13 @@ export const searchQuery = async (queryString: string) => {
   try {
     const recipesRef = collection(FBstore, "recipes");
     const recipesQuery = query(recipesRef, 
-      where("keywords", "array-contains", queryString),
+      where("keywords", "array-contains", queryString.toLowerCase()),
+      limit(5),
     );
     const querySnap = await getDocs(recipesQuery);
     // console.log(querySnap)
     querySnap.forEach((doc) => {
-      
+      console.log(doc.data().name)
     })
   } catch (e) {
     return null;

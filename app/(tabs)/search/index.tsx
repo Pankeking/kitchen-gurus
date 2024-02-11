@@ -29,8 +29,7 @@ export default function SearchScreen() {
 
   const handleSearch = async () => {
     handleToggle(true);
-    // searchQuery(query);
-    hotFixer();
+    searchQuery(query);
     return;
   }
 
