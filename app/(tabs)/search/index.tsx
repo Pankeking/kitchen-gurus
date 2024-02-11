@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 
-import { Input } from "@rneui/themed";
+import { Input, useTheme } from "@rneui/themed";
 
 import { Text, View } from "../../../components/themedCustom";
 import SmallButton from "../../../components/SmallButton";
@@ -17,23 +17,22 @@ export default function SearchScreen() {
   const [query, setQuery] = useState('');
   const [queryResult, setQueryResult] = useState<queryRecipe[]>();
 
+  const themeColors = useTheme().theme.colors;
+
   const inputRef:any = useRef(null);
 
-  const top = useSharedValue(0);
+  const top = useSharedValue(240);
 
-  const handleToggle = (up: boolean) => {
-    if (up && query.length > 0) {
-      top.value = withSpring(-220);
-      return;
-    }
-    top.value = withSpring(0);
-  }
+  
+  
 
   const handleSearch = async () => {
-    handleToggle(true);
     const resp = await searchQuery(query);
     if (!resp) {
       return;
+    }
+    if (inputRef.current.isFocused()) {
+      top.value = withSpring(40);
     }
     setQueryResult(resp);
     return;
@@ -41,22 +40,22 @@ export default function SearchScreen() {
 
 
   const handleCancel = () => {
-    handleToggle(false)
     if (inputRef.current) {
       inputRef.current.clear();
+      inputRef.current.shake();
     }
+    top.value = withSpring(200);
     setQueryResult([]);
     return;
   }
 
 
-  const search_icon = <SmallButton  size={40} title="" onPress={handleSearch} iconName="magnify" />
-  const drop_icon = <SmallButton size={40} title="" onPress={handleCancel} iconName={"close"}/>
+  const search_icon = <SmallButton  size={40} title="" Color={"black"} onPress={handleSearch} iconName="magnify" />
+  const drop_icon = <SmallButton size={40} title="" Color={"black"} onPress={handleCancel} iconName={"close"}/>
   return (
       <View style={styles.container}>
         <Animated.View style={{top}}>
-          <View style={styles.titleContainer}>
-          </View>
+          
           <Input 
             ref={inputRef}
             placeholder="Search for users or recipes" 
@@ -71,7 +70,14 @@ export default function SearchScreen() {
             onChangeText={setQuery}
             onChange={handleSearch}
           />
-          {queryResult && queryResult.map((ele) => <Text>{ele.name}</Text>)}
+          <View style={styles.queryContainer}>
+            {/* <QueryChip recipe={queryResult[0]} /> */}
+            {queryResult && queryResult.length > 0 && queryResult.map((ele) => 
+            <>
+              <QueryChip key={ele.recipeID} recipe={ele} />
+            </>
+            ) }
+          </View>
 
           
           
@@ -84,14 +90,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-  },
-  titleContainer: {
-    zIndex: 2,
-    marginBottom: 12,
-  },
-  title: {
-    fontSize: 40,
+    // justifyContent: "center",
   },
   inputContainer: {
     alignItems: "center",
@@ -102,10 +101,14 @@ const styles = StyleSheet.create({
   },
   input: {
     fontFamily: "PlaypenBold",
+    color: "black",
     top: 12,
     left: 6
   },
   topFix: {
     top: 18
   },
+  queryContainer: {
+    marginTop: 10,
+  }
 })
