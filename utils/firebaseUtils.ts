@@ -2,7 +2,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
 import { addDoc, and, arrayUnion, collection, doc, getDoc, getDocs, increment, limit, or, orderBy, query, setDoc, updateDoc, where, writeBatch } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { Ingredient, Photo, Recipe, dietOptions } from "../redux/slices/contentSlice";
+import { Ingredient, Photo, Recipe, dietOptions, queryRecipe } from "../redux/slices/contentSlice";
 
 // Register
 // Register
@@ -570,11 +570,11 @@ export const searchQuery = async (queryString: string) => {
       where("keywords", "array-contains", queryString.toLowerCase()),
       limit(5),
     );
-    let recipes = [{}];
+    let recipes: queryRecipe[] = [];
     const querySnap = await getDocs(recipesQuery);
     querySnap.forEach((doc) => {
       const data = doc.data();
-      const recipe = {
+      const recipe:queryRecipe = {
         recipeID: data.recipeID,
         name: data.name,
         photo: data.photo[0],

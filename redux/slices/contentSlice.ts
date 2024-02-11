@@ -30,6 +30,15 @@ export interface Recipe {
   extra: dietOptions;
 }
 
+export interface queryRecipe {
+  recipeID: string;
+  name: string;
+  username: string;
+  userID: string;
+  photo: string;
+  profilePicture: string;
+}
+
 interface ContentState {
   recipe: Recipe;
   isPhoto: boolean;

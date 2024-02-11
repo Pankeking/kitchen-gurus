@@ -3,17 +3,19 @@ import { StyleSheet } from "react-native";
 
 import { Input } from "@rneui/themed";
 
-import { View } from "../../../components/themedCustom";
+import { Text, View } from "../../../components/themedCustom";
 import SmallButton from "../../../components/SmallButton";
 
 import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
 
 import { searchQuery } from "../../../utils/firebaseUtils";
+import QueryChip from "../../../components/Search/QueryChip";
+import { queryRecipe } from "../../../redux/slices/contentSlice";
 
 export default function SearchScreen() {
 
   const [query, setQuery] = useState('');
-  const [foundQuery, setFoundQuery] = useState([]);
+  const [queryResult, setQueryResult] = useState<queryRecipe[]>();
 
   const inputRef:any = useRef(null);
 
@@ -30,7 +32,10 @@ export default function SearchScreen() {
   const handleSearch = async () => {
     handleToggle(true);
     const resp = await searchQuery(query);
-    console.log(resp);
+    if (!resp) {
+      return;
+    }
+    setQueryResult(resp);
     return;
   }
 
@@ -40,6 +45,7 @@ export default function SearchScreen() {
     if (inputRef.current) {
       inputRef.current.clear();
     }
+    setQueryResult([]);
     return;
   }
 
@@ -65,6 +71,10 @@ export default function SearchScreen() {
             onChangeText={setQuery}
             onChange={handleSearch}
           />
+          {queryResult && queryResult.map((ele) => <Text>{ele.name}</Text>)}
+
+          
+          
         </Animated.View>
       </View>
   )
