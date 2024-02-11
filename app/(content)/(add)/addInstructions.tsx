@@ -1,15 +1,20 @@
-import { View } from "../../../components/themedCustom";
-import { FlatList, ImageBackground, StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
-import Steps from "../../../components/AddContent/Steps";
 import { useEffect, useRef, useState } from "react";
-import WideButton from "../../../components/WideButton";
-import SmallButton from "../../../components/SmallButton";
+import { FlatList, ImageBackground, StyleSheet } from "react-native";
+
+import { router } from "expo-router";
+
 import { Input } from "@rneui/themed";
 import { Text } from "@rneui/base";
+
 import { useDispatch } from "react-redux";
+
+import { View } from "../../../components/themedCustom";
+import SmallButton from "../../../components/SmallButton";
+import WideButton from "../../../components/WideButton";
+import Steps from "../../../components/AddContent/Steps";
+
+import { useSelector } from "react-redux";
 import { setInstructions } from "../../../redux/slices/contentSlice";
-import { router } from "expo-router";
 
 export default function addInstructionsScreen() {
 

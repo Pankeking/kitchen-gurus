@@ -40,6 +40,7 @@ export default function PhotoEditor(props: {
 
       <View style={styles.imageContainer}>
         <Image 
+          contentFit="contain"
           style={styles.image}
           source={props.newImage}
         />
@@ -103,7 +104,6 @@ const styles = StyleSheet.create({
     // borderWidth: 4, borderColor: "orange",
     width: "100%",
     height: "60%",
-    resizeMode:"contain",
     backgroundColor: "black",
   }
 })

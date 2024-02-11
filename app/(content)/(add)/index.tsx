@@ -13,10 +13,6 @@ import { FBauth } from "../../../firebase-config";
 
 export default function AddContentScreen() {
 
-  
-
-
-
   const isPhoto         = useSelector((state:any) => state.content.isPhoto);
   const isName          = useSelector((state:any) => state.content.isName);
   const isInstructions  = useSelector((state:any) => state.content.isInstructions);
@@ -63,7 +59,7 @@ export default function AddContentScreen() {
     router.push(route)
   }
 
-  const handleSubmitRecipe = (recipe:Recipe) => {
+  const handleSubmitRecipe = async (recipe:Recipe) => {
     if (!isPhoto) {
       alert('First Add a Photo')
       router.push('/(content)/(add)/addPhotoName')
@@ -71,6 +67,7 @@ export default function AddContentScreen() {
     }
     if (!isName) {
       alert("Name your recipe")
+      return
     }
     if (!isInstructions) {
       alert("Add Instructions")
@@ -94,8 +91,8 @@ export default function AddContentScreen() {
     }
     alert("Uploading on progress");
     // dispatch(nullifyRecipe())
-    const recipeID = uploadRecipe(userId,recipe);
-    if (recipeID == null) {
+    const recipeID = await uploadRecipe(userId,recipe);
+    if (!recipeID) {
       alert("Recipe Upload Failed, try again");
       return
     }

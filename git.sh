@@ -10,7 +10,7 @@ echo "    After   "
 echo "<<<------->>>"
 git status
 echo "<<<------->>>"
-echo "Enter commit message"
+echo "     END     "
 echo "<<<------->>>"
 message=$@
 git commit -m "$message"
