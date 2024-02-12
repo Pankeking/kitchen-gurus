@@ -36,5 +36,3 @@
 - **IMPORTANT** Re-vamp add instructions screen
 
 ## Dev Notes
-
-
