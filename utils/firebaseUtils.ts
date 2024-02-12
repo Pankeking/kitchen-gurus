@@ -133,7 +133,7 @@ const pictureUploadHelper = async (ref: StorageReference, blob: Blob, callback: 
     }
   }, (error) => {
     switch (error.code) {
-      case "storage/unauthroized":
+      case "storage/unauthorized":
         console.log("User doesn't have permission to access the object");
         callback(null); // return null in case of error
         break;
@@ -149,8 +149,9 @@ const pictureUploadHelper = async (ref: StorageReference, blob: Blob, callback: 
   }, async () => {
     // Get downloadURL for reference
     const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-    callback(downloadURL);
+    return callback(downloadURL);
   })
+  
 }
 
 // SEND RECIPE
@@ -164,8 +165,7 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
     console.error("Error fetching user profile picture")
     return
   }
-  const userProfilePicture = userDocSnap.data().profilePicture;
-  const username = userDocSnap.data().username;
+  const { profilePicture, username } = userDocSnap.data();
   // Remove falsys from recipe
   const cleanedRecipe = cleanRecipe(recipe);
   // Get recipes collection add cleaned Recipe
@@ -179,7 +179,7 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
     likes: 0,
     userID: uid,
     username: username,
-    profilePicture: userProfilePicture,
+    profilePicture: profilePicture,
     keywords: generateKeywords(recipe.name)
   }, {merge: true})
   // Add to user -> userRecipes collection (firebase de-normalization)
@@ -191,13 +191,12 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
     vegan: cleanedRecipe.extra.hasOwnProperty("Vegan") && cleanedRecipe.extra["Vegan"].selected
   }
   await setDoc(userRecipesDoc, userRecipeData)
-  
   // Upload every picture to FB storage
   const photosArray:Photo[] = recipe.photo;
-  let downloadURLS:string[] = [];
+  let downloadURLS:{[key: number]: string} = {};
   for (let i = 0; i < photosArray.length; i++) {
     const storageRef = ref(FBstorage, `recipes/${recipeID}/photo-${i}.jpg`);
-    const response = await fetch(photosArray[i].uri)
+    const response = await fetch(photosArray[i].uri);
     const imageBlob = await response.blob();
     await pictureUploadHelper(storageRef, imageBlob, async (downloadURL) => {
       if (!downloadURL) {
@@ -210,24 +209,24 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
           mainPhoto: downloadURL
         })
       }
-      // Update on the spot the Recipe.Photos array
-      console.log(downloadURL + " at idx: " + i)
-      await updateDoc(doc(FBstore, "recipes", recipeID), {
-        photo: arrayUnion(downloadURL)
-      })
-    });
-    
+      downloadURLS[i] = downloadURL;
+    })
   }
-  console.log("downloadURLS <<<---->>> " + downloadURLS);
- 
+
+  const URLpromises = [];
+  for (const url of Object.values(downloadURLS)) {
+    URLpromises.push(updateDoc(doc(FBstore, "recipes", recipeID), {
+      photo: arrayUnion(url)
+    }))
+  }
+  await Promise.all(URLpromises)
+  console.log(recipeID);
   return recipeID;
 }
 
 // HELPERS RECIPE
 // HELPERS RECIPE
 // HELPERS RECIPE
-
-
 const cleanRecipe = (recipe:Recipe) => {
   const filteredRecipe: Recipe = {
     ...recipe,
@@ -282,34 +281,25 @@ const generateKeywords = (name: string) => {
 export const fetchAllRecipes = async (currentUser:string) => {
   try {
       const recipesQuerySnap = await getDocs(collection(FBstore, "recipes"))
-      const promises   = recipesQuerySnap.docs.map(async (docu) => {
-        const uid        = docu.data().userID;
-        const username   = docu.data().username;
-        
-        const recipeName = docu.data().name;
-        const recipeID   = docu.data().recipeID;
-        const likes      = docu.data().likes;  
-        
-        const profilePic = docu.data().profilePicture; 
-        const mainPhoto  = docu.data().photo;
-        
-        const likedBy    = recipeLikedBy(currentUser, recipeID);
-
-        // DEV <<<
-        // const profilePic = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.imgur.com%2F4pigoji.jpg&f=1&nofb=1&ipt=0ca9831f18d43132974d0574f6931d9810136cdf5c615d1c025bd23bb2654cbe&ipo=images"
-        // DEV <<<
-        // const mainPhoto = ["https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.plannthat.com%2Fwp-content%2Fuploads%2F2018%2F07%2F25-Stock-Photo-Sites.jpeg&f=1&nofb=1&ipt=825acb3b9caa343c74ee234ab2826dcee6ee660dc52eabcc222524d44cec8d2b&ipo=images","https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.ikozmik.com%2FContent%2FImages%2Fuploaded%2Fits-free-featured.jpg&f=1&nofb=1&ipt=0b3505ecb8a4dab33ec69e8656cb8e83c25dc0b7d9da9aeded5d1d058446feb6&ipo=images"]
-        // DEV <<<
-        
+      const promises = recipesQuerySnap.docs.map(async (docu) => {
+        const { userID, 
+            username,
+            name,
+            recipeID,
+            likes,
+            profilePicture,
+            photo,
+          } = docu.data();
+        const likedBy = await recipeLikedBy(currentUser, recipeID);
         return {
-          uid:uid,
-          recipeName: recipeName,
+          uid:userID,
+          recipeName: name,
           recipeID: recipeID,
           likes: likes,
           username: username,
-          profilePic: profilePic,
-          photo: mainPhoto,
-          liked: await likedBy
+          profilePic: profilePicture,
+          photo: photo,
+          liked: likedBy
         }
       })
       return await Promise.all(promises);
