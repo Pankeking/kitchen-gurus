@@ -1,5 +1,11 @@
 #! /usr/bin/bash
 
+echo "<<<------->>>"
+echo "    BEFORE  "
+echo "<<<------->>>"
+git status
+git add .
+
 push=false
 message=""
 
@@ -20,11 +26,7 @@ if [[ -z $message ]]; then
   message=$1
 fi
 
-echo "<<<------->>>"
-echo "    BEFORE  "
-echo "<<<------->>>"
-git status
-git add .
+
 echo "<<<------->>>"
 echo "    AFTER   "
 echo "<<<------->>>"
