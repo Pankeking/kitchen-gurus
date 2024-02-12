@@ -182,8 +182,6 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
     profilePicture: userProfilePicture,
     keywords: generateKeywords(recipe.name)
   }, {merge: true})
-  
- 
   // Add to user -> userRecipes collection (firebase de-normalization)
   const userRecipesCollection = collection(FBstore, "users", uid, "userRecipes");
   const userRecipesDoc = doc(userRecipesCollection, recipeID);
@@ -196,11 +194,12 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
   
   // Upload every picture to FB storage
   const photosArray:Photo[] = recipe.photo;
+  let downloadURLS:string[] = [];
   for (let i = 0; i < photosArray.length; i++) {
     const storageRef = ref(FBstorage, `recipes/${recipeID}/photo-${i}.jpg`);
     const response = await fetch(photosArray[i].uri)
     const imageBlob = await response.blob();
-    pictureUploadHelper(storageRef, imageBlob, async (downloadURL) => {
+    await pictureUploadHelper(storageRef, imageBlob, async (downloadURL) => {
       if (!downloadURL) {
         console.error("Error uploading image");
         alert("Photo upload failed");
@@ -212,11 +211,14 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
         })
       }
       // Update on the spot the Recipe.Photos array
+      console.log(downloadURL + " at idx: " + i)
       await updateDoc(doc(FBstore, "recipes", recipeID), {
         photo: arrayUnion(downloadURL)
       })
     });
+    
   }
+  console.log("downloadURLS <<<---->>> " + downloadURLS);
  
   return recipeID;
 }
@@ -227,7 +229,6 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
 
 
 const cleanRecipe = (recipe:Recipe) => {
-  // const filteredIngredients: Ingredient
   const filteredRecipe: Recipe = {
     ...recipe,
     ingredients: recipe.ingredients.slice(1).filter(

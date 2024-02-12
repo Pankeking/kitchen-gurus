@@ -20,11 +20,12 @@ export default function CameraComp(props: {
   const [isReady, setReady] = useState(false);
 
   useEffect(() => {
-    (async () => {
+    const start = (async () => {
       const status = await requestPermission();
-      console.log("perm"+permission)
-      console.log("stat"+status)
+      console.log(permission)
+      console.log(status)
     })
+    start()
   }, [])
   
   if (!permission) return <Text>hallo</Text>
