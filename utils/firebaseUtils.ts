@@ -213,13 +213,11 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
     })
   }
 
-  const URLpromises = [];
-  for (const url of Object.values(downloadURLS)) {
-    URLpromises.push(updateDoc(doc(FBstore, "recipes", recipeID), {
-      photo: arrayUnion(url)
-    }))
-  }
+  const URLpromises = Object.values(downloadURLS);
   await Promise.all(URLpromises)
+  await updateDoc(doc(FBstore, "recipes", recipeID), {
+    photo: URLpromises
+  })
   console.log(recipeID);
   return recipeID;
 }
