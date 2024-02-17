@@ -72,19 +72,17 @@ export const updateProfilePicture = async (userId: string, localUri: string) => 
     const response = await fetch(localUri)
     const imageBlob = await response.blob();
     // See callback function
-    pictureUploadHelper(storageRef, imageBlob, (downloadURL) => {
-      if (downloadURL) {
-        // Update user profilePicture
-        const userDocRef = doc(FBstore, "users", userId)
-        updateDoc(userDocRef, {
-            profilePicture: downloadURL
-        })
-      } else {
-        console.error('Error uploading image and updating Firestore:');
-      }
+    const downloadURL = await pictureUploadHelper(storageRef, imageBlob);
+    if (downloadURL instanceof Error) {
+      throw downloadURL;
+    }
+    // Update user profilePicture
+    const userDocRef = doc(FBstore, "users", userId)
+    await updateDoc(userDocRef, {
+        profilePicture: downloadURL
     });
   } catch (e) {
-    console.error('Error uploading image and updating Firestore:', e);
+    throw new Error(`Error uploading image and updating Firestore: ${e}`);
   }
 } 
 
@@ -99,7 +97,7 @@ export const updateProfileBackground = async (userId: string, localUri: string) 
     const response = await fetch(localUri)
     const imageBlob = await response.blob();
     // See callback function
-    pictureUploadHelper(storageRef, imageBlob, (downloadURL) => {
+    const downloadURL = await pictureUploadHelper(storageRef, imageBlob)
       if (downloadURL) {
         // Update user profileBackground
         const userDocRef = doc(FBstore, "users", userId)
@@ -109,7 +107,7 @@ export const updateProfileBackground = async (userId: string, localUri: string) 
       } else {
         console.error('Error uploading image and updating Firestore:');
       }
-    });
+    ;
   } catch (e) {
     console.error('Error uploading image and updating Firestore:', e);
   }
@@ -117,10 +115,12 @@ export const updateProfileBackground = async (userId: string, localUri: string) 
 /// PICTURE UPLOAD UTIL
 /// PICTURE UPLOAD UTIL
 /// PICTURE UPLOAD UTIL
-const pictureUploadHelper = async (ref: StorageReference, blob: Blob, callback: (downloadURL: string | null) => void) => {
+async function pictureUploadHelper(ref: StorageReference, blob: Blob): Promise<string | Error> {
+  let resolvedValue: string | Error;
   // Upload Image Blob
   const uploadTask = uploadBytesResumable(ref, blob);
-  uploadTask.on("state_changed", (snapshot) => {
+  uploadTask.on("state_changed", 
+    (snapshot) => {
     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     console.log("Upload is " + progress + "% done");
     switch (snapshot.state) {
@@ -131,27 +131,31 @@ const pictureUploadHelper = async (ref: StorageReference, blob: Blob, callback: 
         console.log("Upload is running");
         break;
     }
-  }, (error) => {
-    switch (error.code) {
-      case "storage/unauthorized":
-        console.log("User doesn't have permission to access the object");
-        callback(null); // return null in case of error
-        break;
-      case "storage/canceled":
-        console.log("User canceled the upload");
-        callback(null); // return null in case of error
-        break;
-      case "storage/unknown":
-        console.log("Unknown error occurred, inspect error.serverResponse");
-        callback(null); // return null in case of error
-        break;
-    }
-  }, async () => {
+  }, 
+    (error) => {
+      switch (error.code) {
+        case "storage/unauthorized":
+          return new Error("User doesn't have permission to access the object"); // return null in case of error
+        case "storage/canceled":
+          return new Error("User canceled the upload"); // return null in case of error
+        case "storage/unknown":
+          return new Error("Unknown error occurred, inspect error.serverResponse"); // return null in case of error
+      }
+      return new Error(`Unknown error during upload: ${error.message}`);
+  },  
+    async () => {
     // Get downloadURL for reference
-    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-    return callback(downloadURL);
-  })
-  
+    resolvedValue = await getDownloadURL(uploadTask.snapshot.ref);
+    })
+    return await new Promise((reject, resolve) => {
+      if (resolvedValue instanceof Error) {
+        reject(resolvedValue);
+      } else {
+        resolve(resolvedValue as string);
+      }
+
+
+    })
 }
 
 // SEND RECIPE
@@ -198,7 +202,7 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
     const storageRef = ref(FBstorage, `recipes/${recipeID}/photo-${i}.jpg`);
     const response = await fetch(photosArray[i].uri);
     const imageBlob = await response.blob();
-    await pictureUploadHelper(storageRef, imageBlob, async (downloadURL) => {
+    const downloadURL = await pictureUploadHelper(storageRef, imageBlob)
       if (!downloadURL) {
         console.error("Error uploading image");
         alert("Photo upload failed");
@@ -210,7 +214,7 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
         })
       }
       downloadURLS[i] = downloadURL;
-    })
+    
   }
 
   const URLpromises = Object.values(downloadURLS);
