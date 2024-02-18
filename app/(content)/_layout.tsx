@@ -8,9 +8,6 @@ export default function ContentLayout() {
           headerBackVisible: true,
           headerShown: false,
         }}/>
-       
-        <Stack.Screen name="edit"/>
-        <Stack.Screen name="share"/>
       </Stack>
         
     )

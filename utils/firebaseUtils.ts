@@ -1,8 +1,13 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
-import { addDoc, and, arrayUnion, collection, doc, getDoc, getDocs, increment, limit, or, orderBy, query, setDoc, updateDoc, where, writeBatch } from "firebase/firestore";
+import { 
+  addDoc, collection, doc, getDoc, getDocs, setDoc, updateDoc,
+  increment, limit, query, where
+   } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { Ingredient, Photo, Recipe, dietOptions, queryRecipe } from "../redux/slices/contentSlice";
+import { Photo, Recipe, queryRecipe } from "../redux/slices/contentSlice";
+
+const STORAGE_DIRECTORY = 'gs://hulala-831d2.appspot.com'
 
 // Register
 // Register
@@ -24,7 +29,7 @@ export const appSignUp = async (email: string, password: string, displayName: st
 // Register
 export const registerUserDB = async (uid: string, username: string, email: string) => {
   // Get default picture for anonymous from cloud storage
-  const storageRef = ref(FBstorage, 'user-profiles/anonymous-user.png');
+  const storageRef = ref(FBstorage, `${STORAGE_DIRECTORY}/user-profiles/anonymous-user.png`);
   const defaultPic = await getDownloadURL(storageRef)
   // Declare userData type and values  
   const userData: {
@@ -67,24 +72,23 @@ export const registerUserDB = async (uid: string, username: string, email: strin
 export const updateProfilePicture = async (userId: string, localUri: string) => {
   try {
     // Create reference to storage location
-    const storageRef = ref(FBstorage, `user-profiles/${userId}-profile.jpg`);
+    const storageRef = ref(FBstorage, `${STORAGE_DIRECTORY}/user-profiles/${userId}-profile.jpg`);
     // Fetch image -> convert to binary
     const response = await fetch(localUri)
     const imageBlob = await response.blob();
     // See callback function
-    pictureUploadHelper(storageRef, imageBlob, (downloadURL) => {
-      if (downloadURL) {
-        // Update user profilePicture
-        const userDocRef = doc(FBstore, "users", userId)
-        updateDoc(userDocRef, {
-            profilePicture: downloadURL
-        })
-      } else {
-        console.error('Error uploading image and updating Firestore:');
-      }
+    const downloadURL = await pictureUploadHelper(storageRef, imageBlob);
+    if (!downloadURL) {
+      alert("Error uploading new profile image to firebase");
+      throw new Error("Error uploading new profile image to firebase");
+    }
+    // Update user profilePicture
+    const userDocRef = doc(FBstore, "users", userId);
+    await updateDoc(userDocRef, {
+        profilePicture: downloadURL
     });
   } catch (e) {
-    console.error('Error uploading image and updating Firestore:', e);
+    throw new Error(`Error uploading image and updating Firestore: ${e}`);
   }
 } 
 
@@ -94,62 +98,70 @@ export const updateProfilePicture = async (userId: string, localUri: string) => 
 export const updateProfileBackground = async (userId: string, localUri: string) => {
   try {
     // Create reference to storage location
-    const storageRef = ref(FBstorage, `user-profiles/${userId}-background.jpg`);
+    const storageRef = ref(FBstorage, `${STORAGE_DIRECTORY}/user-profiles/${userId}-background.jpg`);
     // Fetch image -> convert to binary
     const response = await fetch(localUri)
     const imageBlob = await response.blob();
     // See callback function
-    pictureUploadHelper(storageRef, imageBlob, (downloadURL) => {
-      if (downloadURL) {
-        // Update user profileBackground
-        const userDocRef = doc(FBstore, "users", userId)
-        updateDoc(userDocRef, {
-          profileBackground: downloadURL
-        })
-      } else {
-        console.error('Error uploading image and updating Firestore:');
-      }
+    const downloadURL = await pictureUploadHelper(storageRef, imageBlob);
+    if (!downloadURL) {
+      alert("Error uploading new profile background image to firebase");
+      throw new Error("Error uploading new profile background image to firebase");
+    }
+    // Update user profileBackground
+    const userDocRef = doc(FBstore, "users", userId);
+    await updateDoc(userDocRef, {
+      profileBackground: downloadURL
     });
   } catch (e) {
-    console.error('Error uploading image and updating Firestore:', e);
+    throw new Error(`Error uploading image and updating Firestore: ${e}`);
   }
 } 
 /// PICTURE UPLOAD UTIL
 /// PICTURE UPLOAD UTIL
 /// PICTURE UPLOAD UTIL
-const pictureUploadHelper = async (ref: StorageReference, blob: Blob, callback: (downloadURL: string | null) => void) => {
+function pictureUploadHelper(ref: StorageReference, blob: Blob): Promise<string> {
   // Upload Image Blob
-  const uploadTask = uploadBytesResumable(ref, blob);
-  uploadTask.on("state_changed", (snapshot) => {
-    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    console.log("Upload is " + progress + "% done");
-    switch (snapshot.state) {
-      case "paused":
-        console.log("Upload is paused");
-        break;
-      case "running":
-        console.log("Upload is running");
-        break;
-    }
-  }, (error) => {
-    switch (error.code) {
-      case "storage/unauthroized":
-        console.log("User doesn't have permission to access the object");
-        callback(null); // return null in case of error
-        break;
-      case "storage/canceled":
-        console.log("User canceled the upload");
-        callback(null); // return null in case of error
-        break;
-      case "storage/unknown":
-        console.log("Unknown error occurred, inspect error.serverResponse");
-        callback(null); // return null in case of error
-        break;
-    }
-  }, async () => {
-    // Get downloadURL for reference
-    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-    callback(downloadURL);
+  return new Promise<string>((resolve, reject) => {
+    const uploadTask = uploadBytesResumable(ref, blob);
+    uploadTask.on("state_changed", 
+      (snapshot) => {
+      const progress = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(1);
+      console.log("Upload is " + progress + "% done");
+      switch (snapshot.state) {
+        case "paused":
+          console.log("Upload is paused");
+          break;
+        case "running":
+          console.log("Upload is running");
+          break;
+      }
+    }, 
+      (error) => {
+        switch (error.code) {
+          case "storage/unauthorized":
+             reject(error.message);
+             throw new Error("User doesn't have permission to access the object");
+          case "storage/canceled":
+             reject(error.message);
+             throw new Error("User canceled the upload");
+          case "storage/unknown":
+             reject(error.message);
+             throw new Error("Unknown error occurred, inspect error.serverResponse");
+          default:
+             reject(error.message);
+             throw new Error(`Unknown error during upload: ${error.message}`);
+        }
+    },  
+      async () => {
+      // Get downloadURL for reference
+      try {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        resolve(downloadURL);
+      } catch (error) {
+        reject(error);
+      }
+    });
   })
 }
 
@@ -157,77 +169,89 @@ const pictureUploadHelper = async (ref: StorageReference, blob: Blob, callback: 
 // SEND RECIPE
 // SEND RECIPE
 export const uploadRecipe = async (uid: string, recipe:Recipe) => {
-  // Get User data --> picture & name
-  const userDocSnap = await getDoc(doc(FBstore, "users", uid))
-  if (!userDocSnap.exists()) {
-    alert("Error uploading, please try again")
-    console.error("Error fetching user profile picture")
-    return
-  }
-  const userProfilePicture = userDocSnap.data().profilePicture;
-  const username = userDocSnap.data().username;
-  // Remove falsys from recipe
-  const cleanedRecipe = cleanRecipe(recipe);
-  // Get recipes collection add cleaned Recipe
-  const recipesRef = collection(FBstore, "recipes");
-  const recipeDocResp = await addDoc(recipesRef, cleanedRecipe);
-  // Get added recipe ID and update itself with reference for future use
-  const recipeID = recipeDocResp.id;
-  const updateRef = doc(recipesRef, recipeID);
-  await setDoc(updateRef, {
-    recipeID: recipeID,
-    likes: 0,
-    userID: uid,
-    username: username,
-    profilePicture: userProfilePicture,
-    keywords: generateKeywords(recipe.name)
-  }, {merge: true})
-  
- 
-  // Add to user -> userRecipes collection (firebase de-normalization)
-  const userRecipesCollection = collection(FBstore, "users", uid, "userRecipes");
-  const userRecipesDoc = doc(userRecipesCollection, recipeID);
-  const userRecipeData = {
-    recipeName: cleanedRecipe.name,
-    recipeID: recipeID,
-    vegan: cleanedRecipe.extra.hasOwnProperty("Vegan") && cleanedRecipe.extra["Vegan"].selected
-  }
-  await setDoc(userRecipesDoc, userRecipeData)
-  
-  // Upload every picture to FB storage
-  const photosArray:Photo[] = recipe.photo;
-  for (let i = 0; i < photosArray.length; i++) {
-    const storageRef = ref(FBstorage, `recipes/${recipeID}/photo-${i}.jpg`);
-    const response = await fetch(photosArray[i].uri)
-    const imageBlob = await response.blob();
-    pictureUploadHelper(storageRef, imageBlob, async (downloadURL) => {
-      if (!downloadURL) {
-        console.error("Error uploading image");
+  try {
+    // Get User data --> picture & name
+    const userDocSnap = await getDoc(doc(FBstore, "users", uid))
+    if (!userDocSnap.exists()) {
+      alert("Error uploading, please try again")
+      console.error("Error fetching user profile picture")
+      return
+    }
+    const { profilePicture, username } = userDocSnap.data();
+    // Remove falsys from recipe
+    const cleanedRecipe = cleanRecipe(recipe);
+    // Get recipes collection add cleaned Recipe
+    const recipesRef = collection(FBstore, "recipes");
+    const recipeDocResp = await addDoc(recipesRef, cleanedRecipe);
+    // Get added recipe ID and update itself with reference for future use
+    const recipeID = recipeDocResp.id;
+    const updateRef = doc(recipesRef, recipeID);
+    await setDoc(updateRef, {
+      recipeID: recipeID,
+      likes: 0,
+      userID: uid,
+      username: username,
+      profilePicture: profilePicture,
+      keywords: generateKeywords(recipe.name)
+    }, {merge: true})
+    // Add to user -> userRecipes collection (firebase de-normalization)
+    const userRecipesCollection = collection(FBstore, "users", uid, "userRecipes");
+    const userRecipesDoc = doc(userRecipesCollection, recipeID);
+    const userRecipeData = {
+      recipeName: cleanedRecipe.name,
+      recipeID: recipeID,
+      vegan: cleanedRecipe.extra.hasOwnProperty("Vegan") && cleanedRecipe.extra["Vegan"].selected
+    }
+    await setDoc(userRecipesDoc, userRecipeData);
+    // Upload every picture to FB storage
+    const photosArray:Photo[] = recipe.photo;
+    let downloadURLS:{[key: number]: Promise<string>} = {};
+    for (let i = 0; i < photosArray.length; i++) {
+      const storageRef = ref(FBstorage, `/recipes/${recipeID}/photo-${i}.jpg`);
+      try {
+        const resp = await fetch(photosArray[i].uri);
+        if (!resp.ok) {
+          throw new Error(`Failed to fetch image: ${resp.status} ${resp.statusText}`);
+        }
+        const imageBlob = await resp.blob();
+        const downloadURL = pictureUploadHelper(storageRef, imageBlob)
+        downloadURLS[i] = downloadURL;
+      } catch (error) {
         alert("Photo upload failed");
-        return
+        console.error(`Uploading photo-${i} to firebase: ${error}`);
+        throw error;
       }
-      if (i == 0) {
-        await updateDoc(userRecipesDoc, {
-          mainPhoto: downloadURL
-        })
-      }
-      // Update on the spot the Recipe.Photos array
-      await updateDoc(doc(FBstore, "recipes", recipeID), {
-        photo: arrayUnion(downloadURL)
+    }
+    /* 
+    transform async indexed object into ordered array
+    resolves promises
+    update Main/first photo
+    update entire array into firebase
+    */
+    const URLpromises = Object.values(downloadURLS);
+    try {
+      const resolvedURLS = await Promise.all(URLpromises);
+      await updateDoc(userRecipesDoc, {
+        mainPhoto: resolvedURLS[0]
       })
-    });
+      await updateDoc(doc(FBstore, "recipes", recipeID), {
+        photo: resolvedURLS
+      })
+    } catch (error) {
+      console.error("During Promise.all execution: ", error);
+      throw error;
+    }
+    return recipeID;
+  } catch (error) {
+    console.error('During recipe upload', error);
+    throw error;
   }
- 
-  return recipeID;
 }
 
 // HELPERS RECIPE
 // HELPERS RECIPE
 // HELPERS RECIPE
-
-
 const cleanRecipe = (recipe:Recipe) => {
-  // const filteredIngredients: Ingredient
   const filteredRecipe: Recipe = {
     ...recipe,
     ingredients: recipe.ingredients.slice(1).filter(
@@ -281,34 +305,25 @@ const generateKeywords = (name: string) => {
 export const fetchAllRecipes = async (currentUser:string) => {
   try {
       const recipesQuerySnap = await getDocs(collection(FBstore, "recipes"))
-      const promises   = recipesQuerySnap.docs.map(async (docu) => {
-        const uid        = docu.data().userID;
-        const username   = docu.data().username;
-        
-        const recipeName = docu.data().name;
-        const recipeID   = docu.data().recipeID;
-        const likes      = docu.data().likes;  
-        
-        const profilePic = docu.data().profilePicture; 
-        const mainPhoto  = docu.data().photo;
-        
-        const likedBy    = recipeLikedBy(currentUser, recipeID);
-
-        // DEV <<<
-        // const profilePic = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.imgur.com%2F4pigoji.jpg&f=1&nofb=1&ipt=0ca9831f18d43132974d0574f6931d9810136cdf5c615d1c025bd23bb2654cbe&ipo=images"
-        // DEV <<<
-        // const mainPhoto = ["https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.plannthat.com%2Fwp-content%2Fuploads%2F2018%2F07%2F25-Stock-Photo-Sites.jpeg&f=1&nofb=1&ipt=825acb3b9caa343c74ee234ab2826dcee6ee660dc52eabcc222524d44cec8d2b&ipo=images","https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.ikozmik.com%2FContent%2FImages%2Fuploaded%2Fits-free-featured.jpg&f=1&nofb=1&ipt=0b3505ecb8a4dab33ec69e8656cb8e83c25dc0b7d9da9aeded5d1d058446feb6&ipo=images"]
-        // DEV <<<
-        
+      const promises = recipesQuerySnap.docs.map(async (docu) => {
+        const { userID, 
+            username,
+            name,
+            recipeID,
+            likes,
+            profilePicture,
+            photo,
+          } = docu.data();
+        const likedBy = await recipeLikedBy(currentUser, recipeID);
         return {
-          uid:uid,
-          recipeName: recipeName,
+          uid:userID,
+          recipeName: name,
           recipeID: recipeID,
           likes: likes,
           username: username,
-          profilePic: profilePic,
-          photo: mainPhoto,
-          liked: await likedBy
+          profilePic: profilePicture,
+          photo: photo,
+          liked: likedBy
         }
       })
       return await Promise.all(promises);

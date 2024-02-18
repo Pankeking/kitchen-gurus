@@ -121,7 +121,6 @@ const contentSlice = createSlice({
           state.recipe.instructions.push(newInstructions)
       }
       state.isInstructions = true;
-      console.log(state.recipe.instructions)
     },
     setIngredients: (state, action) => {
       state.recipe.ingredients = action.payload;
@@ -129,7 +128,6 @@ const contentSlice = createSlice({
     },
     setExtra: (state, action) => {
       state.recipe.extra = action.payload;
-      console.log(state.recipe.extra)
       state.isExtra = true;
     },
     nullifyRecipe: (state) => {
