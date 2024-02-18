@@ -1,8 +1,13 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
-import { addDoc, and, arrayUnion, collection, doc, getDoc, getDocs, increment, limit, or, orderBy, query, setDoc, updateDoc, where, writeBatch } from "firebase/firestore";
+import { 
+  addDoc, collection, doc, getDoc, getDocs, setDoc, updateDoc,
+  increment, limit, query, where
+   } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { Ingredient, Photo, Recipe, dietOptions, queryRecipe } from "../redux/slices/contentSlice";
+import { Photo, Recipe, queryRecipe } from "../redux/slices/contentSlice";
+
+const STORAGE_DIRECTORY = 'gs://hulala-831d2.appspot.com'
 
 // Register
 // Register
@@ -24,7 +29,7 @@ export const appSignUp = async (email: string, password: string, displayName: st
 // Register
 export const registerUserDB = async (uid: string, username: string, email: string) => {
   // Get default picture for anonymous from cloud storage
-  const storageRef = ref(FBstorage, 'user-profiles/anonymous-user.png');
+  const storageRef = ref(FBstorage, `${STORAGE_DIRECTORY}/user-profiles/anonymous-user.png`);
   const defaultPic = await getDownloadURL(storageRef)
   // Declare userData type and values  
   const userData: {
@@ -67,12 +72,11 @@ export const registerUserDB = async (uid: string, username: string, email: strin
 export const updateProfilePicture = async (userId: string, localUri: string) => {
   try {
     // Create reference to storage location
-    const storageRef = ref(FBstorage, `user-profiles/${userId}-profile.jpg`);
+    const storageRef = ref(FBstorage, `${STORAGE_DIRECTORY}/user-profiles/${userId}-profile.jpg`);
     // Fetch image -> convert to binary
     const response = await fetch(localUri)
     const imageBlob = await response.blob();
     // See callback function
-    console.log(storageRef)
     const downloadURL = await pictureUploadHelper(storageRef, imageBlob);
     if (!downloadURL) {
       alert("Error uploading new profile image to firebase");
@@ -94,7 +98,7 @@ export const updateProfilePicture = async (userId: string, localUri: string) => 
 export const updateProfileBackground = async (userId: string, localUri: string) => {
   try {
     // Create reference to storage location
-    const storageRef = ref(FBstorage, `user-profiles/${userId}-background.jpg`);
+    const storageRef = ref(FBstorage, `${STORAGE_DIRECTORY}/user-profiles/${userId}-background.jpg`);
     // Fetch image -> convert to binary
     const response = await fetch(localUri)
     const imageBlob = await response.blob();
@@ -116,41 +120,44 @@ export const updateProfileBackground = async (userId: string, localUri: string) 
 /// PICTURE UPLOAD UTIL
 /// PICTURE UPLOAD UTIL
 /// PICTURE UPLOAD UTIL
-async function pictureUploadHelper(ref: StorageReference, blob: Blob): Promise<string> {
-  let resolvedValue: string;
+function pictureUploadHelper(ref: StorageReference, blob: Blob): Promise<string> {
   // Upload Image Blob
-  const uploadTask = uploadBytesResumable(ref, blob);
-  uploadTask.on("state_changed", 
-    (snapshot) => {
-    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    console.log("Upload is " + progress + "% done");
-    switch (snapshot.state) {
-      case "paused":
-        console.log("Upload is paused");
-        break;
-      case "running":
-        console.log("Upload is running");
-        break;
-    }
-  }, 
-    (error) => {
-      switch (error.code) {
-        case "storage/unauthorized":
-          throw new Error("User doesn't have permission to access the object"); // return null in case of error
-        case "storage/canceled":
-          throw new Error("User canceled the upload"); // return null in case of error
-        case "storage/unknown":
-          throw new Error("Unknown error occurred, inspect error.serverResponse"); // return null in case of error
+  return new Promise((reject, resolve) => {
+    const uploadTask = uploadBytesResumable(ref, blob);
+    uploadTask.on("state_changed", 
+      (snapshot) => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log("Upload is " + progress + "% done");
+      switch (snapshot.state) {
+        case "paused":
+          console.log("Upload is paused");
+          break;
+        case "running":
+          console.log("Upload is running");
+          break;
       }
-      throw new Error(`Unknown error during upload: ${error.message}`);
-  },  
-    async () => {
-    // Get downloadURL for reference
-    resolvedValue = await getDownloadURL(uploadTask.snapshot.ref);
-    return resolvedValue;
-  });
-  resolvedValue = await getDownloadURL(uploadTask.snapshot.ref);
-  return resolvedValue;
+    }, 
+      (error) => {
+        switch (error.code) {
+          case "storage/unauthorized":
+            throw new Error("User doesn't have permission to access the object"); 
+          case "storage/canceled":
+            throw new Error("User canceled the upload"); 
+          case "storage/unknown":
+            throw new Error("Unknown error occurred, inspect error.serverResponse"); 
+        }
+        throw new Error(`Unknown error during upload: ${error.message}`);
+    },  
+      async () => {
+      // Get downloadURL for reference
+        try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          resolve(downloadURL);
+        } catch (error) {
+          reject(error as string);
+        }
+    });
+  })
 }
 
 // SEND RECIPE
@@ -192,32 +199,31 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
   await setDoc(userRecipesDoc, userRecipeData)
   // Upload every picture to FB storage
   const photosArray:Photo[] = recipe.photo;
-  let downloadURLS:{[key: number]: string} = {};
+  let downloadURLS:{[key: number]: Promise<string>} = {};
   for (let i = 0; i < photosArray.length; i++) {
-    const storageRef = ref(FBstorage, `recipes/${recipeID}/photo-${i}.jpg`);
-    const response = await fetch(photosArray[i].uri);
-    const imageBlob = await response.blob();
-    const downloadURL = await pictureUploadHelper(storageRef, imageBlob)
+    const storageRef = ref(FBstorage, `gs://hulala-831d2.appspot.com/recipes/${recipeID}/photo-${i}.jpg`);
+    const imageBlob = await fetch(photosArray[i].uri).then((r) => r.blob());
+    // const imageBlob = await response.blob();
+    const downloadURL = pictureUploadHelper(storageRef, imageBlob)
     if (!downloadURL) {
       alert("Photo upload failed");
       throw new Error(`Error uploading photo N°${i+1} to firebase`);
-    }
-    if (i == 0) {
-      await updateDoc(userRecipesDoc, {
-        mainPhoto: downloadURL
-      })
     }
     downloadURLS[i] = downloadURL;
   }
   /* 
   transform async indexed object into ordered array
   resolves promises
+  update Main/first photo
   update entire array into firebase
   */
   const URLpromises = Object.values(downloadURLS);
-  await Promise.all(URLpromises)
+  const resolvedURLS: string[] = await Promise.all(URLpromises);
+  await updateDoc(userRecipesDoc, {
+    mainPhoto: resolvedURLS[0]
+  })
   await updateDoc(doc(FBstore, "recipes", recipeID), {
-    photo: URLpromises
+    photo: resolvedURLS
   })
   return recipeID;
 }
