@@ -122,7 +122,7 @@ export const updateProfileBackground = async (userId: string, localUri: string) 
 /// PICTURE UPLOAD UTIL
 function pictureUploadHelper(ref: StorageReference, blob: Blob): Promise<string> {
   // Upload Image Blob
-  return new Promise((reject, resolve) => {
+  return new Promise<string>((reject, resolve) => {
     const uploadTask = uploadBytesResumable(ref, blob);
     uploadTask.on("state_changed", 
       (snapshot) => {
@@ -140,22 +140,27 @@ function pictureUploadHelper(ref: StorageReference, blob: Blob): Promise<string>
       (error) => {
         switch (error.code) {
           case "storage/unauthorized":
-            throw new Error("User doesn't have permission to access the object"); 
+             reject(error.message);
+             throw new Error("User doesn't have permission to access the object");
           case "storage/canceled":
-            throw new Error("User canceled the upload"); 
+             reject(error.message);
+             throw new Error("User canceled the upload");
           case "storage/unknown":
-            throw new Error("Unknown error occurred, inspect error.serverResponse"); 
+             reject(error.message);
+             throw new Error("Unknown error occurred, inspect error.serverResponse");
+          default:
+             reject(error.message);
+             throw new Error(`Unknown error during upload: ${error.message}`);
         }
-        throw new Error(`Unknown error during upload: ${error.message}`);
     },  
       async () => {
       // Get downloadURL for reference
-        try {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          resolve(downloadURL);
-        } catch (error) {
-          reject(error as string);
-        }
+      try {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        resolve(downloadURL);
+      } catch (error) {
+        reject("error");
+      }
     });
   })
 }
@@ -164,68 +169,87 @@ function pictureUploadHelper(ref: StorageReference, blob: Blob): Promise<string>
 // SEND RECIPE
 // SEND RECIPE
 export const uploadRecipe = async (uid: string, recipe:Recipe) => {
-  // Get User data --> picture & name
-  const userDocSnap = await getDoc(doc(FBstore, "users", uid))
-  if (!userDocSnap.exists()) {
-    alert("Error uploading, please try again")
-    console.error("Error fetching user profile picture")
-    return
-  }
-  const { profilePicture, username } = userDocSnap.data();
-  // Remove falsys from recipe
-  const cleanedRecipe = cleanRecipe(recipe);
-  // Get recipes collection add cleaned Recipe
-  const recipesRef = collection(FBstore, "recipes");
-  const recipeDocResp = await addDoc(recipesRef, cleanedRecipe);
-  // Get added recipe ID and update itself with reference for future use
-  const recipeID = recipeDocResp.id;
-  const updateRef = doc(recipesRef, recipeID);
-  await setDoc(updateRef, {
-    recipeID: recipeID,
-    likes: 0,
-    userID: uid,
-    username: username,
-    profilePicture: profilePicture,
-    keywords: generateKeywords(recipe.name)
-  }, {merge: true})
-  // Add to user -> userRecipes collection (firebase de-normalization)
-  const userRecipesCollection = collection(FBstore, "users", uid, "userRecipes");
-  const userRecipesDoc = doc(userRecipesCollection, recipeID);
-  const userRecipeData = {
-    recipeName: cleanedRecipe.name,
-    recipeID: recipeID,
-    vegan: cleanedRecipe.extra.hasOwnProperty("Vegan") && cleanedRecipe.extra["Vegan"].selected
-  }
-  await setDoc(userRecipesDoc, userRecipeData)
-  // Upload every picture to FB storage
-  const photosArray:Photo[] = recipe.photo;
-  let downloadURLS:{[key: number]: Promise<string>} = {};
-  for (let i = 0; i < photosArray.length; i++) {
-    const storageRef = ref(FBstorage, `gs://hulala-831d2.appspot.com/recipes/${recipeID}/photo-${i}.jpg`);
-    const imageBlob = await fetch(photosArray[i].uri).then((r) => r.blob());
-    // const imageBlob = await response.blob();
-    const downloadURL = pictureUploadHelper(storageRef, imageBlob)
-    if (!downloadURL) {
-      alert("Photo upload failed");
-      throw new Error(`Error uploading photo N°${i+1} to firebase`);
+  try {
+    // Get User data --> picture & name
+    const userDocSnap = await getDoc(doc(FBstore, "users", uid))
+    if (!userDocSnap.exists()) {
+      alert("Error uploading, please try again")
+      console.error("Error fetching user profile picture")
+      return
     }
-    downloadURLS[i] = downloadURL;
+    const { profilePicture, username } = userDocSnap.data();
+    // Remove falsys from recipe
+    const cleanedRecipe = cleanRecipe(recipe);
+    // Get recipes collection add cleaned Recipe
+    const recipesRef = collection(FBstore, "recipes");
+    const recipeDocResp = await addDoc(recipesRef, cleanedRecipe);
+    // Get added recipe ID and update itself with reference for future use
+    const recipeID = recipeDocResp.id;
+    const updateRef = doc(recipesRef, recipeID);
+    await setDoc(updateRef, {
+      recipeID: recipeID,
+      likes: 0,
+      userID: uid,
+      username: username,
+      profilePicture: profilePicture,
+      keywords: generateKeywords(recipe.name)
+    }, {merge: true})
+    // Add to user -> userRecipes collection (firebase de-normalization)
+    const userRecipesCollection = collection(FBstore, "users", uid, "userRecipes");
+    const userRecipesDoc = doc(userRecipesCollection, recipeID);
+    const userRecipeData = {
+      recipeName: cleanedRecipe.name,
+      recipeID: recipeID,
+      vegan: cleanedRecipe.extra.hasOwnProperty("Vegan") && cleanedRecipe.extra["Vegan"].selected
+    }
+    await setDoc(userRecipesDoc, userRecipeData);
+    // Upload every picture to FB storage
+    const photosArray:Photo[] = recipe.photo;
+    let downloadURLS:{[key: number]: Promise<string>} = {};
+    for (let i = 0; i < photosArray.length; i++) {
+      const storageRef = ref(FBstorage, `/recipes/${recipeID}/photo-${i}.jpg`);
+      try {
+        const resp = await fetch(photosArray[i].uri);
+        if (!resp.ok) {
+          throw new Error(`Failed to fetch image: ${resp.status} ${resp.statusText}`);
+        }
+        const imageBlob = await resp.blob();
+        const downloadURL = pictureUploadHelper(storageRef, imageBlob)
+        downloadURLS[i] = downloadURL;
+      } catch (error) {
+        alert("Photo upload failed");
+        console.error(`Uploading photo-${i} to firebase: ${error}`);
+        throw error;
+      }
+    }
+    /* 
+    transform async indexed object into ordered array
+    resolves promises
+    update Main/first photo
+    update entire array into firebase
+    */
+    const URLpromises = Object.values(downloadURLS);
+    try {
+      console.warn("try-catch block Promise.all");
+      console.log(URLpromises[0]);
+      const resolvedURLS: string[] = await Promise.all(URLpromises);
+      console.log(resolvedURLS);
+      await updateDoc(userRecipesDoc, {
+        mainPhoto: resolvedURLS[0]
+      })
+      await updateDoc(doc(FBstore, "recipes", recipeID), {
+        photo: resolvedURLS
+      })
+    } catch (error) {
+      console.error("During Promise.all execution: ", error);
+      throw error;
+    }
+    console.log("Post")
+    return recipeID;
+  } catch (error) {
+    console.error('During recipe upload', error);
+    throw error;
   }
-  /* 
-  transform async indexed object into ordered array
-  resolves promises
-  update Main/first photo
-  update entire array into firebase
-  */
-  const URLpromises = Object.values(downloadURLS);
-  const resolvedURLS: string[] = await Promise.all(URLpromises);
-  await updateDoc(userRecipesDoc, {
-    mainPhoto: resolvedURLS[0]
-  })
-  await updateDoc(doc(FBstore, "recipes", recipeID), {
-    photo: resolvedURLS
-  })
-  return recipeID;
 }
 
 // HELPERS RECIPE

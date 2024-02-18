@@ -1,6 +1,10 @@
 files=$(find components/ | grep .tsx)
 files+=" "
+files=$(find components/ | grep .ts)
+files+=" "
 files+=$(find app/ | grep .tsx)
+files+=" "
+files+=$(find app/ | grep .ts)
 files+=" "
 files+=$(find redux/ | grep .ts)
 files+=" "

@@ -91,13 +91,15 @@ export default function AddContentScreen() {
     }
     alert("Uploading on progress");
     // dispatch(nullifyRecipe())
-    const recipeID = await uploadRecipe(userId,recipe);
+    const recipeID = await uploadRecipe(userId, recipe);
     if (!recipeID) {
       alert("Recipe Upload Failed, try again");
       return
     }
+    console.log("after uploadRecipe call at: (add)/index");
     router.replace('/(tabs)/');
     dispatch(nullifyRecipe());
+    return;
   }
 
 
