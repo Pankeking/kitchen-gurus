@@ -122,11 +122,11 @@ export const updateProfileBackground = async (userId: string, localUri: string) 
 /// PICTURE UPLOAD UTIL
 function pictureUploadHelper(ref: StorageReference, blob: Blob): Promise<string> {
   // Upload Image Blob
-  return new Promise<string>((reject, resolve) => {
+  return new Promise<string>((resolve, reject) => {
     const uploadTask = uploadBytesResumable(ref, blob);
     uploadTask.on("state_changed", 
       (snapshot) => {
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      const progress = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(1);
       console.log("Upload is " + progress + "% done");
       switch (snapshot.state) {
         case "paused":
@@ -159,7 +159,7 @@ function pictureUploadHelper(ref: StorageReference, blob: Blob): Promise<string>
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
         resolve(downloadURL);
       } catch (error) {
-        reject("error");
+        reject(error);
       }
     });
   })
@@ -230,10 +230,7 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
     */
     const URLpromises = Object.values(downloadURLS);
     try {
-      console.warn("try-catch block Promise.all");
-      console.log(URLpromises[0]);
-      const resolvedURLS: string[] = await Promise.all(URLpromises);
-      console.log(resolvedURLS);
+      const resolvedURLS = await Promise.all(URLpromises);
       await updateDoc(userRecipesDoc, {
         mainPhoto: resolvedURLS[0]
       })
@@ -244,7 +241,6 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
       console.error("During Promise.all execution: ", error);
       throw error;
     }
-    console.log("Post")
     return recipeID;
   } catch (error) {
     console.error('During recipe upload', error);
