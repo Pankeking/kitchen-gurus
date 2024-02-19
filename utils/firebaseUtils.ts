@@ -38,8 +38,8 @@ export const registerUserDB = async (uid: string, username: string, email: strin
     email: string;
     bio: string;
     lastLogin: Date;
-    profilePicture?: string; // Make it optional
-    profileBackground?: string; // Make it optional
+    profilePicture?: string; 
+    profileBackground?: string; 
   } = {
     userID: uid,
     username: username,
@@ -186,10 +186,12 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
     // Get added recipe ID and update itself with reference for future use
     const recipeID = recipeDocResp.id;
     const updateRef = doc(recipesRef, recipeID);
+    const timestamp = new Date();
     await setDoc(updateRef, {
       recipeID: recipeID,
       likes: 0,
       userID: uid,
+      timestamp: timestamp,
       username: username,
       profilePicture: profilePicture,
       keywords: generateKeywords(recipe.name)
@@ -200,7 +202,8 @@ export const uploadRecipe = async (uid: string, recipe:Recipe) => {
     const userRecipeData = {
       recipeName: cleanedRecipe.name,
       recipeID: recipeID,
-      vegan: cleanedRecipe.extra.hasOwnProperty("Vegan") && cleanedRecipe.extra["Vegan"].selected
+      vegan: cleanedRecipe.extra.hasOwnProperty("Vegan") && cleanedRecipe.extra["Vegan"].selected,
+      timestamp: timestamp
     }
     await setDoc(userRecipesDoc, userRecipeData);
     // Upload every picture to FB storage
