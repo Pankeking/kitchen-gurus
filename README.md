@@ -22,7 +22,7 @@ const firebaseConfig = {
 ```
 
 Update each environment variable in the [*.env*](./.env) file with the corresponding from the Firebase Console
-expo .env variables must follow this rule per the [**documentation**](https://docs.expo.dev/guides/environment-variables/) 
+expo .env variables must follow this rule per the [**documentation**](https://docs.expo.dev/guides/environment-variables/)
 
 "add environment-specific variables on new lines in the form of `EXPO_PUBLIC_[NAME]=VALUE`"
 Where apiKey corresponds to `EXPO_PUBLIC_API_KEY` and so on
