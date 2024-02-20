@@ -10,6 +10,7 @@ import CheckList from "../../../components/AddContent/CheckList";
 import WideButton from "../../../components/WideButton";
 import { uploadRecipe } from "../../../utils/firebaseUtils";
 import { FBauth } from "../../../firebase-config";
+import { reloadify } from "../../../redux/slices/authSlice";
 
 export default function AddContentScreen() {
 
@@ -98,6 +99,7 @@ export default function AddContentScreen() {
       alert("Recipe Upload Failed, try again");
       return
     }
+    dispatch(reloadify());
     return;
   }
 

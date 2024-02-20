@@ -2,12 +2,12 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FBauth, FBstorage, FBstore } from "../firebase-config";
 import { 
   addDoc, collection, doc, getDoc, getDocs, setDoc, updateDoc,
-  increment, limit, query, where
+  increment, limit, where, query, orderBy
    } from "firebase/firestore";
 import { StorageReference, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { Photo, Recipe, queryRecipe } from "../redux/slices/contentSlice";
 
-const STORAGE_DIRECTORY = 'gs://hulala-831d2.appspot.com'
+const STORAGE_DIRECTORY = 'gs://' + process.env.EXPO_PUBLIC_STORAGE_BUCKET;
 
 // Register
 // Register
@@ -307,7 +307,9 @@ const generateKeywords = (name: string) => {
 // HELPER FETCHING RECIPES <<< HOME
 export const fetchAllRecipes = async (currentUser:string) => {
   try {
-      const recipesQuerySnap = await getDocs(collection(FBstore, "recipes"))
+      const recipeRef        =       collection(FBstore, 'recipes');
+      const q                =       query(recipeRef, orderBy('timestamp'));
+      const recipesQuerySnap = await getDocs(q);
       const promises = recipesQuerySnap.docs.map(async (docu) => {
         const { userID, 
             username,

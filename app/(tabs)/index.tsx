@@ -44,17 +44,16 @@ export default function HomeScreen() {
     recipeID: "",
     likes: 0,
     username: "",
-    // randomUri
+    // default dummy picture
     profilePic: "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.lionleaf.com%2Fwp-content%2Fuploads%2F2014%2F11%2F1415275_22821821.jpg&f=1&nofb=1&ipt=4b75db3b6c030a650ba0e7ca45fb05518b9726e49576df08fefbd0d6eead98cc&ipo=images",
     photo: ["https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.lionleaf.com%2Fwp-content%2Fuploads%2F2014%2F11%2F1415275_22821821.jpg&f=1&nofb=1&ipt=4b75db3b6c030a650ba0e7ca45fb05518b9726e49576df08fefbd0d6eead98cc&ipo=images"],
-    // randomUri
     liked: false
   }])
 
   const [Users, setUsers] = useState([{
     uid: "",
     username: "",
-    // randomUri
+    // default dummy
     pic: "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.lionleaf.com%2Fwp-content%2Fuploads%2F2014%2F11%2F1415275_22821821.jpg&f=1&nofb=1&ipt=4b75db3b6c030a650ba0e7ca45fb05518b9726e49576df08fefbd0d6eead98cc&ipo=images"
   }])
 
